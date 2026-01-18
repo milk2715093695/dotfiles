@@ -53,7 +53,8 @@ chmod +x ./deploy/ubuntu.sh
 
 ## 未来计划
 
-- [ ] zsh 配置
+- [X] WezTerm 配置
+- [ ] Zsh 配置
 - [ ] vim/nvim 配置
 - [ ] starship 配置
 
