@@ -84,6 +84,30 @@ link_dir() {
     fi
 }
 
+# 安装 JetBrains Mono 字体
+install_jetbrains_mono() {
+    # 如果已安装，跳过
+    if fc-list | grep -i "jetbrains mono" >/dev/null 2>&1; then
+        echo "JetBrains Mono 已安装，跳过字体安装。"
+        return
+    fi
+
+    # 仅支持 Ubuntu/Debian 系
+    if command -v apt >/dev/null 2>&1; then
+        echo -e "${YELLOW}检测到 apt，准备安装 fonts-jetbrains-mono${RESET}"
+
+        if prompt_confirm "是否使用 apt 安装 JetBrains Mono 字体？"; then
+            sudo apt update
+            sudo apt install -y fonts-jetbrains-mono
+        else
+            echo "跳过字体安装。"
+        fi
+    else
+        echo -e "${YELLOW}未检测到 apt，无法自动安装 JetBrains Mono。${RESET}"
+        echo "请手动安装字体，或自行扩展脚本。"
+    fi
+}
+
 # 检查 WezTerm 是否存在
 check_wezterm() {
     if command -v wezterm >/dev/null 2>&1; then
@@ -136,6 +160,8 @@ main() {
     echo " dotfiles deploy (Linux/Ubuntu)"
     echo "================================"
     echo
+
+    install_jetbrains_mono
 
     configure_wezterm
 

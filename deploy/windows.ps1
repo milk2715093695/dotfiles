@@ -97,6 +97,34 @@ function Link-Dir {
     }
 }
 
+# 安装 JetBrains Mono 字体
+function Install-JetBrainsMono {
+    # 如果已安装，跳过
+    $fontInstalled = Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows\Fonts" -ErrorAction SilentlyContinue |
+        Where-Object { $_.Name -match "JetBrainsMono" }
+
+    if ($fontInstalled) {
+        Write-Host "JetBrains Mono 已安装，跳过字体安装。"
+        return
+    }
+
+    # 仅支持 scoop
+    if (Get-Command scoop -ErrorAction SilentlyContinue) {
+        Write-Host "未安装 JetBrains Mono，但存在 scoop。" -ForegroundColor $YELLOW
+
+        if (Prompt-Confirm "是否使用 scoop 安装 JetBrains Mono？") {
+            scoop bucket add nerd-fonts
+            scoop install jetbrains-mono
+        } else {
+            Write-Host "跳过字体安装。"
+        }
+        return
+    }
+
+    Write-Host "未检测到 scoop，无法自动安装 JetBrains Mono。" -ForegroundColor $YELLOW
+    Write-Host "请手动安装字体，或自行扩展脚本。"
+}
+
 # 检查 WezTerm 是否存在
 function Check-WezTerm {
     if (Get-Command wezterm -ErrorAction SilentlyContinue) {
@@ -158,6 +186,8 @@ function Main {
         Write-Host "当前不是管理员权限运行。" -ForegroundColor $YELLOW
         Write-Host "如果未开启 Windows 开发者模式，创建符号链接可能失败。"
     }
+
+    Install-JetBrainsMono
 
     Configure-WezTerm
 

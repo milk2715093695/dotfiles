@@ -84,6 +84,30 @@ link_dir() {
     fi
 }
 
+# 安装 JetBrains Mono 字体
+install_jetbrains_mono() {
+    # 如果已安装，跳过
+    if fc-list | grep -i "jetbrains mono" >/dev/null 2>&1; then
+        echo "JetBrains Mono 已安装，跳过字体安装。"
+        return
+    fi
+
+    # 检查 brew
+    if ! command -v brew >/dev/null 2>&1; then
+        echo -e "${RED}未检测到 Homebrew，无法安装字体。${RESET}"
+        return
+    fi
+
+    echo -e "${YELLOW}检测到 Homebrew，准备安装 JetBrains Mono 字体${RESET}"
+
+    if prompt_confirm "是否使用 Homebrew 安装 JetBrains Mono 字体？"; then
+        brew tap homebrew/cask-fonts
+        brew install --cask font-jetbrains-mono
+    else
+        echo "跳过字体安装。"
+    fi
+}
+
 # 检查 WezTerm 是否存在（macOS）
 check_wezterm() {
     if command -v wezterm >/dev/null 2>&1; then
@@ -102,7 +126,7 @@ install_wezterm_via_brew() {
     echo -e "${YELLOW}未安装 wezterm，但检测到 Homebrew。${RESET}"
 
     if prompt_confirm "是否使用 Homebrew 安装 wezterm？"; then
-        brew install wezterm
+        brew install --cask wezterm
     else
         echo "跳过 wezterm 安装。"
     fi
@@ -134,6 +158,8 @@ main() {
     echo " dotfiles deploy (macOS)"
     echo "================================"
     echo
+
+    install_jetbrains_mono
 
     configure_wezterm
 
