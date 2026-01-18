@@ -8,6 +8,7 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"                   # 仓库目录
 # 颜色定义（ANSI）
 YELLOW="\033[33m"
 RED="\033[31m"
+GREEN="\033[32m"
 RESET="\033[0m"
 
 # 交互函数
@@ -83,17 +84,63 @@ link_dir() {
     fi
 }
 
+# 检查 WezTerm 是否存在
+check_wezterm() {
+    if command -v wezterm >/dev/null 2>&1; then
+        return 0
+    fi
+
+    if command -v flatpak >/dev/null 2>&1 && flatpak info org.wezfurlong.wezterm >/dev/null 2>&1; then
+        return 0
+    fi
+
+    return 1
+}
+
+# 使用 flatpak 安装 WezTerm
+install_wezterm_via_flatpak() {
+    echo -e "${YELLOW}未安装 wezterm，但存在 flatpak。${RESET}"
+
+    if prompt_confirm "是否使用 flatpak 安装 wezterm？"; then
+        flatpak install -y flathub org.wezfurlong.wezterm
+    else
+        echo "跳过 wezterm 安装。"
+    fi
+}
+
+# 配置 WezTerm 函数
+configure_wezterm() {
+    # 检查 wezterm 是否存在
+    if check_wezterm; then
+        echo "wezterm 已存在，跳过安装。"
+    else
+        if command -v flatpak >/dev/null 2>&1; then
+            install_wezterm_via_flatpak
+        else
+            echo -e "${YELLOW}系统未安装 wezterm，且未检测到 flatpak。${RESET}"
+            echo "将跳过 wezterm 配置。"
+        fi
+    fi
+
+    # 如果已经安装或安装成功，才进行链接
+    if check_wezterm; then
+        link_dir "$HOME/.config/wezterm" "$REPO_ROOT/wezterm"
+    else
+        echo -e "${YELLOW}没有 wezterm，跳过 wezterm 配置。${RESET}"
+    fi
+}
+
 # 入口
 main() {
-  echo "================================"
-  echo " dotfiles deploy (Linux/Ubuntu)"
-  echo "================================"
-  echo
+    echo "================================"
+    echo " dotfiles deploy (Linux/Ubuntu)"
+    echo "================================"
+    echo
 
-  link_dir "$HOME/.config/wezterm" "$REPO_ROOT/wezterm"
+    configure_wezterm
 
-  echo
-  echo "部署完成。"
+    echo
+    echo -e "${GREEN}部署完成。${RESET}"
 }
 
 main
