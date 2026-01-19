@@ -16,6 +16,9 @@ $IsAdmin = ([Security.Principal.WindowsPrincipal] `
     [Security.Principal.WindowsIdentity]::GetCurrent()
 ).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 
+# CPU 架构
+$cpu = Get-CimInstance Win32_Processor
+
 # 交互函数
 function Prompt-Confirm {
     param (
@@ -95,6 +98,195 @@ function Link-Dir {
         New-Item -ItemType SymbolicLink -Path $TargetPath -Target $SourcePath | Out-Null
         Write-Host "已创建符号链接：$TargetPath -> $SourcePath"
     }
+}
+
+# 获取最新的 Release 的 Tag
+function Get-GitHubLatestReleaseTag {
+    param (
+        [Parameter(Mandatory)]
+        [string]$Owner,
+
+        [Parameter(Mandatory)]
+        [string]$Repo
+    )
+
+    $apiUrl = "https://api.github.com/repos/$Owner/$Repo/releases/latest"
+
+    $headers = @{
+        "User-Agent" = "PowerShell"
+    }
+
+    try {
+        $release = Invoke-RestMethod -Uri $apiUrl -Headers $headers
+    } catch {
+        throw "无法访问 GitHub API ($Owner/$Repo)：$($_.Exception.Message)"
+    }
+
+    if (-not $release.tag_name) {
+        throw "未能从 GitHub API 获取 tag_name ($Owner/$Repo)"
+    }
+
+    return $release.tag_name
+}
+
+# 获取 AltSnap 的资产名字
+function Get-AltSnapAssetName {
+    param (
+        [Parameter(Mandatory)]
+        [string]$Version
+    )
+
+    if ($cpu.Architecture -eq 12) {
+        return "AltSnap${Version}bin_ARM64.zip"
+    }
+    elseif ([Environment]::Is64BitOperatingSystem) {
+        return "AltSnap${Version}bin_x64.zip"
+    }
+    else {
+        return "AltSnap${Version}bin.zip"
+    }
+}
+
+# 下载仓库 Release 到目录
+function Download-GitHubReleaseAsset {
+    param (
+        [Parameter(Mandatory)]
+        [string]$Owner,
+
+        [Parameter(Mandatory)]
+        [string]$Repo,
+
+        [Parameter(Mandatory)]
+        [string]$Version,
+
+        [Parameter(Mandatory)]
+        [string]$AssetName,
+
+        [Parameter(Mandatory)]
+        [string]$OutputDir
+    )
+
+    if (-not (Test-Path $OutputDir)) {
+        New-Item -ItemType Directory -Path $OutputDir | Out-Null
+    }
+
+    $downloadUrl = "https://github.com/$Owner/$Repo/releases/download/$Version/$AssetName"
+    $outputPath = Join-Path $OutputDir $AssetName
+
+    Write-Host "正在从 $downloadUrl 下载 $AssetName..."
+
+    if (Test-Path $outputPath) {
+        Write-Host "下载目标目录已经存在" -ForegroundColor $RED
+
+        if (Prompt-Confirm "确认要强制删除并替换吗？") {
+            Remove-Item $outputPath -Force
+        } else {
+            Write-Host "文件已存在: $outputPath" -ForegroundColor $YELLOW
+            return $outputPath
+        }
+    }
+
+    try {
+        Invoke-WebRequest -Uri $downloadUrl -OutFile $outputPath -UseBasicParsing
+    } catch {
+        throw "下载失败：$($_.Exception.Message)"
+    }
+
+    return $outputPath
+}
+
+# 解压 Zip
+function Unzip-File {
+    param (
+        [Parameter(Mandatory)]
+        [string]$ZipPath,
+
+        [Parameter(Mandatory)]
+        [string]$Destination
+    )
+
+    if (-not (Test-Path $ZipPath)) {
+        throw "Zip 文件不存在：$ZipPath"
+    }
+
+    if (Test-Path $Destination) {
+        Write-Host "目标目录已经存在" -ForegroundColor $RED
+
+        if (Prompt-Confirm "确认要强制删除并替换吗？") {
+            Remove-Item $Destination -Recurse -Force
+        } else {
+            Write-Host "文件已存在: $Destination" -ForegroundColor $YELLOW
+            return
+        }
+    }
+
+    New-Item -ItemType Directory -Path $Destination | Out-Null
+
+    Expand-Archive -Path $ZipPath -DestinationPath $Destination
+
+    # 解压完成后删除压缩包
+    Remove-Item -Path $ZipPath -Force
+}
+
+# 添加桌面快捷方式
+function Create-DesktopShortcut {
+    param (
+        [Parameter(Mandatory)]
+        [string] $TargetDir,
+
+        [Parameter(Mandatory)]
+        [string] $ExecutableName,
+
+        [string] $ShortcutName = $ExecutableName
+    )
+
+    $shell = New-Object -ComObject WScript.Shell
+    $desktopPath = [Environment]::GetFolderPath("Desktop")
+
+    $shortcut = $shell.CreateShortcut("$desktopPath\$ShortcutName.lnk")
+
+    $targetPath = Join-Path $TargetDir $ExecutableName
+
+    $shortcut.TargetPath = $targetPath
+    $shortcut.WorkingDirectory = $TargetDir
+    $shortcut.IconLocation = $targetPath
+    $shortcut.Save()
+
+    Write-Host "桌面快捷方式已创建：$desktopPath\$ShortcutName.lnk" -ForegroundColor $GREEN
+}
+
+# 安装 AltSnap
+function Install-AltSnap {
+    $owner = "RamonUnch"
+    $repo = "AltSnap"
+
+    $version = Get-GitHubLatestReleaseTag -Owner $owner -Repo $repo
+
+    Write-Host "AltSnap 最新版本: $version"
+
+    if (-not (Prompt-Confirm "是否需要更新或者安装 AltSnap？")) {
+        Write-Host "跳过 AltSnap 的安装"
+        return
+    }
+
+    $assetName = Get-AltSnapAssetName -Version $version
+
+    $downloadedFile = Download-GitHubReleaseAsset `
+        -Owner $owner `
+        -Repo $repo `
+        -Version $version `
+        -AssetName $assetName `
+        -OutputDir "$REPO_ROOT\cache"
+
+    $unzipDir = "$REPO_ROOT\tools\AltSnap"
+
+    Unzip-File -ZipPath $downloadedFile -Destination $unzipDir
+
+    if (Prompt-Confirm "是否创建桌面快捷方式？") {
+        Create-DesktopShortcut -TargetDir $unzipDir -ExecutableName "AltSnap.exe" -ShortcutName "AltSnap"
+    }
+
+    Write-Host "推荐自行添加开机启动项并运行，AltSnap 能帮助您拖动窗口" -ForegroundColor $YELLOW
 }
 
 # 安装 JetBrains Mono 字体
@@ -186,6 +378,8 @@ function Main {
         Write-Host "当前不是管理员权限运行。" -ForegroundColor $YELLOW
         Write-Host "如果未开启 Windows 开发者模式，创建符号链接可能失败。"
     }
+
+    Install-AltSnap
 
     Install-JetBrainsMono
 
