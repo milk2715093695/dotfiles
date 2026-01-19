@@ -80,7 +80,7 @@ chmod +x ./deploy/macos.sh
 ### 2.3. Windows
 
 - 推荐拥有 `scoop` 作为前置。
-- 推荐以管理员身份运行部署脚本。
+- 推荐以管理员身份的 `Powershell` 或 `pwsh`（推荐）运行部署脚本。
 
 在 powershell 上执行以下步骤即可部署配置：
 
@@ -106,3 +106,5 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 ## 许可证
 
 本仓库采用 MIT 许可证。详情见 [LICENSE](./LICENSE) 文件。
+
+关于配置中使用到了 AltDrag（GPLv3）的问题：本仓库不包含 AltDrag 源码或可执行文件，部署时会自动从官方仓库下载并安装。AltDrag 许可请参见：[AltDrag 仓库](https://github.com/RamonUnch/AltSnap)

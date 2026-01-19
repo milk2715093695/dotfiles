@@ -29,3 +29,11 @@ $RECYCLE.BIN/
 ############################
 
 .directory
+
+
+# 工具
+Tools/
+tools/
+
+# 缓存
+cache/
