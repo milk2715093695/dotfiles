@@ -6,8 +6,9 @@ local wezterm = require("wezterm")
 local platform = wezterm.target_triple
 
 -- 定义变量
-local config_dir = wezterm.config_dir           -- 配置目录   
-local bg = config_dir .. "/Background.jpg"      -- 背景图片路径
+local config_dir = wezterm.config_dir               -- 配置目录  
+local sep = package.config:sub(1, 1)                -- 获取路径分隔符
+local bg = config_dir .. sep .. "Background.jpg"    -- 背景图片路径
 
 -- 创建配置对象
 local config = wezterm.config_builder()
@@ -28,22 +29,29 @@ end
 -- 字体 fallback 列表
 local fallback_fonts = {}
 
+-- 平台有关的配置
 if platform:find("windows") then
     fallback_fonts = {
         font("Cascadia Code"),
         font("Consolas"),
     }
+    config.default_prog = { "pwsh", "-NoLogo" }
+
 elseif platform:find("apple") then
     fallback_fonts = {
         font("SF Mono"),
         font("Menlo"),
     }
+    config.default_prog = { "zsh", "-l" }
+
 else
     fallback_fonts = {
         font("Liberation Mono"),
         font("Ubuntu Mono"),
         font("DejaVu Sans Mono"),
     }
+    config.default_prog = { "zsh", "-l" }
+
 end
 
 -- 字体配置
