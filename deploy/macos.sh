@@ -10,11 +10,12 @@ source "$SCRIPT_DIR/posix/utils/colors.sh"              # 颜色变量
 source "$SCRIPT_DIR/posix/utils/prompt.sh"              # 提示函数
 source "$SCRIPT_DIR/posix/utils/link.sh"                # 链接函数
 source "$SCRIPT_DIR/posix/utils/install_package.sh"     # 安装包函数
-source "$SCRIPT_DIR/posix/main.sh"                      # 入口
 source "$SCRIPT_DIR/posix/packages/wezterm.sh"          # WezTerm 安装
 
 source "$SCRIPT_DIR/macos/packages/jetbrains_mono.sh"   # JetBrains Mono 字体安装
 source "$SCRIPT_DIR/macos/packages/wezterm.sh"          # WezTerm 安装
+
+source "$SCRIPT_DIR/posix/main.sh"                      # 入口函数
 
 # 处理脚本参数 -y 自动确认
 AUTO_CONFIRM=false

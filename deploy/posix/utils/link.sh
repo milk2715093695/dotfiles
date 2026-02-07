@@ -8,7 +8,7 @@ link_dir() {
     echo
 
     if [ -L "$target_pth" ]; then
-        echo -e "${YELLOW}注意：目标已经是一个符号链接。将删除旧链接并创建新的链接。${RESET}"
+        warn "注意：目标已经是一个符号链接。将删除旧链接并创建新的链接。"
 
         if prompt_confirm "确认要替换该符号链接吗？"; then
             rm "$target_pth"
@@ -23,7 +23,7 @@ link_dir() {
 
     if [ -e "$target_pth" ]; then
         if [ -d "$target_pth" ] && [ -z "$(ls -A "$target_pth")" ]; then
-            echo -e "${YELLOW}注意：目标目录存在且为空。将删除该空目录并创建符号链接。${RESET}"
+            warn "注意：目标目录存在且为空。将删除该空目录并创建符号链接。"
 
             if prompt_confirm "确认要删除空目录并创建链接吗？"; then
                 rmdir "$target_pth"
@@ -33,7 +33,7 @@ link_dir() {
                 echo "跳过：$target_pth"
             fi
         else
-            echo -e "${RED}警告：目标已存在且非空（或不是目录）。${RESET}"
+            error "错误：目标已存在且非空（或不是目录）。"
             echo "为避免数据丢失，将不会自动覆盖。"
 
             if prompt_confirm "确认要强制删除并替换为链接吗？"; then
