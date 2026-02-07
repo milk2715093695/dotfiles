@@ -63,6 +63,10 @@ config.font = wezterm.font_with_fallback({
 })
 config.font_size = 18
 
+-- 窗口大小
+config.initial_cols = 80
+config.initial_rows = 24
+
 -- 背景配置
 config.background = {
     {
