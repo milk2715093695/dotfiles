@@ -16,15 +16,26 @@
 
 ```text
 .
-├── deploy              # 部署脚本
-│   ├── macos.sh        # macOS
-│   ├── ubuntu.sh       # Ubuntu（其他 Linux 系列未尝）
-│   └── windows.ps1     # Windows
+├── deploy                  # 部署脚本
+│   ├── macos.sh            # macOS
+│   ├── ubuntu.sh           # Ubuntu（其他 Linux 系列未尝试）
+│   └── windows.ps1         # Windows
 ├── LICENSE
 ├── README.md
-└── wezterm             # WezTerm 配置以及文件
-    ├── Background.jpg
-    └── wezterm.lua
+├── wezterm                 # WezTerm 配置以及文件
+└── zsh                     # zsh 配置
+    ├── .zshrc              # zsh 配置文件一级入口
+    └── zsh
+        ├── aliases.zsh     # 别名配置  
+        ├── conda.zsh       # conda 初始化脚本（懒加载）
+        ├── env.zsh         # 环境变量配置
+        ├── functions.zsh   # 自定义函数
+        ├── hook.zsh        # hook
+        ├── options.zsh     # zsh 选项配置
+        ├── plugins.zsh     # 插件配置
+        ├── secrets         # 密码管理（除了示例文件外不会被追踪）
+        │   └── example.sh  # 示例
+        └── zshrc           # zsh 配置文件二级入口
 ```
 
 - `wezterm/`：WezTerm 配置文件及资源
@@ -38,6 +49,7 @@
 例如：
 
 - `~/.config/wezterm/`  ->  `dotfiles/wezterm/`
+- `~/.zshrc` -> `dotfiles/zsh/.zshrc`，`~/.config/zsh/` -> `dotfiles/zsh/zsh/`
 
 ## 2. 部署
 
