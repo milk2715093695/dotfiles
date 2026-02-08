@@ -1,0 +1,15 @@
+MY_ZSH_CONFIG="$HOME/.config/zsh"       # 配置文件路径
+
+# 加载配置文件
+source "$MY_ZSH_CONFIG/env.zsh"         # 加载环境变量
+source "$MY_ZSH_CONFIG/options.zsh"     # 加载 zsh 行为选项
+source "$MY_ZSH_CONFIG/aliases.zsh"     # 加载别名
+source "$MY_ZSH_CONFIG/functions.zsh"   # 加载函数
+source "$MY_ZSH_CONFIG/hook.zsh"        # 加载钩子
+source "$MY_ZSH_CONFIG/plugins.zsh"     # 加载插件
+
+# 加载补全
+autoload -Uz compinit
+compinit -C
+
+unset MY_ZSH_CONFIG
