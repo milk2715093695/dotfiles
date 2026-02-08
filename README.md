@@ -46,6 +46,7 @@
 - 创建必要的目录
 - 自动创建符号链接
 - 对已有文件做提示，避免误覆盖
+- 可以使用 `-y` 参数自动全部确认，但是不建议使用
 
 > 使用过程中请注意提示与警告！以免错过重要信息！
 >
@@ -53,7 +54,7 @@
 
 ### 2.1. Ubuntu
 
-推荐拥有 `flatpak` 作为前置。
+推荐拥有 `flatpak` 与 `Linuxbrew` 作为前置，同时有 `zsh` 作为默认的 shell。
 
 在新机器上执行以下步骤即可部署配置：
 
@@ -95,7 +96,7 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 
 - 配置
   - [X] WezTerm 配置
-  - [ ] Zsh 配置
+  - [X] zsh 配置
   - [ ] vim/nvim 配置
   - [ ] starship 配置
 - 部署

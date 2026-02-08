@@ -37,3 +37,7 @@ tools/
 
 # 缓存
 cache/
+
+# 忽略 secrets 目录下所有文件，但保留 example.sh
+/zsh/zsh/secrets/*
+!/zsh/zsh/secrets/example.sh
