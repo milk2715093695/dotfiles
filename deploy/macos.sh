@@ -10,9 +10,16 @@ source "$SCRIPT_DIR/posix/utils/colors.sh"              # 颜色变量
 source "$SCRIPT_DIR/posix/utils/prompt.sh"              # 提示函数
 source "$SCRIPT_DIR/posix/utils/link.sh"                # 链接函数
 source "$SCRIPT_DIR/posix/utils/install_package.sh"     # 安装包函数
-source "$SCRIPT_DIR/posix/packages/wezterm.sh"          # WezTerm 安装
+source "$SCRIPT_DIR/posix/utils/install_brew_pkg.sh"    # brew 安装包函数
+source "$SCRIPT_DIR/posix/packages/jetbrains_mono.sh"   # JetBrains Mono 字体安装
+source "$SCRIPT_DIR/posix/packages/wezterm.sh"          # WezTerm 配置
+# source "$SCRIPT_DIR/posix/packages/fd.sh"               # fd 配置
+source "$SCRIPT_DIR/posix/packages/zsh.sh"              # zsh 配置
+source "$SCRIPT_DIR/posix/packages/zsh_plugins.sh"      # zsh 插件配置
+source "$SCRIPT_DIR/posix/packages/starship.sh"         # starship 安装
+# source "$SCRIPT_DIR/posix/packages/fzf.sh"              # fzf 安装
+# source "$SCRIPT_DIR/posix/packages/zoxide.sh"           # zoxide 安装
 
-source "$SCRIPT_DIR/macos/packages/jetbrains_mono.sh"   # JetBrains Mono 字体安装
 source "$SCRIPT_DIR/macos/packages/wezterm.sh"          # WezTerm 安装
 
 source "$SCRIPT_DIR/posix/main.sh"                      # 入口函数

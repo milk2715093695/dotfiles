@@ -1,7 +1,12 @@
-# 创建符号链接函数
-link_dir() {
-    local target_pth="$1"   # 真实路径
-    local source_pth="$2"   # 仓库路径
+link_item() {
+    local target_pth="$1"
+    local source_pth="$2"
+    local use_sudo="${3:-false}"  # 默认不使用 sudo
+    local cmd="ln -s"
+
+    if [ "$use_sudo" = "true" ]; then
+        cmd="sudo ln -s"
+    fi
 
     echo "准备创建链接："
     echo "    目标 (target)：$target_pth -> 源 (source)：$source_pth"
@@ -11,47 +16,55 @@ link_dir() {
         warn "注意：目标已经是一个符号链接。将删除旧链接并创建新的链接。"
 
         if prompt_confirm "确认要替换该符号链接吗？"; then
-            rm "$target_pth"
-            ln -s "$source_pth" "$target_pth"
+            if [ "$use_sudo" = "true" ]; then
+                sudo rm "$target_pth"
+            else
+                rm "$target_pth"
+            fi
+            $cmd "$source_pth" "$target_pth"
             echo "已替换符号链接：$target_pth -> $source_pth"
         else
             echo "跳过：$target_pth"
         fi
-
         return
     fi
 
+    # 如果目标不是符号链接
     if [ -e "$target_pth" ]; then
         if [ -d "$target_pth" ] && [ -z "$(ls -A "$target_pth")" ]; then
             warn "注意：目标目录存在且为空。将删除该空目录并创建符号链接。"
 
-            if prompt_confirm "确认要删除空目录并创建链接吗？"; then
-                rmdir "$target_pth"
-                ln -s "$source_pth" "$target_pth"
-                echo "已创建符号链接：$target_pth -> $source_pth"
+            if [ "$use_sudo" = "true" ]; then
+                sudo rmdir "$target_pth"
             else
-                echo "跳过：$target_pth"
+                rmdir "$target_pth"
             fi
+
+            $cmd "$source_pth" "$target_pth"
+            echo "已创建符号链接：$target_pth -> $source_pth"
         else
             error "错误：目标已存在且非空（或不是目录）。"
             echo "为避免数据丢失，将不会自动覆盖。"
 
             if prompt_confirm "确认要强制删除并替换为链接吗？"; then
-                rm -rf "$target_pth"
-                ln -s "$source_pth" "$target_pth"
+                if [ "$use_sudo" = "true" ]; then
+                    sudo rm -rf "$target_pth"
+                else
+                    rm -rf "$target_pth"
+                fi
+                $cmd "$source_pth" "$target_pth"
                 echo "已强制替换：$target_pth -> $source_pth"
             else
                 echo "跳过：$target_pth"
             fi
         fi
-
         return
     fi
 
-    # 目标不存在，可以创建
+    # 目标不存在
     if prompt_confirm "即将在 $target_pth 创建符号链接"; then
         mkdir -p "$(dirname "$target_pth")"
-        ln -s "$source_pth" "$target_pth"
+        $cmd "$source_pth" "$target_pth"
         echo "已创建符号链接：$target_pth -> $source_pth"
     fi
 }

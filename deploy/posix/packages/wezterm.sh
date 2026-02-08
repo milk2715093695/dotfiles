@@ -7,7 +7,7 @@ configure_wezterm() {
     fi
 
     if check_wezterm; then
-        link_dir "$HOME/.config/wezterm" "$REPO_ROOT/wezterm"
+        link_item "$HOME/.config/wezterm" "$REPO_ROOT/wezterm"
     else
         warn "没有 wezterm，跳过 wezterm 配置。"
     fi

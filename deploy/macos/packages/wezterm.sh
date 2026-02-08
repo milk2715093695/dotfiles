@@ -4,7 +4,7 @@ check_wezterm() {
         return 0
     fi
 
-    if command -v brew >/dev/null 2>&1 && brew list --formula wezterm >/dev/null 2>&1; then
+    if command -v brew >/dev/null 2>&1 && brew list --cask wezterm >/dev/null 2>&1; then
         return 0
     fi
 

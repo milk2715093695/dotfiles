@@ -7,7 +7,7 @@ function Install-JetBrainsMono {
         Where-Object { $_.Name -match "JetBrainsMono" }
 
     if ($fontInstalled) {
-        Write-Host "JetBrains Mono 已安装，跳过字体安装。"
+        Write-INFO "JetBrains Mono 已安装，跳过字体安装。"
         return
     }
 
