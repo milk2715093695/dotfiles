@@ -30,7 +30,6 @@ fi
 
 # fzf 初始化
 if command -v fzf >/dev/null 2>&1; then
-    add_to_path "$(brew --prefix)/opt/fzf/bin"
     source <(fzf --zsh)
 fi
 
