@@ -81,9 +81,13 @@ unset ANDROID_SDK_ROOT
 # ====================================================
 # ======================= JAVA =======================
 # ====================================================
-# 默认使用 JAVA 17
-export JAVA_HOME=$(/usr/libexec/java_home -v 17)
-add_to_path "$JAVA_HOME/bin"
+# 默认使用 Java 17（如果存在）
+if command -v /usr/libexec/java_home >/dev/null 2>&1; then
+    if JAVA_HOME_17=$(/usr/libexec/java_home -v 17 2>/dev/null); then
+        export JAVA_HOME="$JAVA_HOME_17"
+        add_to_path "$JAVA_HOME/bin"
+    fi
+fi
 # 不需要清理 JAVA_HOME
 
 
