@@ -22,6 +22,8 @@
 │   └── windows.ps1         # Windows
 ├── LICENSE
 ├── README.md
+├── starship
+│   └── starship.toml       # starship 配置
 ├── wezterm                 # WezTerm 配置以及文件
 └── zsh                     # zsh 配置
     ├── .zshrc              # zsh 配置文件一级入口
@@ -50,6 +52,7 @@
 
 - `~/.config/wezterm/`  ->  `dotfiles/wezterm/`
 - `~/.zshrc` -> `dotfiles/zsh/.zshrc`，`~/.config/zsh/` -> `dotfiles/zsh/zsh/`
+- `~/.config/starship.toml` -> `dotfiles/starship/starship.toml`
 
 ## 2. 部署
 
@@ -109,12 +112,13 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 - 配置
   - [X] WezTerm 配置
   - [X] zsh 配置
+  - [X] starship 配置
   - [ ] vim/nvim 配置
-  - [ ] starship 配置
 - 部署
   - [X] Ubuntu 部署脚本
   - [X] macOS 部署脚本
-  - [X] Windows 部署脚本
+  - [ ] Windows 部署脚本
+  - [ ] Termux + Android 部署脚本
 
 ## 许可证
 

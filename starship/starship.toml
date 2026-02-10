@@ -1,0 +1,184 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+[░▒▓](prompt_bg_main)\
+$os\
+$username\
+[](bg:prompt_bg_dir fg:prompt_bg_main)\
+$directory\
+[](fg:prompt_bg_dir bg:prompt_bg_git)\
+$git_branch\
+$git_status\
+[](fg:prompt_bg_git bg:prompt_bg_time)\
+$time\
+[ ](fg:prompt_bg_time)\
+$fill\
+$python\
+$lua\
+$nodejs\
+$golang\
+$haskell\
+$rust\
+$ruby\
+$aws\
+$docker_context\
+$jobs\
+$cmd_duration\
+$line_break\
+$character"""
+
+add_newline = true
+palette = "TokyoNight"
+
+command_timeout = 1000
+
+[os]
+disabled = false
+style = "bg:prompt_bg_main fg:prompt_fg_icon"
+
+[os.symbols]
+Windows = " 󰍲"
+Ubuntu = " 󰕈"
+Macos = " 󰀵"
+Linux = " 󰌽"
+Android = " "
+Arch = " 󰣇"
+CentOS = " "
+Debian = " 󰣚"
+Redhat = " 󱄛"
+
+[username]
+show_always = true
+style_user = "bg:prompt_bg_main fg:prompt_fg_icon"
+style_root = "bg:prompt_bg_main fg:prompt_fg_icon"
+format = '[ $user ]($style)'
+
+[directory]
+style = 'fg:prompt_fg_text bg:prompt_bg_dir'
+format = '[ $path ]($style)'
+truncation_length = 4
+truncation_symbol = '…/'
+truncate_to_repo = true
+
+[directory.substitutions]
+'Documents' = '󰈙 '
+'Downloads' = ' '
+'Music' = ' '
+'Pictures' = ' '
+'github-repositories' = ' '
+'Desktop' = ' '
+
+[git_branch]
+symbol = ""
+style = "bg:prompt_bg_git"
+format = '[[ $symbol $branch ](fg:prompt_bg_dir bg:prompt_bg_git)]($style)'
+
+[git_status]
+style = "bg:prompt_bg_git"
+format = '[[($all_status$ahead_behind )](fg:prompt_bg_dir bg:prompt_bg_git)]($style)'
+
+[fill]
+symbol = ' '
+
+[python]
+style = 'teal'
+symbol = ' '
+format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
+pyenv_version_name = true
+pyenv_prefix = ''
+
+[lua]
+format = '[$symbol($version )]($style)'
+symbol = ' '
+
+[nodejs]
+style = 'blue'
+symbol = ' '
+
+[golang]
+style = 'blue'
+symbol = ' '
+
+[haskell]
+style = 'blue'
+symbol = ' '
+
+[rust]
+style = 'orange'
+symbol = ' '
+
+[ruby]
+style = 'blue'
+symbol = ' '
+
+[package]
+symbol = '󰏗 '
+
+[aws]
+symbol = ' '
+style = 'yellow'
+format = '[$symbol($profile )(\[$duration\] )]($style)'
+
+[docker_context]
+symbol = ' '
+style = 'fg:#06969A'
+format = '[$symbol]($style) $path'
+detect_files = ['docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']
+detect_extensions = ['Dockerfile']
+
+[jobs]
+symbol = ' '
+style = 'red'
+number_threshold = 1
+format = '[$symbol]($style)'
+
+[cmd_duration]
+min_time = 500
+style = 'fg:gray'
+format = '[$duration]($style)'
+
+[time]
+disabled = false
+time_format = '%H:%M'
+style = "bg:prompt_bg_time"
+format = '[[  $time ](fg:prompt_fg_time bg:prompt_bg_time)]($style)'
+
+[palettes.TokyoNight]
+# prompt 结构色
+prompt_bg_main  = '#a3aed2'
+prompt_bg_dir   = '#769ff0'
+prompt_bg_git   = '#394260'
+prompt_bg_time  = '#212736'
+
+# 前景色
+prompt_fg_icon  = '#090c0c'
+prompt_fg_text  = '#e3e5e5'
+prompt_fg_time  = '#a0a9cb'
+
+# 功能色（module）
+blue    = '#81A1C1'
+teal    = '#88C0D0'
+red     = '#BF616A'
+orange  = '#D08770'
+yellow  = '#EBCB8B'
+gray    = '#434C5E'
+
+[palettes.Rainbow]
+# prompt 结构色
+prompt_bg_main  = '#cc241d'
+prompt_bg_dir   = '#d65d0e'
+prompt_bg_git   = '#d79921'
+prompt_bg_time  = '#98971a'
+
+# 前景色
+prompt_fg_icon  = '#090c0c'
+prompt_fg_text  = '#090c0c'
+prompt_fg_time  = '#090c0c'
+
+# 功能色（module）
+blue    = '#81A1C1'
+teal    = '#88C0D0'
+red     = '#BF616A'
+orange  = '#D08770'
+yellow  = '#EBCB8B'
+gray    = '#434C5E'
