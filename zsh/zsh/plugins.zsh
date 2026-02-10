@@ -2,7 +2,7 @@
 if command -v brew >/dev/null 2>&1; then
     ZSH_PLUGIN_BASE="$(brew --prefix)/share"
 else
-    ZSH_PLUGIN_BASE="/usr/share"
+    ZSH_PLUGIN_BASE="$HOME/.zsh"
 fi
 
 # 激活 zsh-completions（命令补全）
