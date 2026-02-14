@@ -2,7 +2,7 @@
 if command -v brew >/dev/null 2>&1; then
     ZSH_PLUGIN_BASE="$(brew --prefix)/share"
 else
-    ZSH_PLUGIN_BASE="$HOME/.zsh"
+    ZSH_PLUGIN_BASE="/usr/share"
 fi
 
 # 激活 zsh-completions（命令补全）
@@ -30,7 +30,11 @@ fi
 
 # fzf 初始化
 if command -v fzf >/dev/null 2>&1; then
+    add_to_path "$(brew --prefix)/opt/fzf/bin"
     source <(fzf --zsh)
+
+    # 配置 fzf 使用 fd
+    export FZF_DEFAULT_COMMAND='fd --type f'
 fi
 
 # 激活 zsh-syntax-highlighting（语法高亮，需要最后加载）
