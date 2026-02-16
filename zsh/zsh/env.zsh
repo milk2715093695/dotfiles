@@ -53,6 +53,9 @@ fi
 if command -v brew >/dev/null 2>&1; then
     HOMEBREW="$(brew --prefix)"
 
+    # Homebrew 命令
+    add_to_fpath "$HOMEBREW/share/zsh/site-functions"
+
     # Homebrew 的可执行文件路径
     add_to_path "$HOMEBREW/bin"
 
