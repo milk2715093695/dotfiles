@@ -39,3 +39,13 @@ done
 for ext in md py json yaml; do
     alias -s $ext="code"
 done
+
+
+# ====================================================
+# ================== conda 懒加载代理 ==================
+# ====================================================
+conda() {
+    unfunction conda
+    source "$HOME/.config/zsh/conda.zsh"
+    conda "$@"
+}

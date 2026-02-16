@@ -1,10 +1,9 @@
 # 懒加载 conda 环境
 load_conda() {
-    if (( $+CONDA_SHLVL )); then
-        return
-    fi
-
     source "$HOME/.config/zsh/conda.zsh"
+
+    # 删除代理函数
+    unfunction load_conda 2>/dev/null
 }
 
 # 启动 AVD 的函数
