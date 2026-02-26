@@ -1,7 +1,5 @@
 Set-StrictMode -Version Latest
 
-$cpu = Get-CimInstance Win32_Processor
-
 # 获取 AltSnap 的资产名字
 function Get-AltSnapAssetName {
     param (
@@ -9,13 +7,13 @@ function Get-AltSnapAssetName {
         [string]$Version
     )
 
+    $cpu = Get-CimInstance Win32_Processor
+
     if ($cpu.Architecture -eq 12) {
         return "AltSnap${Version}bin_ARM64.zip"
-    }
-    elseif ([Environment]::Is64BitOperatingSystem) {
+    } elseif ([Environment]::Is64BitOperatingSystem) {
         return "AltSnap${Version}bin_x64.zip"
-    }
-    else {
+    } else {
         return "AltSnap${Version}bin.zip"
     }
 }

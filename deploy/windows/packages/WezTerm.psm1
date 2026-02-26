@@ -18,7 +18,7 @@ function Test-WezTerm {
 
 # 使用 scoop 安装 WezTerm
 function Install-WezTerm {
-    Write-WARNING "未安装 wezterm，但存在 scoop。" -ForegroundColor
+    Write-WARNING "未安装 wezterm，但存在 scoop。"
 
     if (Read-Confirmation "是否使用 scoop 安装 wezterm？") {
         scoop install wezterm
@@ -29,7 +29,6 @@ function Install-WezTerm {
 
 # 配置 WezTerm
 function Initialize-WezTerm {
-
     if (Test-WezTerm) {
         Write-Host "wezterm 已存在，跳过安装。"
     } else {
@@ -42,7 +41,7 @@ function Initialize-WezTerm {
     }
 
     if (Test-WezTerm) {
-        $target = "$env:USERPROFILE\.config\wezterm"
+        $target = "$HOME\.config\wezterm"
         $source = Join-Path $REPO_ROOT "wezterm"
         New-SymbolicLink $target $source
     } else {

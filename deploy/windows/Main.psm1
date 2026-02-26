@@ -18,6 +18,20 @@ function Main {
 
     Initialize-WezTerm
 
+    Initialize-PSGalleryRepository
+
+    Install-ScoopPackage fd
+
+    Install-ScoopPackage fzf
+
+    Install-ScoopPackage zoxide
+
+    Initialize-Starship
+
+    Initialize-PSFzf
+
+    Initialize-PWSH
+
     Write-Host ""
     Write-INFO "部署完成。"
 }
