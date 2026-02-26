@@ -34,7 +34,9 @@ if command -v fzf >/dev/null 2>&1; then
     source <(fzf --zsh)
 
     # 配置 fzf 使用 fd
-    export FZF_DEFAULT_COMMAND='fd --type f'
+    if command -v fd >/dev/null 2>&1; then
+        export FZF_DEFAULT_COMMAND='fd --type f'
+    fi
 fi
 
 # 激活 zsh-syntax-highlighting（语法高亮，需要最后加载）
