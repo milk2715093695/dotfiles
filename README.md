@@ -1,6 +1,6 @@
 # dotfiles
 
-这是一个用于管理个人配置的仓库（dotfiles）。  
+这是一个用于管理个人配置的仓库（dotfiles）。
 
 - [dotfiles](#dotfiles)
   - [目录结构](#目录结构)
@@ -21,6 +21,19 @@
 │   ├── ubuntu.sh           # Ubuntu（其他 Linux 系列未尝试）
 │   └── windows.ps1         # Windows
 ├── LICENSE
+├── pwsh                                        # pwsh 配置
+│   ├── Microsoft.PowerShell_profile.ps1        # pwsh 配置文件一级入口
+│   └── pwsh
+│       ├── Aliases.ps1                         # 别名配置
+│       ├── Conda.ps1                           # conda 初始化脚本（懒加载）
+│       ├── Env.ps1                             # 环境变量配置
+│       ├── Functions.ps1                       # 自定义函数
+│       ├── Hook.ps1                            # hook
+│       ├── Microsoft.PowerShell_profile.ps1    # pwsh 配置文件二级入口
+│       ├── Options.ps1                         # zsh 选项配置
+│       ├── Plugins.ps1                         # 插件配置
+│       └── Secrets                             # 密码管理（除了示例文件外不会被追踪）
+│           └── Example.ps1                     # 示例
 ├── README.md
 ├── starship
 │   └── starship.toml       # starship 配置
@@ -28,7 +41,7 @@
 └── zsh                     # zsh 配置
     ├── .zshrc              # zsh 配置文件一级入口
     └── zsh
-        ├── aliases.zsh     # 别名配置  
+        ├── aliases.zsh     # 别名配置
         ├── conda.zsh       # conda 初始化脚本（懒加载）
         ├── env.zsh         # 环境变量配置
         ├── functions.zsh   # 自定义函数
@@ -45,7 +58,7 @@
 
 ## 1. 配置路径约定
 
-本仓库采用以下约定：  
+本仓库采用以下约定：
 **仓库只存放“源文件”，实际配置通过符号链接（symlink）映射到真实路径。**
 
 例如：
@@ -53,6 +66,7 @@
 - `~/.config/wezterm/`  ->  `dotfiles/wezterm/`
 - `~/.zshrc` -> `dotfiles/zsh/.zshrc`，`~/.config/zsh/` -> `dotfiles/zsh/zsh/`
 - `~/.config/starship.toml` -> `dotfiles/starship/starship.toml`
+- `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` -> `dotfiles\pwsh\PowerShell_profile.ps1`，`~\.config\pwsh\` -> `dotfiles\pwsh\pwsh\`
 
 ## 2. 部署
 
@@ -113,12 +127,12 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
   - [X] WezTerm 配置
   - [X] zsh 配置
   - [X] starship 配置
+  - [X] pwsh 配置
   - [ ] vim/nvim 配置
 - 部署
   - [X] Ubuntu 部署脚本
   - [X] macOS 部署脚本
-  - [ ] Windows 部署脚本
-  - [ ] Termux + Android 部署脚本
+  - [X] Windows 部署脚本
 
 ## 许可证
 
