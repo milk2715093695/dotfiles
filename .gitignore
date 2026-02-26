@@ -43,3 +43,6 @@ cache/
 !/zsh/zsh/secrets/example.sh
 /pwsh/pwsh/secrets/*
 !/pwsh/pwsh/secrets/Example.ps1
+
+# 忽略 vscode 配置
+.vscode/
