@@ -62,6 +62,9 @@ if command -v brew >/dev/null 2>&1; then
     # llvm 路径
     add_to_path "$HOMEBREW/opt/llvm/bin"
 
+    # ffmpeg 配置
+    add_to_path "$HOMEBREW/opt/ffmpeg-full/bin"
+
     # terminfo 相关配置
     export TERMINFO="$HOMEBREW/opt/ncurses/share/terminfo"
 

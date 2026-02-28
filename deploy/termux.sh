@@ -4,7 +4,7 @@ set -euo pipefail   # 失败即退出
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"  # 脚本目录
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"                   # 仓库目录
-PAKAGE_MANAGER="brew"                                       # 包管理器
+PAKAGE_MANAGER="pkg"                                        # 包管理器
 
 source "$SCRIPT_DIR/posix/utils/colors.sh"              # 颜色变量
 source "$SCRIPT_DIR/posix/utils/prompt.sh"              # 提示函数
@@ -16,7 +16,7 @@ source "$SCRIPT_DIR/posix/packages/zsh.sh"              # zsh 配置
 source "$SCRIPT_DIR/posix/packages/zsh_plugins.sh"      # zsh 插件配置
 source "$SCRIPT_DIR/posix/packages/starship.sh"         # starship 安装
 
-source "$SCRIPT_DIR/ubuntu/packages/wezterm.sh"         # WezTerm 安装
+source "$SCRIPT_DIR/termux/packages/wezterm.sh"         # WezTerm 安装（占位）
 
 source "$SCRIPT_DIR/posix/main.sh"                      # 入口函数
 

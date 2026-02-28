@@ -9,6 +9,7 @@
     - [2.1. Ubuntu](#21-ubuntu)
     - [2.2. macOS](#22-macos)
     - [2.3. Windows](#23-windows)
+    - [2.4. Android-termux](#24-android-termux)
   - [3. 未来计划](#3-未来计划)
   - [许可证](#许可证)
 
@@ -121,6 +122,17 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 .\deploy\windows.ps1
 ```
 
+### 2.4. Android-termux
+
+在 termux 上执行以下步骤即可部署配置：
+
+```bash
+git clone https://github.com/milk2715093695/dotfiles.git
+cd ./dotfiles
+chmod +x ./deploy/termux.sh
+./deploy/termux.sh
+```
+
 ## 3. 未来计划
 
 - 配置
@@ -133,6 +145,7 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
   - [X] Ubuntu 部署脚本
   - [X] macOS 部署脚本
   - [X] Windows 部署脚本
+  - [X] Android-termux 部署脚本
 
 ## 许可证
 

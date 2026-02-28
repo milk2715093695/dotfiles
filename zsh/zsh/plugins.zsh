@@ -2,7 +2,7 @@
 if command -v brew >/dev/null 2>&1; then
     ZSH_PLUGIN_BASE="$(brew --prefix)/share"
 else
-    ZSH_PLUGIN_BASE="/usr/share"
+    ZSH_PLUGIN_BASE="$HOME/.zsh"
 fi
 
 # 激活 zsh-completions（命令补全）
@@ -30,7 +30,10 @@ fi
 
 # fzf 初始化
 if command -v fzf >/dev/null 2>&1; then
-    add_to_path "$(brew --prefix)/opt/fzf/bin"
+    if command -v brew >/dev/null 2>&1; then
+        add_to_path "$(brew --prefix)/opt/fzf/bin"
+    fi
+    
     source <(fzf --zsh)
 
     # 配置 fzf 使用 fd
