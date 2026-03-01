@@ -1,7 +1,6 @@
 ############################
 # macOS
 ############################
-
 .DS_Store
 .AppleDouble
 .LSOverride
@@ -15,7 +14,6 @@ Icon
 ############################
 # Windows
 ############################
-
 Thumbs.db
 Thumbs.db:encryptable
 ehthumbs.db
@@ -27,7 +25,6 @@ $RECYCLE.BIN/
 ############################
 # Linux
 ############################
-
 .directory
 
 
@@ -46,3 +43,7 @@ cache/
 
 # 忽略 vscode 配置
 .vscode/
+
+# 忽略 yazi 插件和主题
+yazi/plugins/
+yazi/flavors/
