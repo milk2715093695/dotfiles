@@ -19,7 +19,7 @@ config.enable_tab_bar = false
 config.window_close_confirmation = "NeverPrompt"
 config.window_decorations = "RESIZE"
 config.default_cursor_style = "BlinkingBar"
-config.color_scheme = "Nord (Gogh)"
+config.color_scheme = "Tokyo Night Storm"
 
 -- 字体 helper
 local function font(family)
