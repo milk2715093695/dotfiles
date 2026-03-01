@@ -68,6 +68,7 @@
 - `~/.zshrc` -> `dotfiles/zsh/.zshrc`，`~/.config/zsh/` -> `dotfiles/zsh/zsh/`
 - `~/.config/starship.toml` -> `dotfiles/starship/starship.toml`
 - `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` -> `dotfiles\pwsh\PowerShell_profile.ps1`，`~\.config\pwsh\` -> `dotfiles\pwsh\pwsh\`
+- `~/.config/yazi/` -> `dotfiles/yazi/` 或 `%AppData\config\yazi\` -> `dotfiles\yazi\`
 
 ## 2. 部署
 
@@ -140,6 +141,7 @@ chmod +x ./deploy/termux.sh
   - [X] zsh 配置
   - [X] starship 配置
   - [X] pwsh 配置
+  - [X] yazi 配置
   - [ ] vim/nvim 配置
 - 部署
   - [X] Ubuntu 部署脚本
