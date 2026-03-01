@@ -105,3 +105,6 @@ add_to_path "$HOME/bin"
 
 # LaTeX 路径
 add_to_path "/Library/TeX/texbin"
+
+# termux 使用的 bin 目录
+add_to_path "/data/data/com.termux/files/usr/bin"
