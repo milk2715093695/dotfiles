@@ -4,41 +4,49 @@ Set-StrictMode -Version Latest
 function Install-ScoopPackage {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true)]
-        [string]$Name,
+        # 支持多个包名
+        [
+            Parameter(
+                Mandatory=$true,
+                Position=0,
+                ValueFromPipeline=$true,
+                ValueFromPipelineByPropertyName=$true
+            )
+        ]
+        [string[]]$Name,
 
         [Parameter()]
-        [switch]$App  # 如果指定，则使用 scoop install --app (等价于 brew cask)
+        [switch]$App
     )
 
-    # 检查是否已安装
-    if (Get-Command $Name -ErrorAction SilentlyContinue) {
-        Write-Host "$Name 已安装 (命令可用)"
-        return
-    }
+    process {
+        foreach ($pkg in $Name) {
 
-    if ($App) {
-        if (scoop list | Select-String -Pattern "^$Name\s") {
-            Write-Host "$Name 已安装 (Scoop app)"
-            return
+            # 检查是否已安装
+            if (Get-Command $pkg -ErrorAction SilentlyContinue) {
+                Write-Host "$pkg 已安装 (命令可用)"
+                continue
+            }
+
+            if (scoop list | Select-String -Pattern "^$pkg\s") {
+                Write-Host "$pkg 已安装 (Scoop)"
+                continue
+            }
+
+            # 询问是否安装
+            if (Read-Confirmation "是否使用 Scoop 安装 $pkg？") {
+
+                $installArgs = @("install")
+                if ($App) { $installArgs += "--app" }
+                $installArgs += $pkg
+
+                Write-Host "使用 Scoop 安装 $pkg..."
+                scoop @installArgs
+            }
+            else {
+                Write-Host "跳过 $pkg 安装"
+            }
         }
-    } else {
-        if (scoop list | Select-String -Pattern "^$Name\s") {
-            Write-Host "$Name 已安装 (Scoop bucket)"
-            return
-        }
-    }
-
-    # 提示安装
-    if (Read-Confirmation "是否使用 Scoop 安装 $Name？") {
-        $installArgs = @("install")
-        if ($App) { $installArgs += "--app" }
-        $installArgs += $Name
-
-        Write-Host "使用 Scoop 安装 $Name..."
-        scoop @installArgs
-    } else {
-        Write-Host "跳过 $Name 安装"
     }
 }
 

@@ -20,17 +20,15 @@ function Main {
 
     Initialize-PSGalleryRepository
 
-    Install-ScoopPackage fd
-
-    Install-ScoopPackage fzf
-
-    Install-ScoopPackage zoxide
+    Install-ScoopPackage -Name @('fd','fzf','zoxide')
 
     Initialize-Starship
 
     Initialize-PSFzf
 
     Initialize-PWSH
+
+    Initialize-Yazi
 
     Write-Host ""
     Write-INFO "部署完成。"
