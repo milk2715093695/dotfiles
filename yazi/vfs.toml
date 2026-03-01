@@ -1,0 +1,5 @@
+[services.my-oplus]
+type     = "sftp"
+host     = "10.66.0.20"
+user     = "u0_a346"
+port     = 8022
