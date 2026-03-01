@@ -13,9 +13,5 @@ check_wezterm() {
 
 # 使用 Homebrew 安装 WezTerm
 install_wezterm() {
-    if prompt_confirm "是否使用 Homebrew 安装 wezterm？"; then
-        install_package "$PAKAGE_MANAGER" wezterm true
-    else
-        echo "跳过 wezterm 安装。"
-    fi
+    install_package brew cask:wezterm
 }

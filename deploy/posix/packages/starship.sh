@@ -7,21 +7,12 @@ check_starship() {
     fi
 }
 
-# 安装 starship
-install_starship() {
-    if prompt_confirm "是否使用 brew 安装 starship？"; then
-        install_package brew starship false
-    else
-        echo "跳过 starship 安装。"
-    fi
-}
-
 # 配置 starship
 configure_starship() {
     if check_starship; then
         echo "starship 已存在，跳过安装"
     else
-        install_starship
+        install_package brew starship
     fi
 
     if check_starship; then

@@ -6,9 +6,5 @@ install_jetbrains_mono() {
         return
     fi
 
-    if prompt_confirm "是否安装 JetBrains Mono 字体？"; then
-        install_package "$PAKAGE_MANAGER" "font-jetbrains-mono" true
-    else
-        echo "跳过字体安装。"
-    fi
+    install_package "$PAKAGE_MANAGER" cask:font-jetbrains-mono
 }
