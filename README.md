@@ -10,7 +10,8 @@
     - [2.2. macOS](#22-macos)
     - [2.3. Windows](#23-windows)
     - [2.4. Android-termux](#24-android-termux)
-  - [3. 未来计划](#3-未来计划)
+  - [3. 注意事项](#3-注意事项)
+  - [4. 未来计划](#4-未来计划)
   - [许可证](#许可证)
 
 ## 目录结构
@@ -134,7 +135,11 @@ chmod +x ./deploy/termux.sh
 ./deploy/termux.sh
 ```
 
-## 3. 未来计划
+## 3. 注意事项
+
+对于 `cava` 的配置，我采用了 BlackHole 2ch 以获取内部音频，鉴于此方法只适用于 macOS，因此如果是其它系统，请自行修改 `cava` 配置文件。
+
+## 4. 未来计划
 
 - 配置
   - [X] WezTerm 配置
@@ -142,6 +147,8 @@ chmod +x ./deploy/termux.sh
   - [X] starship 配置
   - [X] pwsh 配置
   - [X] yazi 配置
+  - [X] cava 配置
+  - [ ] tmux 配置
   - [ ] vim/nvim 配置
 - 部署
   - [X] Ubuntu 部署脚本

@@ -47,3 +47,6 @@ cache/
 # 忽略 yazi 插件和主题
 yazi/plugins/
 yazi/flavors/
+
+# 忽略 cava 的 shader 文件
+cava/shaders/
