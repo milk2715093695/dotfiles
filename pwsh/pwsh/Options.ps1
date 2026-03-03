@@ -14,7 +14,14 @@ Set-PSReadLineOption -PredictionSource History
 Set-PSReadLineOption -PredictionViewStyle InlineView
 
 Set-PSReadLineOption -Colors @{
-    Command = 'Green'
-    String = 'Yellow'
-    InlinePrediction = 'Cyan'
+    Command = '#a6da95'
+    Parameter = '#f5a97f'
+    String = '#eed49f'
+    Variable = '#cad3f5'
+    Comment = '#5b6078'
+    Operator = '#ed8796'
+    InlinePrediction = '#c6a0f6'
+    Number = '#cad3f5'
+    Type = '#a6da95'
+    Keyword = '#a6da95'
 }

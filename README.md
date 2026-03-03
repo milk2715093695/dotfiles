@@ -10,7 +10,6 @@
     - [2.2. macOS](#22-macos)
     - [2.3. Windows](#23-windows)
     - [2.4. Android-termux](#24-android-termux)
-  - [3. 注意事项](#3-注意事项)
   - [4. 未来计划](#4-未来计划)
   - [许可证](#许可证)
 
@@ -70,6 +69,7 @@
 - `~/.config/starship.toml` -> `dotfiles/starship/starship.toml`
 - `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` -> `dotfiles\pwsh\PowerShell_profile.ps1`，`~\.config\pwsh\` -> `dotfiles\pwsh\pwsh\`
 - `~/.config/yazi/` -> `dotfiles/yazi/` 或 `%AppData\config\yazi\` -> `dotfiles\yazi\`
+- `~/.config/cava/` -> `dotfiles/cava/<对应系统>`
 
 ## 2. 部署
 
@@ -134,10 +134,6 @@ cd ./dotfiles
 chmod +x ./deploy/termux.sh
 ./deploy/termux.sh
 ```
-
-## 3. 注意事项
-
-对于 `cava` 的配置，我采用了 BlackHole 2ch 以获取内部音频，鉴于此方法只适用于 macOS，因此如果是其它系统，请自行修改 `cava` 配置文件。
 
 ## 4. 未来计划
 
