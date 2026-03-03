@@ -22,7 +22,12 @@ function Initialize-Yazi {
         Write-Host "yazi 已存在，跳过安装。"
     } else {
         Install-ScoopPackage -Name @(
-            "yazi", "ffmpeg", "7zip", "jq", "poppler", "fd", "ripgrep", "fzf", "zoxide", "resvg", "imagemagick", "file"
+            "yazi", "ffmpeg", "7zip",
+            "jq", "poppler", "fd",
+            "ripgrep", "fzf", "zoxide",
+            "resvg", "imagemagick", "clipboard",
+            "bat", "less", "glow",
+            "file"
         )
     }
 

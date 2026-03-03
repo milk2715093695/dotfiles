@@ -12,7 +12,7 @@ configure_yazi() {
     if check_yazi; then
         echo "yazi 已经安装"
     else
-        install_package $PAKAGE_MANAGER yazi ffmpeg 7zip jq poppler fd ripgrep fzf zoxide resvg imagemagick
+        install_package $PACKAGE_MANAGER yazi ffmpeg 7zip jq poppler fd ripgrep fzf zoxide resvg imagemagick clipboard glow
     fi
 
     if check_yazi; then

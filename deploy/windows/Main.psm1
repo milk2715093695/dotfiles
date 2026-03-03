@@ -30,6 +30,8 @@ function Main {
 
     Initialize-Yazi
 
+    Initialize-Cava
+
     Write-Host ""
     Write-INFO "部署完成。"
 }

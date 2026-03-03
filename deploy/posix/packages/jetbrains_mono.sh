@@ -6,5 +6,5 @@ install_jetbrains_mono() {
         return
     fi
 
-    install_package "$PAKAGE_MANAGER" cask:font-jetbrains-mono
+    install_package "$PACKAGE_MANAGER" cask:font-jetbrains-mono
 }
