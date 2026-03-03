@@ -46,10 +46,12 @@ fi
 if [ -f "${ZSH_PLUGIN_BASE}/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]; then
     source "${ZSH_PLUGIN_BASE}/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
-    # 禁用语法高亮中的下划线样式
+    # 设置启用的 highlighters
+    ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets cursor)
+
     (( ${+ZSH_HIGHLIGHT_STYLES} )) || typeset -A ZSH_HIGHLIGHT_STYLES
-    ZSH_HIGHLIGHT_STYLES[path]=none
-    ZSH_HIGHLIGHT_STYLES[path_prefix]=none
+
+    source "$MY_ZSH_CONFIG/themes/catppuccin_macchiato-zsh-syntax-highlighting.zsh"
 fi
 
 unset ZSH_PLUGIN_BASE
