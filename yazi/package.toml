@@ -33,6 +33,11 @@ use = "orhnk/system-clipboard"
 rev = "75a5330"
 hash = "2eca70f99d25c661e0a92000843d001e"
 
+[[plugin.deps]]
+use = "yazi-rs/plugins:mime-ext"
+rev = "1962818"
+hash = "8b177921e50732b2c8e9d71aa5956270"
+
 [[flavor.deps]]
 use = "BennyOe/tokyo-night"
 rev = "8e6296f"
