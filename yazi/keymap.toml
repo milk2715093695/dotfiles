@@ -3,9 +3,14 @@
 "$schema" = "https://yazi-rs.github.io/schemas/keymap.json"
 
 [[mgr.prepend_keymap]]
-on   = [ "g", "s" ]
+on   = [ "g", "s", "o" ]
 run  = "cd sftp://my-oplus"
 desc = "Go to my-oplus"
+
+[[mgr.prepend_keymap]]
+on   = [ "g", "s", "w" ]
+run  = "cd sftp://my-windows"
+desc = "Go to my-windows"
 
 [[mgr.prepend_keymap]]
 on   = "l"

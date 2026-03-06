@@ -3,3 +3,9 @@ type     = "sftp"
 host     = "10.66.0.20"
 user     = "u0_a346"
 port     = 8022
+
+[services.my-windows]
+type     = "sftp"
+host     = "10.66.0.11"
+user     = "mac"
+port     = 2358
