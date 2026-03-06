@@ -14,3 +14,9 @@ setopt INC_APPEND_HISTORY      # 命令执行后立即写入
 setopt SHARE_HISTORY           # 多终端共享
 setopt HIST_IGNORE_ALL_DUPS    # 完全去重
 setopt HIST_REDUCE_BLANKS      # 去掉多余空格
+
+# 允许用 $EDITOR 编辑当前命令行
+# Ctrl-x Ctrl-e 会打开编辑器编辑当前输入的命令
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '^x^e' edit-command-line

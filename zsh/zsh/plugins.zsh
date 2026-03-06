@@ -10,6 +10,12 @@ if [ -d "${ZSH_PLUGIN_BASE}/zsh-completions" ]; then
     add_to_fpath "${ZSH_PLUGIN_BASE}/zsh-completions"
 fi
 
+# OpenClaw 补全
+# 让 openclaw 命令支持 Tab 补全
+if [ -f "~/.openclaw/completions/openclaw.zsh" ]; then
+    source "~/.openclaw/completions/openclaw.zsh"
+fi
+
 # 激活 zsh-autosuggestions（命令自动提示）
 if [ -f "${ZSH_PLUGIN_BASE}/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
     source "${ZSH_PLUGIN_BASE}/zsh-autosuggestions/zsh-autosuggestions.zsh"

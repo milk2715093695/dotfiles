@@ -111,3 +111,6 @@ add_to_path "/Library/TeX/texbin"
 
 # termux 使用的 bin 目录
 add_to_path "/data/data/com.termux/files/usr/bin"
+
+# 默认编辑器为 nvim
+export EDITOR=nvim
