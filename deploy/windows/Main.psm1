@@ -32,6 +32,8 @@ function Main {
 
     Initialize-Cava
 
+    Initialize-LazyVim
+
     Write-Host ""
     Write-INFO "部署完成。"
 }

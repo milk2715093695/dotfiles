@@ -23,6 +23,7 @@ Import-Module   "$SCRIPT_DIR\windows\packages\PSFzf.psm1"       -Force  # PSFzf
 Import-Module   "$SCRIPT_DIR\windows\packages\Starship.psm1"    -Force  # Starship
 Import-Module   "$SCRIPT_DIR\windows\packages\Yazi.psm1"        -Force  # Yazi
 Import-Module   "$SCRIPT_DIR\windows\packages\Cava.psm1"        -Force  # Cava
+Import-Module   "$SCRIPT_DIR\windows\packages\LazyVim.psm1"     -Force  # LazyVim
 
 Import-Module   "$SCRIPT_DIR\windows\Main.psm1"     -Force      # 主函数
 
