@@ -3,25 +3,101 @@
 这是一个用于管理个人配置的仓库（dotfiles）。
 
 - [dotfiles](#dotfiles)
-  - [目录结构](#目录结构)
-  - [1. 配置路径约定](#1-配置路径约定)
-  - [2. 部署](#2-部署)
-    - [2.1. Ubuntu](#21-ubuntu)
-    - [2.2. macOS](#22-macos)
-    - [2.3. Windows](#23-windows)
-    - [2.4. Android-termux](#24-android-termux)
-  - [4. 未来计划](#4-未来计划)
+  - [1. 效果展示](#1-效果展示)
+  - [2. 目录结构](#2-目录结构)
+  - [3. 配置路径约定](#3-配置路径约定)
+  - [4. 部署](#4-部署)
+    - [4.1. Ubuntu](#41-ubuntu)
+    - [4.2. macOS](#42-macos)
+    - [4.3. Windows](#43-windows)
+    - [4.4. Android-termux](#44-android-termux)
+  - [5. 未来计划](#5-未来计划)
   - [许可证](#许可证)
 
-## 目录结构
+## 1. 效果展示
+
+<details>
+<summary>cava</summary>
+
+cava 配置了主题颜色：
+
+![cava 配置效果](assets/screenshots/cava.webp)
+
+</details>
+
+
+<details>
+<summary>nvim</summary>
+
+nvim 基本继承了 LazyVim 的配置，添加了部分插件：
+
+![nvim 配置效果](assets/screenshots/nvim.webp)
+
+</details>
+
+
+<details>
+<summary>pwsh & zsh</summary>
+
+基本上都是命令行的效果，无需展示。
+
+</details>
+
+
+<details>
+<summary>starship</summary>
+
+为 starship 配置了 prompt：
+
+![starship 配置效果](assets/screenshots/starship.webp)
+
+</details>
+
+
+<details>
+<summary>tmux</summary>
+
+为 tmux 配置了状态栏以及常见插件。
+
+![tmux 配置效果](assets/screenshots/tmux.webp)
+
+</details>
+
+
+<details>
+<summary>WezTerm</summary>
+
+为 wezterm 配置了主题：
+
+![wezterm 配置效果](assets/screenshots/wezterm.webp)
+
+</details>
+
+
+<details>
+<summary>Yazi</summary>
+
+为 yazi 配置了主题以及常用插件：
+
+![yazi 配置效果](assets/screenshots/yazi.webp)
+
+</details>
+
+## 2. 目录结构
 
 ```text
 .
+├── cava                    # cava 配置
+│   ├── macos               # macOS
+│   ├── termux              # Android-termux
+│   ├── ubuntu              # Ubuntu
+│   └── windows             # Windows
 ├── deploy                  # 部署脚本
 │   ├── macos.sh            # macOS
 │   ├── ubuntu.sh           # Ubuntu（其他 Linux 系列未尝试）
 │   └── windows.ps1         # Windows
 ├── LICENSE
+├── nvim                    # LazyVim 配置
 ├── pwsh                                        # pwsh 配置
 │   ├── Microsoft.PowerShell_profile.ps1        # pwsh 配置文件一级入口
 │   └── pwsh
@@ -38,7 +114,19 @@
 ├── README.md
 ├── starship
 │   └── starship.toml       # starship 配置
+├── tmux                    # tmux 配置
+│   ├── plugins             # tmux 插件目录
+│   └── tmux.conf           # tmux 配置文件
 ├── wezterm                 # WezTerm 配置以及文件
+├── yazi                    # yazi 配置
+│   ├── flavors             # yazi 主题目录
+│   ├── init.lua            # yazi lua 初始化脚本
+│   ├── keymap.toml         # yazi 快捷键配置
+│   ├── package.toml        # yazi 插件配置
+│   ├── plugins             # yazi 插件目录
+│   ├── theme.toml          # yazi 主题配置
+│   ├── vfs.toml            # yazi 文件系统配置
+│   └── yazi.toml           # yazi 主配置文件
 └── zsh                     # zsh 配置
     ├── .zshrc              # zsh 配置文件一级入口
     └── zsh
@@ -54,10 +142,7 @@
         └── zshrc           # zsh 配置文件二级入口
 ```
 
-- `wezterm/`：WezTerm 配置文件及资源
-- `deploy/`：部署脚本
-
-## 1. 配置路径约定
+## 3. 配置路径约定
 
 本仓库采用以下约定：
 **仓库只存放“源文件”，实际配置通过符号链接（symlink）映射到真实路径。**
@@ -70,8 +155,10 @@
 - `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` -> `dotfiles\pwsh\PowerShell_profile.ps1`，`~\.config\pwsh\` -> `dotfiles\pwsh\pwsh\`
 - `~/.config/yazi/` -> `dotfiles/yazi/` 或 `%AppData\config\yazi\` -> `dotfiles\yazi\`
 - `~/.config/cava/` -> `dotfiles/cava/<对应系统>`
+- `~/.config/nvim` -> `dotfiles/nvim/` 或 `%LocalAppData\nvim\` -> `dotfiles\nvim\`
+- `~/.config/tmux` -> `dotfiles/tmux/`
 
-## 2. 部署
+## 4. 部署
 
 部署脚本会：
 
@@ -84,33 +171,33 @@
 >
 > 国内建议提前配置代理或镜像源
 
-### 2.1. Ubuntu
+### 4.1. Ubuntu
 
 推荐拥有 `flatpak` 与 `Linuxbrew` 作为前置，同时有 `zsh` 作为默认的 shell。
 
 在新机器上执行以下步骤即可部署配置：
 
 ```bash
-git clone https://github.com/milk2715093695/dotfiles.git
+git clone --recurse-submodules https://github.com/milk2715093695/dotfiles.git
 cd ./dotfiles
 chmod +x ./deploy/ubuntu.sh
 ./deploy/ubuntu.sh
 ```
 
-### 2.2. macOS
+### 4.2. macOS
 
 推荐拥有 `Homebrew` 作为前置。
 
 在新机器上执行以下步骤即可部署配置：
 
 ```bash
-git clone https://github.com/milk2715093695/dotfiles.git
+git clone --recurse-submodules https://github.com/milk2715093695/dotfiles.git
 cd ./dotfiles
 chmod +x ./deploy/macos.sh
 ./deploy/macos.sh
 ```
 
-### 2.3. Windows
+### 4.3. Windows
 
 - 推荐拥有 `scoop` 作为前置。
 - 推荐以管理员身份的 `Powershell` 或 `pwsh`（推荐）运行部署脚本。
@@ -118,24 +205,24 @@ chmod +x ./deploy/macos.sh
 在 powershell 上执行以下步骤即可部署配置：
 
 ```powershell
-git clone https://github.com/milk2715093695/dotfiles.git
+git clone --recurse-submodules https://github.com/milk2715093695/dotfiles.git
 cd .\dotfiles
 Set-ExecutionPolicy Bypass -Scope Process -Force
 .\deploy\windows.ps1
 ```
 
-### 2.4. Android-termux
+### 4.4. Android-termux
 
 在 termux 上执行以下步骤即可部署配置：
 
 ```bash
-git clone https://github.com/milk2715093695/dotfiles.git
+git clone --recurse-submodules https://github.com/milk2715093695/dotfiles.git
 cd ./dotfiles
 chmod +x ./deploy/termux.sh
 ./deploy/termux.sh
 ```
 
-## 4. 未来计划
+## 5. 未来计划
 
 - 配置
   - [X] WezTerm 配置
@@ -144,8 +231,8 @@ chmod +x ./deploy/termux.sh
   - [X] pwsh 配置
   - [X] yazi 配置
   - [X] cava 配置
-  - [ ] tmux 配置
-  - [ ] vim/nvim 配置
+  - [X] tmux 配置
+  - [X] nvim 配置
 - 部署
   - [X] Ubuntu 部署脚本
   - [X] macOS 部署脚本
