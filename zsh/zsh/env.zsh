@@ -6,7 +6,7 @@ add_to_path() {
                 export PATH="$dir:$PATH"
                 echo "目录 $dir 被添加到 PATH 中"
             fi
-        else 
+        else
             echo "错误：目录 $dir 不存在"
         fi
     done
@@ -20,7 +20,7 @@ add_to_fpath() {
                 export FPATH="$dir:$FPATH"
                 echo "目录 $dir 被添加到 FPATH 中"
             fi
-        else 
+        else
             echo "错误：目录 $dir 不存在"
         fi
     done
@@ -28,89 +28,10 @@ add_to_fpath() {
 
 
 # ====================================================
-# ===================== PNPM =========================
-# ====================================================
-export PNPM_HOME="$HOME/Library/pnpm"
-add_to_path "$PNPM_HOME"
-# 不需要清理 PNPM_HOME
-
-
-# ====================================================
-# =============== homebrew 相关环境变量 ===============
-# ====================================================
-# Homebrew 镜像配置
-export HOMEBREW_PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
-export HOMEBREW_API_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api
-export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/
-
-# 激活 Homebrew
-if [ -x /opt/homebrew/bin/brew ]; then
-    eval $(/opt/homebrew/bin/brew shellenv zsh)
-elif [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
-    eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)
-fi
-
-if command -v brew >/dev/null 2>&1; then
-    HOMEBREW="$(brew --prefix)"
-
-    # Homebrew 命令
-    add_to_fpath "$HOMEBREW/share/zsh/site-functions"
-
-    # Homebrew 的可执行文件路径
-    add_to_path "$HOMEBREW/bin"
-
-    # llvm 路径
-    add_to_path "$HOMEBREW/opt/llvm/bin"
-
-    # ffmpeg 配置
-    add_to_path "$HOMEBREW/opt/ffmpeg-full/bin"
-
-    # imagemagick 路径
-    add_to_path "$HOMEBREW/opt/imagemagick-full/bin"
-
-    # terminfo 相关配置
-    export TERMINFO="$HOMEBREW/opt/ncurses/share/terminfo"
-
-    unset HOMEBREW
-fi
-
-
-# ====================================================
-# ================= Android SDK 路径 =================
-# ====================================================
-ANDROID_SDK_ROOT="$HOME/Library/Android/sdk"
-
-add_to_path "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin"
-add_to_path "$ANDROID_SDK_ROOT/platform-tools"
-add_to_path "$ANDROID_SDK_ROOT/emulator"
-
-unset ANDROID_SDK_ROOT
-
-
-# ====================================================
-# ======================= JAVA =======================
-# ====================================================
-# 默认使用 JAVA 17
-export JAVA_HOME=$(/usr/libexec/java_home -v 17)
-add_to_path "$JAVA_HOME/bin"
-# 不需要清理 JAVA_HOME
-
-
-# ====================================================
 # ======================= 杂项 =======================
 # ====================================================
-
-# Rust Cargo 可执行文件路径
-add_to_path "$HOME/.cargo/bin"
-
 # 当前用户 bin 目录
 add_to_path "$HOME/bin"
-
-# LaTeX 路径
-add_to_path "/Library/TeX/texbin"
-
-# termux 使用的 bin 目录
-add_to_path "/data/data/com.termux/files/usr/bin"
 
 # 默认编辑器为 nvim
 export EDITOR=nvim

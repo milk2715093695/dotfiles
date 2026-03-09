@@ -41,6 +41,9 @@ cache/
 /pwsh/pwsh/secrets/*
 !/pwsh/pwsh/secrets/Example.ps1
 
+# 忽略 zsh 的 local 部分
+/zsh/zsh/locals/*
+
 # 忽略 vscode 配置
 .vscode/
 

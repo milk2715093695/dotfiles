@@ -14,7 +14,7 @@ activate_venv_if_present() {
 ls_on_chpwd() {
     local file_count
     file_count=$(find . -maxdepth 1 -mindepth 1 -not -name '.*' 2>/dev/null | wc -l)
-    
+
     if (( file_count <= 50 )); then
         ls
     fi

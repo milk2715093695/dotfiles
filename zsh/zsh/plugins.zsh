@@ -1,4 +1,4 @@
-# 指定 zsh 插件目录 
+# 指定 zsh 插件目录
 if command -v brew >/dev/null 2>&1; then
     ZSH_PLUGIN_BASE="$(brew --prefix)/share"
 else
@@ -39,7 +39,7 @@ if command -v fzf >/dev/null 2>&1; then
     if command -v brew >/dev/null 2>&1; then
         add_to_path "$(brew --prefix)/opt/fzf/bin"
     fi
-    
+
     source <(fzf --zsh)
 
     # 配置 fzf 使用 fd

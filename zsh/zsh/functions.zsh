@@ -1,38 +1,3 @@
-# 启动 AVD 的函数
-start_avd() {
-    # 设置默认 DNS
-    local ANDROID_DNS="223.5.5.5,223.6.6.6"
-
-    local avds
-    avds=$(emulator -list-avds)
-
-    if [ -z "$avds" ]; then
-        echo "未找到任何 AVD，请先创建。"
-        return 1
-    fi
-
-    echo "可用的 AVD："
-    local choices=()
-    local i=1
-    while IFS= read -r avd; do
-        echo "[$i] $avd"
-        choices[$i]="$avd"
-        ((i++))
-    done <<< "$avds"
-
-    echo -n "请输入要启动的编号："
-    read -r choice
-
-    if [[ "$choice" =~ ^[0-9]+$ ]] && [ -n "${choices[$choice]}" ]; then
-        local selected="${choices[$choice]}"
-        echo "正在启动 AVD: $selected ..."
-        emulator -avd "$selected" -dns-server "$ANDROID_DNS" -writable-system -no-snapshot-load -selinux permissive
-    else
-        echo "无效选择。"
-        return 1
-    fi
-}
-
 # 代理函数
 proxy() {
     # 默认参数
@@ -141,4 +106,20 @@ load_secrets() {
         echo "无效输入"
         return 1
     fi
+}
+
+# conda 懒加载
+conda() {
+    unfunction conda
+    source "$HOME/.config/zsh/conda.zsh"
+    conda "$@"
+}
+
+# yazi 自动 cd
+y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	command yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
+	rm -f -- "$tmp"
 }
