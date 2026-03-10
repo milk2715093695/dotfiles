@@ -18,8 +18,12 @@ configure_yazi() {
     if check_yazi; then
         link_item "$HOME/.config/yazi" "$REPO_ROOT/yazi"
 
-        # 安装 yazi 的插件和主题
-        ya pkg install
+        if prompt_confirm "是否安装或更新 yazi 插件？"; then
+            # 安装 yazi 的插件和主题
+            ya pkg install
+        else
+            echo "跳过 yazi 插件和主题安装"
+        fi
     else
         echo "yazi 未安装，跳过"
     fi

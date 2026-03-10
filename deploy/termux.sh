@@ -17,6 +17,7 @@ source "$SCRIPT_DIR/posix/packages/starship.sh"         # starship 安装
 source "$SCRIPT_DIR/posix/packages/yazi.sh"             # yazi 安装
 source "$SCRIPT_DIR/posix/packages/lazyvim.sh"          # lazyvim 安装
 source "$SCRIPT_DIR/posix/packages/tmux.sh"             # tmux 安装
+source "$SCRIPT_DIR/posix/packages/macos.sh"            # macOS 特有配置（占位）
 
 source "$SCRIPT_DIR/termux/packages/wezterm.sh"         # WezTerm 安装（占位）
 source "$SCRIPT_DIR/termux/packages/zsh_plugins.sh"     # zsh 插件配置

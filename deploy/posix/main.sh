@@ -20,5 +20,7 @@ main() {
 
     configure_tmux          # 配置 tmux
 
+    configure_macos         # 配置 macos 特有的行为
+
     info "部署完成"
 }

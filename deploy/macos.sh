@@ -21,6 +21,8 @@ source "$SCRIPT_DIR/posix/packages/tmux.sh"             # tmux 安装
 
 source "$SCRIPT_DIR/macos/packages/wezterm.sh"          # WezTerm 安装
 source "$SCRIPT_DIR/macos/packages/cava.sh"             # cava 配置
+source "$SCRIPT_DIR/macos/packages/macos.sh"            # macOS 特有配置
+source "$SCRIPT_DIR/macos/packages/aerospace.sh"        # Aerospace 配置
 
 source "$SCRIPT_DIR/posix/main.sh"                      # 入口函数
 
