@@ -120,8 +120,8 @@ on-mode-changed = []
     # '''
 
     # 终端
-    alt-t = '''exec-and-forget /opt/homebrew/bin/wezterm'''
-    alt-enter = '''exec-and-forget /opt/homebrew/bin/wezterm'''
+    alt-t = '''exec-and-forget open -na WezTerm'''
+    alt-enter = '''exec-and-forget open -na WezTerm'''
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#layout
     alt-slash = 'layout tiles horizontal vertical'

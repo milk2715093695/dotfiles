@@ -60,7 +60,7 @@ config.font = wezterm.font_with_fallback({
 	font("Hack"),
 	table.unpack(fallback_fonts),
 })
-config.font_size = 18
+config.font_size = 14
 
 -- 窗口大小
 config.initial_cols = 80
