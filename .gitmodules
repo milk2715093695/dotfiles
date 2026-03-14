@@ -1,3 +1,6 @@
 [submodule "tmux/plugins/tpm"]
 	path = tmux/plugins/tpm
 	url = https://github.com/tmux-plugins/tpm
+[submodule "sketchybar"]
+	path = sketchybar
+	url = https://github.com/milk2715093695/sketchybar-dotfiles.git

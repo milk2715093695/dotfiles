@@ -8,7 +8,8 @@ config-version = 2
 # You can use it to add commands that run after AeroSpace startup.
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = [
-  'exec-and-forget borders style=round width=6.0 hidpi=off active_color=0xff7aa2f7 inactive_color=0xff1e2030'
+    'exec-and-forget borders style=round width=6.0 hidpi=off active_color=0xff7aa2f7 inactive_color=0xff1e2030',
+    'exec-and-forget sketchybar',
 ]
 
 # Start AeroSpace at login
@@ -21,7 +22,7 @@ enable-normalization-opposite-orientation-for-nested-containers = true
 # See: https://nikitabobko.github.io/AeroSpace/guide#layouts
 # The 'accordion-padding' specifies the size of accordion padding
 # You can set 0 to disable the padding feature
-accordion-padding = 30
+accordion-padding = 0
 
 # Possible values: tiles|accordion
 default-root-container-layout = 'tiles'
@@ -37,6 +38,16 @@ default-root-container-orientation = 'auto'
 # See https://nikitabobko.github.io/AeroSpace/commands#move-mouse
 # Fallback value (if you omit the key): on-focused-monitor-changed = []
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+
+exec-on-workspace-change = [
+    '/bin/bash',
+    '-c',
+    'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
+]
+
+on-focus-changed = [
+    'exec-and-forget sketchybar --trigger aerospace_focus_change',
+]
 
 # You can effectively turn off macOS "Hide application" (cmd-h) feature by toggling this flag
 # Useful if you don't use this macOS feature, but accidentally hit cmd-h or cmd-alt-h key
@@ -70,10 +81,10 @@ on-mode-changed = []
 [gaps]
     inner.horizontal = 0
     inner.vertical =   0
-    outer.left =       0
-    outer.bottom =     0
-    outer.top =        0
-    outer.right =      0
+    outer.left =       5
+    outer.bottom =     3
+    outer.top =        38
+    outer.right =      5
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -225,3 +236,15 @@ on-mode-changed = []
 [[on-window-detected]]
     if.app-id = 'com.parallels.desktop.console'
     run = ['layout accordion', 'move-node-to-workspace vm']
+
+[[on-window-detected]]
+    if.app-id = 'com.apple.audio.AudioMIDISetup'
+    run = ['layout floating', 'move-node-to-workspace files']
+
+[[on-window-detected]]
+    if.app-id = 'sh.ppy.osu.lazer'
+    run = ['layout accordion', 'move-node-to-workspace game']
+
+[[on-window-detected]]
+    if.app-id = 'org.keepassxc.keepassxc'
+    run = ['layout floating', 'move-node-to-workspace files']
