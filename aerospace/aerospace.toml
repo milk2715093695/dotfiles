@@ -211,7 +211,7 @@ on-mode-changed = []
 
 [[on-window-detected]]
     if.app-id = 'com.microsoft.VSCode'
-    run = ['layout tiles', 'move-node-to-workspace dev']
+    run = ['layout accordion', 'move-node-to-workspace dev']
 
 [[on-window-detected]]
     if.app-id = 'com.kkrainbow.easytier'
@@ -248,3 +248,11 @@ on-mode-changed = []
 [[on-window-detected]]
     if.app-id = 'org.keepassxc.keepassxc'
     run = ['layout floating', 'move-node-to-workspace files']
+
+[[on-window-detected]]
+    if.app-id = 'net.java.openjdk.java'
+    run = ['layout accordion', 'move-node-to-workspace dev']
+
+[[on-window-detected]]
+    if.app-id = 'com.google.android.studio'
+    run = ['layout accordion', 'move-node-to-workspace dev']
