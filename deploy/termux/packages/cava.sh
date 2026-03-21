@@ -12,7 +12,7 @@ configure_cava() {
     if check_cava; then
         echo "cava 已存在，跳过安装"
     else
-        install_package apk cava mpv pulseaudio
+        install_package pkg cava mpv pulseaudio
     fi
 
     if check_cava; then
