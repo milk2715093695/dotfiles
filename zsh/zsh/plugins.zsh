@@ -12,8 +12,8 @@ fi
 
 # OpenClaw 补全
 # 让 openclaw 命令支持 Tab 补全
-if [ -f "~/.openclaw/completions/openclaw.zsh" ]; then
-    source "~/.openclaw/completions/openclaw.zsh"
+if [ -f "$HOME/.openclaw/completions/openclaw.zsh" ]; then
+    source "$HOME/.openclaw/completions/openclaw.zsh"
 fi
 
 # 激活 zsh-autosuggestions（命令自动提示）
