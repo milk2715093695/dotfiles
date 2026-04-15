@@ -22,5 +22,5 @@ main() {
 
     configure_macos                 # 配置 macos 特有的行为
 
-    info "部署完成"
+    success "部署完成"
 }

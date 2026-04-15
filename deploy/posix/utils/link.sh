@@ -68,7 +68,7 @@ backup_target() {
 
     backup_pth="$(make_backup_path "$target_pth")"
     run_link_command "$use_sudo" mv "$target_pth" "$backup_pth"
-    echo "已备份：$target_pth -> $backup_pth"
+    success "已备份：$target_pth -> $backup_pth"
 }
 
 # 删除已有目标
@@ -77,7 +77,7 @@ remove_target() {
     local use_sudo="$2"
 
     run_link_command "$use_sudo" rm -rf "$target_pth"
-    echo "已删除：$target_pth"
+    success "已删除：$target_pth"
 }
 
 # 创建符号链接
@@ -88,7 +88,7 @@ create_link() {
 
     run_link_command "$use_sudo" mkdir -p "$(dirname "$target_pth")"
     run_link_command "$use_sudo" ln -s "$source_pth" "$target_pth"
-    echo "已创建符号链接：$target_pth -> $source_pth"
+    success "已创建符号链接：$target_pth -> $source_pth"
 }
 
 # 创建或更新符号链接
@@ -99,12 +99,12 @@ link_item() {
     local action
 
     # 先处理已正确链接的情况，避免重复删除或备份
-    echo "准备创建链接："
-    echo "    目标 (target)：$target_pth -> 源 (source)：$source_pth"
-    echo
+    step "准备创建链接"
+    plain "    目标 (target)：$target_pth -> 源 (source)：$source_pth"
+    plain ""
 
     if link_points_to_source "$target_pth" "$source_pth"; then
-        echo "目标已经是指向同一源的符号链接，跳过：$target_pth"
+        skip_msg "目标已经是指向同一源的符号链接，跳过：$target_pth"
         return
     fi
 
@@ -130,7 +130,7 @@ link_item() {
                 create_link "$target_pth" "$source_pth" "$use_sudo"
                 ;;
             skip)
-                echo "跳过：$target_pth"
+                skip_msg "跳过：$target_pth"
                 ;;
         esac
         return

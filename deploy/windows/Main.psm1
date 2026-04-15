@@ -40,7 +40,7 @@ function Main {
     Initialize-LazyVim -DeployContext $DeployContext
 
     Write-Host ""
-    Write-INFO "部署完成。"
+    Write-SUCCESS "部署完成。"
 }
 
 Export-ModuleMember -Function Main

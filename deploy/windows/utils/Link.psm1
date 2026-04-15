@@ -85,7 +85,7 @@ function Backup-Target {
 
     $backupPath = Get-BackupPath $TargetPath
     Move-Item -LiteralPath $TargetPath -Destination $backupPath
-    Write-Host "已备份：$TargetPath -> $backupPath"
+    Write-SUCCESS "已备份：$TargetPath -> $backupPath"
 }
 
 # 删除已有目标
@@ -96,7 +96,7 @@ function Remove-Target {
     )
 
     Remove-Item -LiteralPath $TargetPath -Recurse -Force
-    Write-Host "已删除：$TargetPath"
+    Write-SUCCESS "已删除：$TargetPath"
 }
 
 # 创建符号链接
@@ -115,7 +115,7 @@ function New-Link {
     }
 
     New-Item -ItemType SymbolicLink -Path $TargetPath -Target $SourcePath | Out-Null
-    Write-Host "已创建符号链接：$TargetPath -> $SourcePath"
+    Write-SUCCESS "已创建符号链接：$TargetPath -> $SourcePath"
 }
 
 # 创建或更新符号链接
@@ -129,12 +129,12 @@ function New-SymbolicLink {
     )
 
     # 先处理已正确链接的情况，避免重复删除或备份
-    Write-Host "准备创建链接："
+    Write-STEP "准备创建链接"
     Write-Host "    目标 (target)：$TargetPath -> 源 (source)：$SourcePath"
     Write-Host ""
 
     if (Test-SameSymbolicLink -TargetPath $TargetPath -SourcePath $SourcePath) {
-        Write-Host "目标已经是指向同一源的符号链接，跳过：$TargetPath"
+        Write-SKIP "目标已经是指向同一源的符号链接，跳过：$TargetPath"
         return
     }
 
@@ -160,7 +160,7 @@ function New-SymbolicLink {
                 New-Link -TargetPath $TargetPath -SourcePath $SourcePath
             }
             "skip" {
-                Write-Host "跳过：$TargetPath"
+                Write-SKIP "跳过：$TargetPath"
             }
         }
         return
