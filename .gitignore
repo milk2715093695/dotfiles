@@ -35,8 +35,9 @@ $RECYCLE.BIN/
 /pwsh/pwsh/Secrets/*
 !/pwsh/pwsh/Secrets/Example.ps1
 
-# 私密配置：忽略 zsh 本地覆盖配置
+# 私密配置：忽略 shell 本地覆盖配置
 /zsh/zsh/locals/*
+/pwsh/pwsh/locals/*
 
 # 可再生成资源：yazi 插件和主题
 /yazi/plugins/
