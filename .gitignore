@@ -1,57 +1,48 @@
-############################
-# macOS
-############################
+# 操作系统生成文件：macOS
 .DS_Store
 .AppleDouble
 .LSOverride
-
-# Icon?
 Icon
-
-# Thumbnails
 ._*
 
-############################
-# Windows
-############################
+# 操作系统生成文件：Windows
 Thumbs.db
 Thumbs.db:encryptable
 ehthumbs.db
 ehthumbs_vista.db
-
 Desktop.ini
 $RECYCLE.BIN/
 
-############################
-# Linux
-############################
+# 操作系统生成文件：Linux
 .directory
 
+# 本地工具与缓存
+/Tools/
+/tools/
+/Cache/
+/cache/
+/.vscode/
 
-# 工具
-Tools/
-tools/
+# 代理配置与本地索引
+/.claude/
+/.gitnexus/
+/AGENTS.md
+/CLAUDE.md
 
-# 缓存
-cache/
-
-# 忽略 secrets 目录下所有文件，但保留 example.sh
+# 私密配置：忽略本地内容，保留示例文件
 /zsh/zsh/secrets/*
 !/zsh/zsh/secrets/example.sh
 /pwsh/pwsh/Secrets/*
 !/pwsh/pwsh/Secrets/Example.ps1
 
-# 忽略 zsh 的 local 部分
+# 私密配置：忽略 zsh 本地覆盖配置
 /zsh/zsh/locals/*
 
-# 忽略 vscode 配置
-.vscode/
+# 可再生成资源：yazi 插件和主题
+/yazi/plugins/
+/yazi/flavors/
 
-# 忽略 yazi 插件和主题
-yazi/plugins/
-yazi/flavors/
-
-# 忽略 tmux/plugins/ 目录下所有文件，但保留 tpm 的部分
-tmux/plugins/*
-!tmux/plugins/tpm/
-!tmux/plugins/tpm/**
+# 可再生成资源：tmux 插件，保留 tpm 管理器
+/tmux/plugins/*
+!/tmux/plugins/tpm/
+!/tmux/plugins/tpm/**
