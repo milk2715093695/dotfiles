@@ -1,10 +1,20 @@
 #!/usr/bin/env pwsh
 
+# 解析部署参数
+param(
+    [switch]$YesInstall,
+
+    [ValidateSet("ask", "backup", "replace", "replace-link")]
+    [string]$ConfigMode = "ask"
+)
+
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"     # 失败即退出
 
 $global:SCRIPT_DIR = Split-Path -Parent $MyInvocation.MyCommand.Path   # 脚本目录
 $global:REPO_ROOT  = Resolve-Path "$SCRIPT_DIR\.."                     # 仓库目录
+$global:AUTO_INSTALL = [bool]$YesInstall
+$global:CONFIG_MODE = $ConfigMode
 
 Import-Module   "$SCRIPT_DIR\windows\utils\Colors.psm1"     -Force  # 颜色
 Import-Module   "$SCRIPT_DIR\windows\utils\Prompt.psm1"     -Force  # 提示函数
@@ -27,4 +37,5 @@ Import-Module   "$SCRIPT_DIR\windows\packages\LazyVim.psm1"     -Force  # LazyVi
 
 Import-Module   "$SCRIPT_DIR\windows\Main.psm1"     -Force      # 主函数
 
+# 执行部署入口
 Main

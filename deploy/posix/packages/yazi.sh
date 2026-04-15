@@ -18,7 +18,8 @@ configure_yazi() {
     if check_yazi; then
         link_item "$HOME/.config/yazi" "$REPO_ROOT/yazi"
 
-        if prompt_confirm "是否安装或更新 yazi 插件？"; then
+        # 插件安装属于安装类操作，可由 --yes-install 自动确认
+        if prompt_install_confirm "是否安装或更新 yazi 插件？"; then
             # 安装 yazi 的插件和主题
             ya pkg install
         else

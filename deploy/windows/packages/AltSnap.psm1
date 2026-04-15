@@ -27,7 +27,7 @@ function Install-AltSnap {
 
     Write-Host "AltSnap 最新版本: $version"
 
-    if (-not (Read-Confirmation "是否需要更新或者安装 AltSnap？")) {
+    if (-not (Read-InstallConfirmation "是否需要更新或者安装 AltSnap？")) {
         Write-Host "跳过 AltSnap 的安装"
         return
     }

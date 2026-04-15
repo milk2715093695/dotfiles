@@ -165,11 +165,39 @@ nvim 基本继承了 LazyVim 的配置，添加了部分插件：
 - 创建必要的目录
 - 自动创建符号链接
 - 对已有文件做提示，避免误覆盖
-- 可以使用 `-y` 参数自动全部确认，但是不建议使用
+- 可以自动确认安装类操作，但配置覆盖策略需要单独指定
 
 > 使用过程中请注意提示与警告！以免错过重要信息！
 >
 > 国内建议提前配置代理或镜像源
+
+部署参数：
+
+- POSIX（macOS / Ubuntu / Termux）：
+  - `--yes-install`：自动确认安装或更新软件包、插件等安装类操作。
+  - `--config-mode ask|backup|replace|replace-link`：配置目标已存在时的处理方式，默认 `ask`。
+- Windows：
+  - `-YesInstall`：自动确认安装或更新软件包、插件等安装类操作。
+  - `-ConfigMode ask|backup|replace|replace-link`：配置目标已存在时的处理方式，默认 `ask`。
+
+配置处理方式：
+
+- `ask`：每次遇到已存在的配置目标时询问。交互时使用小写字母只对本次生效，使用大写字母会对后续全部生效。
+- `backup`：备份已有符号链接、文件或目录，再创建新链接。
+- `replace`：删除已有符号链接、文件或目录，再创建新链接。
+- `replace-link`：已有符号链接时替换；已有文件或目录时备份。
+
+> `--yes-install` / `-YesInstall` 只会自动确认安装类操作，不会自动确认配置覆盖、删除、备份、快捷方式、默认 shell 等其他操作。
+
+示例：
+
+```bash
+./deploy/macos.sh --yes-install --config-mode replace-link
+```
+
+```powershell
+.\deploy\windows.ps1 -YesInstall -ConfigMode replace-link
+```
 
 ### 4.1. Ubuntu
 

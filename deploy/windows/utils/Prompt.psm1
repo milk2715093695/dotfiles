@@ -1,17 +1,11 @@
 Set-StrictMode -Version Latest
 
-# 交互函数
+# 通用确认提示
 function Read-Confirmation {
     param (
         [Parameter(Mandatory)]
         [string]$Message
     )
-
-    # 如果 AUTO_CONFIRM=true，则自动确认
-    if ($env:AUTO_CONFIRM -eq "true") {
-        Write-Host "$Message [y/n]: y (自动确认)"
-        return $true
-    }
 
     while ($true) {
         $answer = Read-Host "$Message [y/n]"
@@ -23,4 +17,19 @@ function Read-Confirmation {
     }
 }
 
-Export-ModuleMember -Function Read-Confirmation
+# 只用于安装或更新类确认
+function Read-InstallConfirmation {
+    param (
+        [Parameter(Mandatory)]
+        [string]$Message
+    )
+
+    if ($global:AUTO_INSTALL -eq $true) {
+        Write-Host "$Message [y/n]: y (自动确认安装)"
+        return $true
+    }
+
+    return (Read-Confirmation $Message)
+}
+
+Export-ModuleMember -Function Read-Confirmation, Read-InstallConfirmation

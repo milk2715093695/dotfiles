@@ -15,7 +15,7 @@ function Install-JetBrainsMono {
     if (Get-Command scoop -ErrorAction SilentlyContinue) {
         Write-WARNING "未安装 JetBrains Mono，但存在 scoop。"
 
-        if (Read-Confirmation "是否使用 scoop 安装 JetBrains Mono？") {
+        if (Read-InstallConfirmation "是否使用 scoop 安装 JetBrains Mono？") {
             scoop bucket add nerd-fonts
             scoop install jetbrains-mono
         } else {

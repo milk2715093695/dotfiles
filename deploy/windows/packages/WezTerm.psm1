@@ -20,7 +20,7 @@ function Test-WezTerm {
 function Install-WezTerm {
     Write-WARNING "未安装 wezterm，但存在 scoop。"
 
-    if (Read-Confirmation "是否使用 scoop 安装 wezterm？") {
+    if (Read-InstallConfirmation "是否使用 scoop 安装 wezterm？") {
         scoop install wezterm
     } else {
         Write-Host "跳过 wezterm 安装。"

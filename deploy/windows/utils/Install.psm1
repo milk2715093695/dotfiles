@@ -33,8 +33,9 @@ function Install-ScoopPackage {
                 continue
             }
 
+            # 安装类确认统一走 Read-InstallConfirmation，避免影响其他交互
             # 询问是否安装
-            if (Read-Confirmation "是否使用 Scoop 安装 $pkg？") {
+            if (Read-InstallConfirmation "是否使用 Scoop 安装 $pkg？") {
 
                 $installArgs = @("install")
                 if ($App) { $installArgs += "--app" }
@@ -86,7 +87,8 @@ function Install-PackageByManager {
                 return
             }
 
-            if (Read-Confirmation "是否使用 Chocolatey 安装 $Name？") {
+            # Chocolatey 和 winget 也复用安装类确认逻辑
+            if (Read-InstallConfirmation "是否使用 Chocolatey 安装 $Name？") {
                 choco install $Name -y
             } else {
                 Write-Host "跳过 $Name 安装"
@@ -105,7 +107,7 @@ function Install-PackageByManager {
                 return
             }
 
-            if (Read-Confirmation "是否使用 winget 安装 $Name？") {
+            if (Read-InstallConfirmation "是否使用 winget 安装 $Name？") {
                 winget install --id $Name --accept-package-agreements --accept-source-agreements
             } else {
                 Write-Host "跳过 $Name 安装"

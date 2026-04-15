@@ -25,13 +25,7 @@ source "$SCRIPT_DIR/ubuntu/packages/cava.sh"            # cava 配置
 
 source "$SCRIPT_DIR/posix/main.sh"                      # 入口函数
 
-# 处理脚本参数 -y 自动确认
-AUTO_CONFIRM=false
-while getopts "y" opt; do
-    case "$opt" in
-        y) AUTO_CONFIRM=true ;;
-        *) ;;
-    esac
-done
+# 解析部署参数并执行入口
+parse_deploy_args "$@"
 
 main
