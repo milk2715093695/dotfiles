@@ -1,10 +1,29 @@
-$MY_PWSH_CONFIG="$HOME\.config\pwsh"
+$MY_PWSH_CONFIG = "$HOME\.config\pwsh"
 
-. "$MY_PWSH_CONFIG\Env.ps1"         # 加载环境变量
-. "$MY_PWSH_CONFIG\Options.ps1"     # 加载 pwsh 选项
-. "$MY_PWSH_CONFIG\Aliases.ps1"     # 加载别名
-. "$MY_PWSH_CONFIG\Functions.ps1"   # 加载函数
-. "$MY_PWSH_CONFIG\Hook.ps1"        # 加载钩子
-. "$MY_PWSH_CONFIG\Plugins.ps1"     # 加载插件
+# 配置加载顺序：
+# Env       环境变量、PATH、默认编辑器等
+# Options   PSReadLine、历史记录、补全行为等
+# Aliases   简单别名
+# Functions 自定义函数和命令包装器
+# Hook      事件钩子
+# Plugins   第三方插件、prompt 初始化，通常最后加载
+$profileParts = @(
+    "Env"
+    "Options"
+    "Aliases"
+    "Functions"
+    "Hook"
+    "Plugins"
+)
 
-Remove-Variable MY_PWSH_CONFIG -Scope Global
+foreach ($part in $profileParts) {
+    $profilePart = "$MY_PWSH_CONFIG\$part.ps1"
+    . $profilePart
+
+    $localProfilePart = "$MY_PWSH_CONFIG\locals\$part.ps1"
+    if (Test-Path -LiteralPath $localProfilePart -PathType Leaf) {
+        . $localProfilePart
+    }
+}
+
+Remove-Variable MY_PWSH_CONFIG, profileParts, part, profilePart, localProfilePart -Scope Global -ErrorAction SilentlyContinue
