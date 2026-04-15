@@ -8,6 +8,7 @@ PACKAGE_MANAGER="pkg"                                        # 包管理器
 
 source "$SCRIPT_DIR/posix/utils/colors.sh"              # 颜色变量
 source "$SCRIPT_DIR/posix/utils/prompt.sh"              # 提示函数
+source "$SCRIPT_DIR/posix/utils/link_action.sh"         # 链接策略
 source "$SCRIPT_DIR/posix/utils/link.sh"                # 链接函数
 source "$SCRIPT_DIR/posix/utils/install_package.sh"     # 安装包函数
 source "$SCRIPT_DIR/posix/packages/fonts.sh"            # 安装字体

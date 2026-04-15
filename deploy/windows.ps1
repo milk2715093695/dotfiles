@@ -18,6 +18,7 @@ $global:CONFIG_MODE = $ConfigMode
 
 Import-Module   "$SCRIPT_DIR\windows\utils\Colors.psm1"     -Force  # 颜色
 Import-Module   "$SCRIPT_DIR\windows\utils\Prompt.psm1"     -Force  # 提示函数
+Import-Module   "$SCRIPT_DIR\windows\utils\LinkAction.psm1" -Force  # 链接策略
 Import-Module   "$SCRIPT_DIR\windows\utils\Link.psm1"       -Force  # 链接函数
 Import-Module   "$SCRIPT_DIR\windows\utils\GitHub.psm1"     -Force  # GitHub 操作
 Import-Module   "$SCRIPT_DIR\windows\utils\Archive.psm1"    -Force  # 压缩包操作
