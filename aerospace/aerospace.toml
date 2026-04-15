@@ -256,3 +256,11 @@ on-mode-changed = []
 [[on-window-detected]]
     if.app-id = 'com.google.android.studio'
     run = ['layout accordion', 'move-node-to-workspace dev']
+
+[[on-window-detected]]
+    if.app-id = 'com.carriez.rustdesk'
+    run = ['layout accordion', 'move-node-to-workspace vm']
+
+[[on-window-detected]]
+    if.app-id = 'com.youqu.todesk.mac'
+    run = ['layout accordion', 'move-node-to-workspace vm']
