@@ -9,7 +9,7 @@ check_nvim() {
 
 # 配置 lazyvim
 configure_lazyvim() {
-    install_package $PACKAGE_MANAGER neovim python3 nodejs fd
+    install_package "$PACKAGE_MANAGER" neovim python3 nodejs fd
 
     if check_nvim; then
         link_item "$HOME/.config/nvim" "$REPO_ROOT/nvim"

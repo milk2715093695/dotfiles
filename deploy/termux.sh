@@ -7,6 +7,7 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"                   # 仓库目录
 PACKAGE_MANAGER="pkg"                                        # 包管理器
 
 source "$SCRIPT_DIR/posix/utils/colors.sh"              # 颜色变量
+source "$SCRIPT_DIR/posix/utils/context.sh"             # 部署上下文
 source "$SCRIPT_DIR/posix/utils/prompt.sh"              # 提示函数
 source "$SCRIPT_DIR/posix/utils/link_action.sh"         # 链接策略
 source "$SCRIPT_DIR/posix/utils/link.sh"                # 链接函数

@@ -12,7 +12,7 @@ configure_tmux() {
     if check_tmux; then
         echo "tmux 已经安装"
     else
-        install_package $PACKAGE_MANAGER tmux bash bc coreutils gawk jq
+        install_package "$PACKAGE_MANAGER" tmux bash bc coreutils gawk jq
     fi
 
     if check_tmux; then

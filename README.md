@@ -175,10 +175,10 @@ nvim 基本继承了 LazyVim 的配置，添加了部分插件：
 
 - POSIX（macOS / Ubuntu / Termux）：
   - `--yes-install`：自动确认安装或更新软件包、插件等安装类操作。
-  - `--config-mode ask|backup|replace|replace-link`：配置目标已存在时的处理方式，默认 `ask`。
+  - `--config-mode ask|backup|replace|replace-link|skip`：配置目标已存在时的处理方式，默认 `ask`。
 - Windows：
   - `-YesInstall`：自动确认安装或更新软件包、插件等安装类操作。
-  - `-ConfigMode ask|backup|replace|replace-link`：配置目标已存在时的处理方式，默认 `ask`。
+  - `-ConfigMode ask|backup|replace|replace-link|skip`：配置目标已存在时的处理方式，默认 `ask`。
 
 配置处理方式：
 
@@ -186,6 +186,7 @@ nvim 基本继承了 LazyVim 的配置，添加了部分插件：
 - `backup`：备份已有符号链接、文件或目录，再创建新链接。
 - `replace`：删除已有符号链接、文件或目录，再创建新链接。
 - `replace-link`：已有符号链接时替换；已有文件或目录时备份。
+- `skip`：已有目标时直接跳过，不创建新链接。
 
 > `--yes-install` / `-YesInstall` 只会自动确认安装类操作，不会自动确认配置覆盖、删除、备份、快捷方式、默认 shell 等其他操作。
 

@@ -3,52 +3,52 @@ select_config_action() {
     local answer
 
     while true; do
-        echo "目标已存在，请选择配置处理方式："
-        echo "  b/B  备份一次 / 备份并对后续全部生效"
-        echo "  r/R  替换一次 / 替换并对后续全部生效"
-        echo "  l/L  只替换符号链接，文件或目录备份一次 / 对后续全部生效"
-        echo "  s/S  跳过一次 / 跳过并对后续全部生效"
+        printf '%s\n' "目标已存在，请选择配置处理方式：" >&2
+        printf '%s\n' "  b/B  备份一次 / 备份并对后续全部生效" >&2
+        printf '%s\n' "  r/R  替换一次 / 替换并对后续全部生效" >&2
+        printf '%s\n' "  l/L  只替换符号链接，文件或目录备份一次 / 对后续全部生效" >&2
+        printf '%s\n' "  s/S  跳过一次 / 跳过并对后续全部生效" >&2
         read -rp "请输入选择 [b/B/r/R/l/L/s/S]: " answer
 
         case "$answer" in
             b)
-                LINK_ACTION="backup"
+                printf '%s\n' "backup"
                 return 0
                 ;;
             B)
-                CONFIG_MODE="backup"
-                LINK_ACTION="backup"
+                set_deploy_config_mode "backup"
+                printf '%s\n' "backup"
                 return 0
                 ;;
             r)
-                LINK_ACTION="replace"
+                printf '%s\n' "replace"
                 return 0
                 ;;
             R)
-                CONFIG_MODE="replace"
-                LINK_ACTION="replace"
+                set_deploy_config_mode "replace"
+                printf '%s\n' "replace"
                 return 0
                 ;;
             l)
-                LINK_ACTION="replace-link"
+                printf '%s\n' "replace-link"
                 return 0
                 ;;
             L)
-                CONFIG_MODE="replace-link"
-                LINK_ACTION="replace-link"
+                set_deploy_config_mode "replace-link"
+                printf '%s\n' "replace-link"
                 return 0
                 ;;
             s)
-                LINK_ACTION="skip"
+                printf '%s\n' "skip"
                 return 0
                 ;;
             S)
-                CONFIG_MODE="skip"
-                LINK_ACTION="skip"
+                set_deploy_config_mode "skip"
+                printf '%s\n' "skip"
                 return 0
                 ;;
             *)
-                echo "请输入 b/B/r/R/l/L/s/S。"
+                printf '%s\n' "请输入 b/B/r/R/l/L/s/S。" >&2
                 ;;
         esac
     done
@@ -56,17 +56,19 @@ select_config_action() {
 
 # 根据配置解析本次处理方式
 resolve_config_action() {
-    local mode="${CONFIG_MODE:-ask}"
+    local mode
+
+    mode="$(get_deploy_config_mode)"
 
     case "$mode" in
         ask)
             select_config_action
             ;;
         backup|replace|replace-link|skip)
-            LINK_ACTION="$mode"
+            printf '%s\n' "$mode"
             ;;
         *)
-            warn "未知配置模式 $mode，回退为交互模式。"
+            warn "未知配置模式 $mode，回退为交互模式。" >&2
             select_config_action
             ;;
     esac

@@ -1,6 +1,6 @@
 # 配置 zsh 插件
 configure_zsh_plugins() {
-    install_package $PACKAGE_MANAGER zsh-completions
+    install_package "$PACKAGE_MANAGER" zsh-completions
 
     ZSH_DIR="$HOME/.zsh"
     mkdir -p "$ZSH_DIR"

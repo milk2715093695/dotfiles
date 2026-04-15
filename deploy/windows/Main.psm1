@@ -7,32 +7,37 @@ $IsAdmin = ([Security.Principal.WindowsPrincipal] `
 
 # 函数入口
 function Main {
+    param(
+        [Parameter(Mandatory)]
+        [hashtable]$DeployContext
+    )
+
     if (-not $IsAdmin) {
         Write-WARNING "当前不是管理员权限运行。"
         Write-Host "如果未开启 Windows 开发者模式，创建符号链接可能失败。"
     }
 
-    Install-AltSnap
+    Install-AltSnap -DeployContext $DeployContext
 
-    Install-JetBrainsMono
+    Install-JetBrainsMono -DeployContext $DeployContext
 
-    Initialize-WezTerm
+    Initialize-WezTerm -DeployContext $DeployContext
 
     Initialize-PSGalleryRepository
 
-    Install-ScoopPackage -Name @('fd','fzf','zoxide')
+    Install-ScoopPackage -DeployContext $DeployContext -Name @('fd','fzf','zoxide')
 
-    Initialize-Starship
+    Initialize-Starship -DeployContext $DeployContext
 
     Initialize-PSFzf
 
-    Initialize-PWSH
+    Initialize-PWSH -DeployContext $DeployContext
 
-    Initialize-Yazi
+    Initialize-Yazi -DeployContext $DeployContext
 
-    Initialize-Cava
+    Initialize-Cava -DeployContext $DeployContext
 
-    Initialize-LazyVim
+    Initialize-LazyVim -DeployContext $DeployContext
 
     Write-Host ""
     Write-INFO "部署完成。"

@@ -2,9 +2,12 @@
 
 # 解析部署参数
 param(
+    [Alias("h", "?")]
+    [switch]$Help,
+
     [switch]$YesInstall,
 
-    [ValidateSet("ask", "backup", "replace", "replace-link")]
+    [ValidateSet("ask", "backup", "replace", "replace-link", "skip")]
     [string]$ConfigMode = "ask"
 )
 
@@ -13,9 +16,31 @@ $ErrorActionPreference = "Stop"     # 失败即退出
 
 $global:SCRIPT_DIR = Split-Path -Parent $MyInvocation.MyCommand.Path   # 脚本目录
 $global:REPO_ROOT  = Resolve-Path "$SCRIPT_DIR\.."                     # 仓库目录
-$global:AUTO_INSTALL = [bool]$YesInstall
-$global:CONFIG_MODE = $ConfigMode
 
+# 打印部署脚本帮助
+function Show-DeployUsage {
+@"
+用法: .\deploy\windows.ps1 [-YesInstall] [-ConfigMode ask|backup|replace|replace-link|skip] [-Help]
+
+  -YesInstall          自动确认安装或更新类操作
+  -ConfigMode MODE     配置冲突策略，默认 ask
+  -Help, -h, -?        显示帮助信息
+
+配置模式:
+  ask           遇到已有目标时询问
+  backup        备份已有符号链接、文件或目录后创建新链接
+  replace       删除已有符号链接、文件或目录后创建新链接
+  replace-link  替换符号链接，备份文件或目录
+  skip          遇到已有目标时直接跳过
+"@
+}
+
+if ($Help) {
+    Show-DeployUsage
+    exit 0
+}
+
+Import-Module   "$SCRIPT_DIR\windows\utils\DeployContext.psm1" -Force  # 部署上下文
 Import-Module   "$SCRIPT_DIR\windows\utils\Colors.psm1"     -Force  # 颜色
 Import-Module   "$SCRIPT_DIR\windows\utils\Prompt.psm1"     -Force  # 提示函数
 Import-Module   "$SCRIPT_DIR\windows\utils\LinkAction.psm1" -Force  # 链接策略
@@ -39,4 +64,5 @@ Import-Module   "$SCRIPT_DIR\windows\packages\LazyVim.psm1"     -Force  # LazyVi
 Import-Module   "$SCRIPT_DIR\windows\Main.psm1"     -Force      # 主函数
 
 # 执行部署入口
-Main
+$deployContext = New-DeployContext -AutoInstall ([bool]$YesInstall) -ConfigMode $ConfigMode
+Main -DeployContext $deployContext

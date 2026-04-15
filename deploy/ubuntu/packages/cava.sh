@@ -12,7 +12,7 @@ configure_cava() {
     if check_cava; then
         echo "cava 已存在，跳过安装"
     else
-        install_package $PACKAGE_MANAGER cava
+        install_package "$PACKAGE_MANAGER" cava
     fi
 
     if check_cava; then

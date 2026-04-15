@@ -96,6 +96,7 @@ link_item() {
     local target_pth="$1"
     local source_pth="$2"
     local use_sudo="${3:-false}"
+    local action
 
     # 先处理已正确链接的情况，避免重复删除或备份
     echo "准备创建链接："
@@ -108,10 +109,10 @@ link_item() {
     fi
 
     if target_exists "$target_pth"; then
-        resolve_config_action
+        action="$(resolve_config_action)"
 
         # replace-link 只替换旧链接，普通文件和目录仍保留为备份
-        case "$LINK_ACTION" in
+        case "$action" in
             backup)
                 backup_target "$target_pth" "$use_sudo"
                 create_link "$target_pth" "$source_pth" "$use_sudo"

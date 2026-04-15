@@ -18,10 +18,15 @@ function Test-Yazi {
 
 # 配置 Yazi
 function Initialize-Yazi {
+    param(
+        [Parameter(Mandatory)]
+        [hashtable]$DeployContext
+    )
+
     if (Test-Yazi) {
         Write-Host "yazi 已存在，跳过安装。"
     } else {
-        Install-ScoopPackage -Name @(
+        Install-ScoopPackage -DeployContext $DeployContext -Name @(
             "yazi", "ffmpeg", "7zip",
             "jq", "poppler", "fd",
             "ripgrep", "fzf", "zoxide",
@@ -34,7 +39,7 @@ function Initialize-Yazi {
     if (Test-Yazi) {
         $target = Join-Path $env:AppData "yazi\config"
         $source = Join-Path $REPO_ROOT "yazi"
-        New-SymbolicLink $target $source
+        New-SymbolicLink -DeployContext $DeployContext -TargetPath $target -SourcePath $source
 
         # 安装 yazi 的插件
         ya pkg install

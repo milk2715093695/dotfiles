@@ -12,7 +12,7 @@ configure_starship() {
     if check_starship; then
         echo "starship 已存在，跳过安装"
     else
-        install_package $PACKAGE_MANAGER starship
+        install_package "$PACKAGE_MANAGER" starship
     fi
 
     if check_starship; then

@@ -1,12 +1,11 @@
 # 解析部署参数
 parse_deploy_args() {
-    AUTO_INSTALL=false
-    CONFIG_MODE="ask"
+    init_deploy_context
 
     while [ "$#" -gt 0 ]; do
         case "$1" in
             --yes-install)
-                AUTO_INSTALL=true
+                DEPLOY_AUTO_INSTALL=true
                 ;;
             --config-mode)
                 shift
@@ -14,10 +13,10 @@ parse_deploy_args() {
                     error "缺少 --config-mode 的值"
                     return 1
                 fi
-                CONFIG_MODE="$1"
+                DEPLOY_CONFIG_MODE="$1"
                 ;;
             --config-mode=*)
-                CONFIG_MODE="${1#*=}"
+                DEPLOY_CONFIG_MODE="${1#*=}"
                 ;;
             -h|--help)
                 print_deploy_usage
@@ -37,11 +36,11 @@ parse_deploy_args() {
         shift
     done
 
-    case "$CONFIG_MODE" in
-        ask|backup|replace|replace-link)
+    case "$DEPLOY_CONFIG_MODE" in
+        ask|backup|replace|replace-link|skip)
             ;;
         *)
-            error "无效的配置模式: $CONFIG_MODE"
+            error "无效的配置模式: $DEPLOY_CONFIG_MODE"
             print_deploy_usage
             return 1
             ;;
@@ -51,16 +50,18 @@ parse_deploy_args() {
 # 打印部署脚本帮助
 print_deploy_usage() {
     cat <<EOF
-用法: $0 [--yes-install] [--config-mode ask|backup|replace|replace-link]
+用法: $0 [--yes-install] [--config-mode ask|backup|replace|replace-link|skip]
 
-  --yes-install          自动确认安装或更新类提示
+  --yes-install          自动确认安装或更新类操作
   --config-mode MODE     配置冲突策略，默认 ask
+  -h, --help             显示帮助信息
 
 配置模式:
   ask           遇到已有目标时询问
   backup        备份已有符号链接、文件或目录后创建新链接
   replace       删除已有符号链接、文件或目录后创建新链接
   replace-link  替换符号链接，备份文件或目录
+  skip          遇到已有目标时直接跳过
 EOF
 }
 
@@ -83,7 +84,7 @@ prompt_confirm() {
 prompt_install_confirm() {
     local message="$1"
 
-    if [ "${AUTO_INSTALL:-false}" = true ]; then
+    if [ "$(get_deploy_auto_install)" = true ]; then
         echo "$message [y/n]: y (自动确认安装)"
         return 0
     fi

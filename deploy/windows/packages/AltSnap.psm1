@@ -20,6 +20,11 @@ function Get-AltSnapAssetName {
 
 # 安装 AltSnap
 function Install-AltSnap {
+    param(
+        [Parameter(Mandatory)]
+        [hashtable]$DeployContext
+    )
+
     $owner = "RamonUnch"
     $repo = "AltSnap"
 
@@ -27,7 +32,7 @@ function Install-AltSnap {
 
     Write-Host "AltSnap 最新版本: $version"
 
-    if (-not (Read-InstallConfirmation "是否需要更新或者安装 AltSnap？")) {
+    if (-not (Read-InstallConfirmation -DeployContext $DeployContext -Message "是否需要更新或者安装 AltSnap？")) {
         Write-Host "跳过 AltSnap 的安装"
         return
     }

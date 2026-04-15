@@ -18,9 +18,14 @@ function Test-WezTerm {
 
 # 使用 scoop 安装 WezTerm
 function Install-WezTerm {
+    param(
+        [Parameter(Mandatory)]
+        [hashtable]$DeployContext
+    )
+
     Write-WARNING "未安装 wezterm，但存在 scoop。"
 
-    if (Read-InstallConfirmation "是否使用 scoop 安装 wezterm？") {
+    if (Read-InstallConfirmation -DeployContext $DeployContext -Message "是否使用 scoop 安装 wezterm？") {
         scoop install wezterm
     } else {
         Write-Host "跳过 wezterm 安装。"
@@ -29,11 +34,16 @@ function Install-WezTerm {
 
 # 配置 WezTerm
 function Initialize-WezTerm {
+    param(
+        [Parameter(Mandatory)]
+        [hashtable]$DeployContext
+    )
+
     if (Test-WezTerm) {
         Write-Host "wezterm 已存在，跳过安装。"
     } else {
         if (Get-Command scoop -ErrorAction SilentlyContinue) {
-            Install-WezTerm
+            Install-WezTerm -DeployContext $DeployContext
         } else {
             Write-WARNING "系统未安装 wezterm，且未检测到 scoop。"
             Write-Host "将跳过 wezterm 配置。"
@@ -43,7 +53,7 @@ function Initialize-WezTerm {
     if (Test-WezTerm) {
         $target = "$HOME\.config\wezterm"
         $source = Join-Path $REPO_ROOT "wezterm"
-        New-SymbolicLink $target $source
+        New-SymbolicLink -DeployContext $DeployContext -TargetPath $target -SourcePath $source
     } else {
         Write-WARNING "没有 wezterm，跳过 wezterm 配置。"
     }

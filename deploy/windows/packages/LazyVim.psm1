@@ -18,10 +18,15 @@ function Test-Nvim {
 
 # 配置 LazyVim
 function Initialize-LazyVim {
+    param(
+        [Parameter(Mandatory)]
+        [hashtable]$DeployContext
+    )
+
     if (Test-Nvim) {
         Write-Host "nvim 已存在，跳过安装。"
     } else {
-        Install-ScoopPackage -Name @(
+        Install-ScoopPackage -DeployContext $DeployContext -Name @(
             "neovim", "python", "nodejs", "fd"
         )
     }
@@ -29,7 +34,7 @@ function Initialize-LazyVim {
     if (Test-Nvim) {
         $target = Join-Path $env:LocalAppData "nvim"
         $source = Join-Path $REPO_ROOT "nvim"
-        New-SymbolicLink $target $source
+        New-SymbolicLink -DeployContext $DeployContext -TargetPath $target -SourcePath $source
     } else {
         Write-WARNING "没有 nvim，跳过 lazyvim 配置。"
     }

@@ -8,7 +8,7 @@ function Read-Confirmation {
     )
 
     while ($true) {
-        $answer = Read-Host "$Message [y/n]"
+        $answer = Read-Host "$Message [y/n]:"
         switch -Regex ($answer) {
             '^[Yy]' { return $true }
             '^[Nn]' { return $false }
@@ -21,10 +21,13 @@ function Read-Confirmation {
 function Read-InstallConfirmation {
     param (
         [Parameter(Mandatory)]
+        [hashtable]$DeployContext,
+
+        [Parameter(Mandatory)]
         [string]$Message
     )
 
-    if ($global:AUTO_INSTALL -eq $true) {
+    if (Get-DeployAutoInstall -DeployContext $DeployContext) {
         Write-Host "$Message [y/n]: y (自动确认安装)"
         return $true
     }

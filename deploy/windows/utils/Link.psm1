@@ -121,6 +121,9 @@ function New-Link {
 # 创建或更新符号链接
 function New-SymbolicLink {
     param (
+        [Parameter(Mandatory)]
+        [hashtable]$DeployContext,
+
         [string]$TargetPath,
         [string]$SourcePath
     )
@@ -136,7 +139,7 @@ function New-SymbolicLink {
     }
 
     if (Test-TargetExists $TargetPath) {
-        $action = Resolve-ConfigAction
+        $action = Resolve-ConfigAction -DeployContext $DeployContext
 
         # replace-link 只替换旧链接，普通文件和目录仍保留为备份
         switch ($action) {

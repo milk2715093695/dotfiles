@@ -17,16 +17,21 @@ function Test-Starship {
 }
 
 function Initialize-Starship {
+    param(
+        [Parameter(Mandatory)]
+        [hashtable]$DeployContext
+    )
+
     if (Test-Starship) {
         Write-Host "wezterm 已存在，跳过安装。"
     } else {
-        Install-ScoopPackage starship
+        Install-ScoopPackage -DeployContext $DeployContext -Name starship
     }
 
     if (Test-Starship) {
         $target = "$HOME\.config\starship.toml"
         $source = "$REPO_ROOT\starship\starship.toml"
-        New-SymbolicLink $target $source
+        New-SymbolicLink -DeployContext $DeployContext -TargetPath $target -SourcePath $source
     } else {
         Write-Warning "没有 starship，跳过 starship 配置"
     }

@@ -2,6 +2,11 @@ Set-StrictMode -Version Latest
 
 # 配置 pwsh
 function Initialize-PWSH {
+    param(
+        [Parameter(Mandatory)]
+        [hashtable]$DeployContext
+    )
+
     if (Read-Confirmation "是否将 pwsh 设为默认 ssh 登录客户端？") {
         $pwshPath = (where.exe pwsh 2>$null | Select-Object -First 1)
 
@@ -23,11 +28,11 @@ function Initialize-PWSH {
     $target = "$HOME\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
     $target = "$PROFILE"
     $source = "$REPO_ROOT\pwsh\Microsoft.PowerShell_profile.ps1"
-    New-SymbolicLink $target $source
+    New-SymbolicLink -DeployContext $DeployContext -TargetPath $target -SourcePath $source
 
     $target = "$HOME\.config\pwsh"
     $source = "$REPO_ROOT\pwsh\pwsh"
-    New-SymbolicLink $target $source
+    New-SymbolicLink -DeployContext $DeployContext -TargetPath $target -SourcePath $source
 }
 
 Export-ModuleMember -Function Initialize-PWSH

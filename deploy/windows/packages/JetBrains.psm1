@@ -2,6 +2,11 @@ Set-StrictMode -Version Latest
 
 # 安装 JetBrains Mono 字体
 function Install-JetBrainsMono {
+    param(
+        [Parameter(Mandatory)]
+        [hashtable]$DeployContext
+    )
+
     # 如果已安装，跳过
     $fontInstalled = Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows\Fonts" -ErrorAction SilentlyContinue |
         Where-Object { $_.Name -match "JetBrainsMono" }
@@ -15,7 +20,7 @@ function Install-JetBrainsMono {
     if (Get-Command scoop -ErrorAction SilentlyContinue) {
         Write-WARNING "未安装 JetBrains Mono，但存在 scoop。"
 
-        if (Read-InstallConfirmation "是否使用 scoop 安装 JetBrains Mono？") {
+        if (Read-InstallConfirmation -DeployContext $DeployContext -Message "是否使用 scoop 安装 JetBrains Mono？") {
             scoop bucket add nerd-fonts
             scoop install jetbrains-mono
         } else {
