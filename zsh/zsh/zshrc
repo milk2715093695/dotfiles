@@ -1,7 +1,22 @@
 MY_ZSH_CONFIG="$HOME/.config/zsh"       # 配置文件路径
 
-# 加载基础配置
-for file in env options aliases functions hook plugins; do
+# 配置加载顺序：
+# env       环境变量、PATH、默认编辑器等
+# options   zsh 行为选项、历史记录、按键绑定等
+# aliases   简单别名、全局别名、后缀别名
+# functions 自定义函数和命令包装器
+# hook      chpwd/precmd/preexec 等事件钩子
+# plugins   第三方插件、补全、prompt 初始化，通常最后加载
+config_parts=(
+    env
+    options
+    aliases
+    functions
+    hook
+    plugins
+)
+
+for file in "${config_parts[@]}"; do
     source "$MY_ZSH_CONFIG/$file.zsh"
 
     # 加载本机/locals 配置，如果文件存在
@@ -13,4 +28,4 @@ done
 autoload -Uz compinit
 compinit -C
 
-unset MY_ZSH_CONFIG
+unset MY_ZSH_CONFIG config_parts file local_file
