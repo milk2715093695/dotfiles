@@ -38,8 +38,8 @@ cache/
 # 忽略 secrets 目录下所有文件，但保留 example.sh
 /zsh/zsh/secrets/*
 !/zsh/zsh/secrets/example.sh
-/pwsh/pwsh/secrets/*
-!/pwsh/pwsh/secrets/Example.ps1
+/pwsh/pwsh/Secrets/*
+!/pwsh/pwsh/Secrets/Example.ps1
 
 # 忽略 zsh 的 local 部分
 /zsh/zsh/locals/*
