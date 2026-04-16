@@ -22,10 +22,18 @@ function Write-Label {
         [string]$Message,
 
         [Parameter(Mandatory)]
-        [string]$Color
+        [string]$Color,
+
+        [ValidateSet("stdout", "stderr")]
+        [string]$Stream = "stdout"
     )
 
     $content = "[$Label] $Message"
+    if ($Stream -eq "stderr") {
+        [Console]::Error.WriteLine($content)
+        return
+    }
+
     if (Test-ColorEnabled) {
         Write-Host $content -ForegroundColor $Color
     } else {
@@ -33,6 +41,25 @@ function Write-Label {
     }
 }
 
+# 输出普通消息
+function Write-PLAIN {
+    param (
+        [Parameter(Mandatory)]
+        [AllowEmptyString()]
+        [string]$Message,
+
+        [ValidateSet("stdout", "stderr")]
+        [string]$Stream = "stdout"
+    )
+
+    if ($Stream -eq "stderr") {
+        [Console]::Error.WriteLine($Message)
+    } else {
+        Write-Host $Message
+    }
+}
+
+# 输出步骤消息
 function Write-STEP {
     param (
         [Parameter(Mandatory)]
@@ -42,6 +69,7 @@ function Write-STEP {
     Write-Label -Label "STEP" -Message $Message -Color $script:CYAN
 }
 
+# 输出信息消息
 function Write-INFO {
     param (
         [Parameter(Mandatory)]
@@ -51,6 +79,7 @@ function Write-INFO {
     Write-Label -Label "INFO" -Message $Message -Color $script:BLUE
 }
 
+# 输出成功消息
 function Write-SUCCESS {
     param (
         [Parameter(Mandatory)]
@@ -60,6 +89,7 @@ function Write-SUCCESS {
     Write-Label -Label "OK" -Message $Message -Color $script:GREEN
 }
 
+# 输出跳过消息
 function Write-SKIP {
     param (
         [Parameter(Mandatory)]
@@ -69,22 +99,24 @@ function Write-SKIP {
     Write-Label -Label "SKIP" -Message $Message -Color $script:YELLOW
 }
 
+# 输出警告消息
 function Write-WARNING {
     param (
         [Parameter(Mandatory)]
         [string]$Message
     )
 
-    Write-Label -Label "WARN" -Message $Message -Color $script:YELLOW
+    Write-Label -Label "WARN" -Message $Message -Color $script:YELLOW -Stream stderr
 }
 
+# 输出错误消息
 function Write-ERROR {
     param (
         [Parameter(Mandatory)]
         [string]$Message
     )
 
-    Write-Label -Label "ERROR" -Message $Message -Color $script:RED
+    Write-Label -Label "ERROR" -Message $Message -Color $script:RED -Stream stderr
 }
 
-Export-ModuleMember -Function Write-STEP, Write-INFO, Write-SUCCESS, Write-SKIP, Write-WARNING, Write-ERROR
+Export-ModuleMember -Function Write-PLAIN, Write-STEP, Write-INFO, Write-SUCCESS, Write-SKIP, Write-WARNING, Write-ERROR

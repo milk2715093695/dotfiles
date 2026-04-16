@@ -27,10 +27,13 @@ function Expand-ZipArchive {
 
     New-Item -ItemType Directory -Path $Destination | Out-Null
 
+    Write-STEP "解压 $ZipPath"
     Expand-Archive -Path $ZipPath -DestinationPath $Destination
+    Write-SUCCESS "已解压：$Destination"
 
     # 解压完成后删除压缩包
     Remove-Item -Path $ZipPath -Force
+    Write-SUCCESS "已删除压缩包：$ZipPath"
 }
 
 Export-ModuleMember -Function Expand-ZipArchive

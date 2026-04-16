@@ -1,4 +1,4 @@
-# 检查 aerospace 是否存在
+# 检查 Aerospace 是否存在
 check_aerospace() {
     if command -v aerospace >/dev/null 2>&1; then
         return 0
@@ -7,11 +7,12 @@ check_aerospace() {
     fi
 }
 
-# 配置 aerospace
+# 配置 Aerospace
 configure_aerospace() {
     if check_aerospace; then
-        echo "aerospace 已存在，跳过安装"
+        skip_msg "Aerospace 已存在，跳过安装"
     else
+        step "添加 Aerospace 相关 Homebrew tap"
         brew tap FelixKratz/formulae
         install_package brew cask:nikitabobko/tap/aerospace borders
     fi
@@ -20,6 +21,6 @@ configure_aerospace() {
         link_item "$HOME/.config/aerospace" "$REPO_ROOT/aerospace"
         link_item "$HOME/.config/borders" "$REPO_ROOT/borders"
     else
-        warn "没有 aerospace，跳过 aerospace 配置"
+        warn "没有 Aerospace，跳过 Aerospace 配置"
     fi   
 }

@@ -1,6 +1,6 @@
 Set-StrictMode -Version Latest
 
-# 配置 pwsh
+# 配置 PowerShell
 function Initialize-PWSH {
     param(
         [Parameter(Mandatory)]
@@ -11,7 +11,7 @@ function Initialize-PWSH {
         $pwshPath = (where.exe pwsh 2>$null | Select-Object -First 1)
 
         if (-not $pwshPath) {
-            Write-Error "未找到 pwsh.exe，请确认已安装 PowerShell 7。"
+            Write-ERROR "未找到 pwsh.exe，请确认已安装 PowerShell 7。"
             return
         }
 

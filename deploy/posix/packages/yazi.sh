@@ -1,4 +1,4 @@
-# 检查 yazi 是否已经安装
+# 检查 Yazi 是否存在
 check_yazi() {
     if command -v yazi >/dev/null 2>&1; then
         return 0
@@ -7,10 +7,10 @@ check_yazi() {
     fi
 }
 
-# 配置 yazi
+# 配置 Yazi
 configure_yazi() {
     if check_yazi; then
-        echo "yazi 已经安装"
+        skip_msg "Yazi 已存在，跳过安装"
     else
         install_package "$PACKAGE_MANAGER" yazi ffmpeg 7zip jq poppler fd ripgrep fzf zoxide resvg imagemagick clipboard glow
     fi
@@ -20,12 +20,13 @@ configure_yazi() {
 
         # 插件安装属于安装类操作，可由 --yes-install 自动确认
         if prompt_install_confirm "是否安装或更新 yazi 插件？"; then
-            # 安装 yazi 的插件和主题
+            # 安装 Yazi 插件和主题
+            step "安装或更新 Yazi 插件和主题"
             ya pkg install
         else
-            echo "跳过 yazi 插件和主题安装"
+            skip_msg "跳过 Yazi 插件和主题安装"
         fi
     else
-        echo "yazi 未安装，跳过"
+        warn "没有 Yazi，跳过 Yazi 配置"
     fi
 }

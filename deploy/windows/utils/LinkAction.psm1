@@ -8,11 +8,11 @@ function Read-ConfigAction {
     )
 
     while ($true) {
-        Write-Host "目标已存在，请选择配置处理方式："
-        Write-Host "  b/B  备份一次 / 备份并对后续全部生效"
-        Write-Host "  r/R  替换一次 / 替换并对后续全部生效"
-        Write-Host "  l/L  只替换符号链接，文件或目录备份一次 / 对后续全部生效"
-        Write-Host "  s/S  跳过一次 / 跳过并对后续全部生效"
+        Write-PLAIN -Message "目标已存在，请选择配置处理方式：" -Stream stderr
+        Write-PLAIN -Message "  b/B  备份一次 / 备份并对后续全部生效" -Stream stderr
+        Write-PLAIN -Message "  r/R  替换一次 / 替换并对后续全部生效" -Stream stderr
+        Write-PLAIN -Message "  l/L  只替换符号链接，文件或目录备份一次 / 对后续全部生效" -Stream stderr
+        Write-PLAIN -Message "  s/S  跳过一次 / 跳过并对后续全部生效" -Stream stderr
 
         $answer = Read-Host "请输入选择 [b/B/r/R/l/L/s/S]:"
 
@@ -38,7 +38,7 @@ function Read-ConfigAction {
                 return "skip"
             }
             default {
-                Write-Host "请输入 b/B/r/R/l/L/s/S。"
+                Write-WARNING "请输入 b/B/r/R/l/L/s/S。"
             }
         }
     }

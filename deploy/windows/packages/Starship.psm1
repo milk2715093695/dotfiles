@@ -1,6 +1,6 @@
 Set-StrictMode -Version Latest
 
-# 检查 starship 是否已经安装
+# 检查 Starship 是否存在
 function Test-Starship {
     if (Get-Command starship -ErrorAction SilentlyContinue) {
         return $true
@@ -16,6 +16,7 @@ function Test-Starship {
     return $false
 }
 
+# 配置 Starship
 function Initialize-Starship {
     param(
         [Parameter(Mandatory)]
@@ -23,7 +24,7 @@ function Initialize-Starship {
     )
 
     if (Test-Starship) {
-        Write-Host "wezterm 已存在，跳过安装。"
+        Write-SKIP "Starship 已存在，跳过安装。"
     } else {
         Install-ScoopPackage -DeployContext $DeployContext -Name starship
     }
@@ -33,7 +34,7 @@ function Initialize-Starship {
         $source = "$REPO_ROOT\starship\starship.toml"
         New-SymbolicLink -DeployContext $DeployContext -TargetPath $target -SourcePath $source
     } else {
-        Write-Warning "没有 starship，跳过 starship 配置"
+        Write-WARNING "没有 Starship，跳过 Starship 配置。"
     }
 }
 

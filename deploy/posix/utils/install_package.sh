@@ -5,7 +5,7 @@ install_package() {
     local packages=("$@")
 
     if [ ${#packages[@]} -eq 0 ]; then
-        echo "没有指定要安装的包"
+        error "没有指定要安装的包"
         return 1
     fi
 
@@ -18,8 +18,6 @@ install_package() {
             package="${package#cask:}"  # 去掉前缀
         fi
 
-        echo "使用 $manager 安装 $package"
-
         # 安装类确认统一走 prompt_install_confirm，避免影响配置覆盖提示
         case "$manager" in
             brew)
@@ -30,25 +28,27 @@ install_package() {
 
                 if [ "$is_cask" = true ]; then
                     if brew list --cask "$package" >/dev/null 2>&1; then
-                        info "$package 已安装 (cask)。"
+                        skip_msg "$package 已安装 (cask)。"
                         continue
                     fi
 
                     if prompt_install_confirm "是否使用 brew 安装 $package？"; then
+                        step "使用 brew 安装 $package"
                         brew install --cask "$package"
                     else
-                        echo "跳过 $package 安装"
+                        skip_msg "跳过 $package 安装"
                     fi
                 else
                     if brew list "$package" >/dev/null 2>&1; then
-                        info "$package 已安装。"
+                        skip_msg "$package 已安装。"
                         continue
                     fi
 
                     if prompt_install_confirm "是否使用 brew 安装 $package？"; then
+                        step "使用 brew 安装 $package"
                         brew install "$package"
                     else
-                        echo "跳过 $package 安装"
+                        skip_msg "跳过 $package 安装"
                     fi
                 fi
                 ;;
@@ -59,14 +59,15 @@ install_package() {
                 fi
 
                 if dpkg -s "$package" >/dev/null 2>&1; then
-                    info "$package 已安装。"
+                    skip_msg "$package 已安装。"
                     continue
                 fi
 
                 if prompt_install_confirm "是否使用 apt 安装 $package？"; then
+                    step "使用 apt 安装 $package"
                     sudo apt install -y "$package"
                 else
-                    echo "跳过 $package 安装"
+                    skip_msg "跳过 $package 安装"
                 fi
                 ;;
             pkg)
@@ -76,14 +77,15 @@ install_package() {
                 fi
 
                 if dpkg -s "$package" >/dev/null 2>&1; then
-                    info "$package 已安装。"
+                    skip_msg "$package 已安装。"
                     continue
                 fi
 
                 if prompt_install_confirm "是否使用 pkg 安装 $package？"; then
+                    step "使用 pkg 安装 $package"
                     pkg install -y "$package"
                 else
-                    echo "跳过 $package 安装"
+                    skip_msg "跳过 $package 安装"
                 fi
                 ;;
             pacman)
@@ -93,14 +95,15 @@ install_package() {
                 fi
 
                 if pacman -Q "$package" >/dev/null 2>&1; then
-                    info "$package 已安装。"
+                    skip_msg "$package 已安装。"
                     continue
                 fi
 
                 if prompt_install_confirm "是否使用 pacman 安装 $package？"; then
+                    step "使用 pacman 安装 $package"
                     sudo pacman -S --needed --noconfirm "$package"
                 else
-                    echo "跳过 $package 安装"
+                    skip_msg "跳过 $package 安装"
                 fi
                 ;;
             flatpak)
@@ -110,14 +113,15 @@ install_package() {
                 fi
 
                 if flatpak list --app --columns=application | grep -Fxq "$package"; then
-                    info "$package 已安装。"
+                    skip_msg "$package 已安装。"
                     continue
                 fi
 
                 if prompt_install_confirm "是否使用 Flatpak 安装 $package？"; then
+                    step "使用 Flatpak 安装 $package"
                     flatpak install -y flathub "$package"
                 else
-                    echo "跳过 $package 安装"
+                    skip_msg "跳过 $package 安装"
                 fi
                 ;;
             *)

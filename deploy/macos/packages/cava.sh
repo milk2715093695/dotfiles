@@ -1,4 +1,4 @@
-# 检查 cava 是否存在
+# 检查 Cava 是否存在
 check_cava() {
     if command -v cava >/dev/null 2>&1; then
         return 0
@@ -7,10 +7,10 @@ check_cava() {
     fi
 }
 
-# 配置 cava
+# 配置 Cava
 configure_cava() {
     if check_cava; then
-        echo "cava 已存在，跳过安装"
+        skip_msg "Cava 已存在，跳过安装"
     else
         install_package brew cava cask:blackhole-2ch
     fi
@@ -18,6 +18,6 @@ configure_cava() {
     if check_cava; then
         link_item "$HOME/.config/cava" "$REPO_ROOT/cava/macos"
     else
-        warn "没有 cava，跳过 cava 配置"
+        warn "没有 Cava，跳过 Cava 配置"
     fi   
 }

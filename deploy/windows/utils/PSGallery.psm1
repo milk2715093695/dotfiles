@@ -5,8 +5,9 @@ function Initialize-PSGalleryRepository {
     $repo = Get-PSRepository -Name PSGallery -ErrorAction SilentlyContinue
 
     if (-not $repo) {
-        Write-Warning "PSGallery 未找到。正在注册..."
+        Write-WARNING "PSGallery 未找到。正在注册..."
         Register-PSRepository -Default
+        Write-SUCCESS "PSGallery 已注册。"
     }
 }
 

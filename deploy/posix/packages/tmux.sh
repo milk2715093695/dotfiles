@@ -1,4 +1,4 @@
-# 检查 tmux 是否已经安装
+# 检查 tmux 是否存在
 check_tmux() {
     if command -v tmux >/dev/null 2>&1; then
         return 0
@@ -10,7 +10,7 @@ check_tmux() {
 # 配置 tmux
 configure_tmux() {
     if check_tmux; then
-        echo "tmux 已经安装"
+        skip_msg "tmux 已存在，跳过安装"
     else
         install_package "$PACKAGE_MANAGER" tmux bash bc coreutils gawk jq
     fi
@@ -18,6 +18,6 @@ configure_tmux() {
     if check_tmux; then
         link_item "$HOME/.config/tmux" "$REPO_ROOT/tmux"
     else
-        echo "tmux 未安装，跳过"
+        warn "没有 tmux，跳过 tmux 配置"
     fi
 }

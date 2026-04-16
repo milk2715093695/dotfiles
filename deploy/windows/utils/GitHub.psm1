@@ -1,6 +1,6 @@
 Set-StrictMode -Version Latest
 
-# 获取最新的 Release 的 Tag
+# 获取最新 Release 标签
 function Get-GitHubLatestReleaseTag {
     param (
         [Parameter(Mandatory)]
@@ -29,7 +29,7 @@ function Get-GitHubLatestReleaseTag {
     return $release.tag_name
 }
 
-# 下载仓库 Release 到目录
+# 下载仓库 Release 资产到目录
 function Save-GitHubReleaseAsset {
     param (
         [Parameter(Mandatory)]
@@ -55,7 +55,7 @@ function Save-GitHubReleaseAsset {
     $downloadUrl = "https://github.com/$Owner/$Repo/releases/download/$Version/$AssetName"
     $outputPath = Join-Path $OutputDir $AssetName
 
-    Write-Host "正在从 $downloadUrl 下载 $AssetName..."
+    Write-STEP "下载 $AssetName：$downloadUrl"
 
     if (Test-Path $outputPath) {
         Write-ERROR "下载目标目录已经存在"
@@ -74,6 +74,7 @@ function Save-GitHubReleaseAsset {
         throw "下载失败：$($_.Exception.Message)"
     }
 
+    Write-SUCCESS "已下载：$outputPath"
     return $outputPath
 }
 

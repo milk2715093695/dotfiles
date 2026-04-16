@@ -1,6 +1,6 @@
 Set-StrictMode -Version Latest
 
-# 检查 NeoVim 是否存在
+# 检查 Neovim 是否存在
 function Test-Nvim {
     if (Get-Command nvim -ErrorAction SilentlyContinue) {
         return $true
@@ -24,7 +24,7 @@ function Initialize-LazyVim {
     )
 
     if (Test-Nvim) {
-        Write-Host "nvim 已存在，跳过安装。"
+        Write-SKIP "Neovim 已存在，跳过安装。"
     } else {
         Install-ScoopPackage -DeployContext $DeployContext -Name @(
             "neovim", "python", "nodejs", "fd"
@@ -36,7 +36,7 @@ function Initialize-LazyVim {
         $source = Join-Path $REPO_ROOT "nvim"
         New-SymbolicLink -DeployContext $DeployContext -TargetPath $target -SourcePath $source
     } else {
-        Write-WARNING "没有 nvim，跳过 lazyvim 配置。"
+        Write-WARNING "没有 Neovim，跳过 LazyVim 配置。"
     }
 }
 

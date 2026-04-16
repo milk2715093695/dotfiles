@@ -39,6 +39,11 @@ plain() {
     printf '%s\n' "$1"
 }
 
+# 输出 stderr 普通消息
+plain_error() {
+    printf '%s\n' "$1" >&2
+}
+
 # 输出步骤消息
 step() {
     print_label stdout "$CYAN" "STEP" "$1"

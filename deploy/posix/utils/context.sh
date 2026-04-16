@@ -1,4 +1,4 @@
-# 初始化部署配置
+# 初始化部署上下文
 init_deploy_context() {
     DEPLOY_AUTO_INSTALL=false
     DEPLOY_CONFIG_MODE="ask"

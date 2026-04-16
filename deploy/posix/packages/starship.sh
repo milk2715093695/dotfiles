@@ -1,4 +1,4 @@
-# 检查 starship 是否存在
+# 检查 Starship 是否存在
 check_starship() {
     if command -v starship >/dev/null 2>&1; then
         return 0
@@ -7,10 +7,10 @@ check_starship() {
     fi
 }
 
-# 配置 starship
+# 配置 Starship
 configure_starship() {
     if check_starship; then
-        echo "starship 已存在，跳过安装"
+        skip_msg "Starship 已存在，跳过安装"
     else
         install_package "$PACKAGE_MANAGER" starship
     fi
@@ -18,6 +18,6 @@ configure_starship() {
     if check_starship; then
         link_item "$HOME/.config/starship.toml" "$REPO_ROOT/starship/starship.toml"
     else
-        warn "没有 starship，跳过 starship 配置"
+        warn "没有 Starship，跳过 Starship 配置"
     fi   
 }

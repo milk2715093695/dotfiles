@@ -24,7 +24,7 @@ function Initialize-Yazi {
     )
 
     if (Test-Yazi) {
-        Write-Host "yazi 已存在，跳过安装。"
+        Write-SKIP "Yazi 已存在，跳过安装。"
     } else {
         Install-ScoopPackage -DeployContext $DeployContext -Name @(
             "yazi", "ffmpeg", "7zip",
@@ -41,10 +41,11 @@ function Initialize-Yazi {
         $source = Join-Path $REPO_ROOT "yazi"
         New-SymbolicLink -DeployContext $DeployContext -TargetPath $target -SourcePath $source
 
-        # 安装 yazi 的插件
+        # 安装 Yazi 插件
+        Write-STEP "安装或更新 Yazi 插件"
         ya pkg install
     } else {
-        Write-WARNING "没有 yazi，跳过 yazi 配置。"
+        Write-WARNING "没有 Yazi，跳过 Yazi 配置。"
     }
 }
 

@@ -3,7 +3,7 @@ check_wezterm() {
     return 1
 }
 
-# 使用 Homebrew 安装 WezTerm
+# 跳过 Termux 上的 WezTerm 安装
 install_wezterm() {
-    echo "跳过 wezterm 安装。"
+    skip_msg "跳过 WezTerm 安装。"
 }

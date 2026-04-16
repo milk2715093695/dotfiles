@@ -75,7 +75,7 @@ prompt_confirm() {
         case "$answer" in
             [Yy]*) return 0 ;;
             [Nn]*) return 1 ;;
-            *) echo "请输入 y 或 n." ;;
+            *) warn "请输入 y 或 n." ;;
         esac
     done
 }
@@ -85,7 +85,7 @@ prompt_install_confirm() {
     local message="$1"
 
     if [ "$(get_deploy_auto_install)" = true ]; then
-        echo "$message [y/n]: y (自动确认安装)"
+        info "$message [y/n]: y (自动确认安装)"
         return 0
     fi
 

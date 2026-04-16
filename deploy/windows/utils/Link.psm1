@@ -130,8 +130,8 @@ function New-SymbolicLink {
 
     # 先处理已正确链接的情况，避免重复删除或备份
     Write-STEP "准备创建链接"
-    Write-Host "    目标 (target)：$TargetPath -> 源 (source)：$SourcePath"
-    Write-Host ""
+    Write-PLAIN "    目标 (target)：$TargetPath -> 源 (source)：$SourcePath"
+    Write-PLAIN ""
 
     if (Test-SameSymbolicLink -TargetPath $TargetPath -SourcePath $SourcePath) {
         Write-SKIP "目标已经是指向同一源的符号链接，跳过：$TargetPath"

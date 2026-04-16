@@ -16,7 +16,7 @@ function Test-Cava {
     return $false
 }
 
-# 配置 cava
+# 配置 Cava
 function Initialize-Cava {
     param(
         [Parameter(Mandatory)]
@@ -24,7 +24,7 @@ function Initialize-Cava {
     )
 
     if (Test-Cava) {
-        Write-Host "cava 已存在，跳过安装。"
+        Write-SKIP "Cava 已存在，跳过安装。"
     } else {
         Install-ScoopPackage -DeployContext $DeployContext -Name cava
     }
@@ -34,7 +34,7 @@ function Initialize-Cava {
         $source = Join-Path $REPO_ROOT "cava\windows"
         New-SymbolicLink -DeployContext $DeployContext -TargetPath $target -SourcePath $source
     } else {
-        Write-WARNING "没有 cava，跳过 cava 配置。"
+        Write-WARNING "没有 Cava，跳过 Cava 配置。"
     }
 }
 

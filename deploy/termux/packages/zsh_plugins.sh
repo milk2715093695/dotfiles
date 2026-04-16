@@ -15,10 +15,10 @@ configure_zsh_plugins() {
     for plugin in "${!plugins[@]}"; do
         repo="${plugins[$plugin]}"
         if [ -d "$plugin/.git" ]; then
-            echo "插件 $plugin 已存在，执行 git pull 更新..."
+            step "更新 zsh 插件：$plugin"
             cd "$plugin" && git pull && cd ..
         else
-            echo "插件 $plugin 不存在，执行 git clone..."
+            step "克隆 zsh 插件：$plugin"
             git clone "$repo" "$plugin"
         fi
     done

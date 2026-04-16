@@ -5,7 +5,7 @@ function Initialize-PSFzf {
     if (Get-Command "fzf" -ErrorAction SilentlyContinue) {
         
     } else {
-        Write-Warning "fzf 未安装，跳过 PSFzf 初始化"
+        Write-WARNING "fzf 未安装，跳过 PSFzf 初始化"
     }
 }
 

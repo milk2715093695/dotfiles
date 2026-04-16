@@ -12,7 +12,7 @@ function Read-Confirmation {
         switch -Regex ($answer) {
             '^[Yy]' { return $true }
             '^[Nn]' { return $false }
-            default { Write-Host "请输入 y 或 n." }
+            default { Write-WARNING "请输入 y 或 n." }
         }
     }
 }
@@ -28,7 +28,7 @@ function Read-InstallConfirmation {
     )
 
     if (Get-DeployAutoInstall -DeployContext $DeployContext) {
-        Write-Host "$Message [y/n]: y (自动确认安装)"
+        Write-INFO "$Message [y/n]: y (自动确认安装)"
         return $true
     }
 

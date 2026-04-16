@@ -3,11 +3,11 @@ select_config_action() {
     local answer
 
     while true; do
-        printf '%s\n' "目标已存在，请选择配置处理方式：" >&2
-        printf '%s\n' "  b/B  备份一次 / 备份并对后续全部生效" >&2
-        printf '%s\n' "  r/R  替换一次 / 替换并对后续全部生效" >&2
-        printf '%s\n' "  l/L  只替换符号链接，文件或目录备份一次 / 对后续全部生效" >&2
-        printf '%s\n' "  s/S  跳过一次 / 跳过并对后续全部生效" >&2
+        plain_error "目标已存在，请选择配置处理方式："
+        plain_error "  b/B  备份一次 / 备份并对后续全部生效"
+        plain_error "  r/R  替换一次 / 替换并对后续全部生效"
+        plain_error "  l/L  只替换符号链接，文件或目录备份一次 / 对后续全部生效"
+        plain_error "  s/S  跳过一次 / 跳过并对后续全部生效"
         read -rp "请输入选择 [b/B/r/R/l/L/s/S]: " answer
 
         case "$answer" in
@@ -48,7 +48,7 @@ select_config_action() {
                 return 0
                 ;;
             *)
-                printf '%s\n' "请输入 b/B/r/R/l/L/s/S。" >&2
+                warn "请输入 b/B/r/R/l/L/s/S。"
                 ;;
         esac
     done
@@ -68,7 +68,7 @@ resolve_config_action() {
             printf '%s\n' "$mode"
             ;;
         *)
-            warn "未知配置模式 $mode，回退为交互模式。" >&2
+            warn "未知配置模式 $mode，回退为交互模式。"
             select_config_action
             ;;
     esac

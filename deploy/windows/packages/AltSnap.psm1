@@ -30,10 +30,10 @@ function Install-AltSnap {
 
     $version = Get-GitHubLatestReleaseTag -Owner $owner -Repo $repo
 
-    Write-Host "AltSnap 最新版本: $version"
+    Write-INFO "AltSnap 最新版本: $version"
 
     if (-not (Read-InstallConfirmation -DeployContext $DeployContext -Message "是否需要更新或者安装 AltSnap？")) {
-        Write-Host "跳过 AltSnap 的安装"
+        Write-SKIP "跳过 AltSnap 的安装"
         return
     }
 

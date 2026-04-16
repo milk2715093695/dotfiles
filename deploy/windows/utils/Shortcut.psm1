@@ -24,7 +24,7 @@ function New-DesktopShortcut {
     $shortcut.IconLocation = $targetPath
     $shortcut.Save()
 
-    Write-INFO "桌面快捷方式已创建：$desktopPath\$ShortcutName.lnk"
+    Write-SUCCESS "桌面快捷方式已创建：$desktopPath\$ShortcutName.lnk"
 }
 
 Export-ModuleMember -Function New-DesktopShortcut
