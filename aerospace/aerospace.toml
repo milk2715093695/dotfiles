@@ -1,83 +1,55 @@
-# Place a copy of this config to ~/.aerospace.toml
-# After that, you can edit ~/.aerospace.toml to your liking
+# AeroSpace 配置目标：
+# - 使用语义化工作区组织日常任务
+# - 保持 i3/Vim 风格方向键操作
+# - 和 SketchyBar、borders 组成完整 macOS 桌面体验
 
-# Config version for compatibility and deprecations
-# Fallback value (if you omit the key): config-version = 1
+# 即使部分值与默认值一致，也显式保留，方便之后直接调参。
 config-version = 2
 
-# You can use it to add commands that run after AeroSpace startup.
-# Available commands : https://nikitabobko.github.io/AeroSpace/commands
+# 启动桌面辅助组件。borders 的样式暂时在这里保持内联，便于和 AeroSpace 同步启动。
 after-startup-command = [
     'exec-and-forget borders style=round width=6.0 hidpi=off active_color=0xff7aa2f7 inactive_color=0xff1e2030',
     'exec-and-forget sketchybar',
 ]
 
-# Start AeroSpace at login
 start-at-login = true
 
-# Normalizations. See: https://nikitabobko.github.io/AeroSpace/guide#normalization
+# 保持窗口树结构简洁，避免出现难以理解的嵌套布局。
 enable-normalization-flatten-containers = true
 enable-normalization-opposite-orientation-for-nested-containers = true
 
-# See: https://nikitabobko.github.io/AeroSpace/guide#layouts
-# The 'accordion-padding' specifies the size of accordion padding
-# You can set 0 to disable the padding feature
+# 默认使用平铺，accordion 作为按需切换的堆叠布局。
 accordion-padding = 0
-
-# Possible values: tiles|accordion
 default-root-container-layout = 'tiles'
-
-# Possible values: horizontal|vertical|auto
-# 'auto' means: wide monitor (anything wider than high) gets horizontal orientation,
-#               tall monitor (anything higher than wide) gets vertical orientation
 default-root-container-orientation = 'auto'
 
-# Mouse follows focus when focused monitor changes
-# Drop it from your config, if you don't like this behavior
-# See https://nikitabobko.github.io/AeroSpace/guide#on-focus-changed-callbacks
-# See https://nikitabobko.github.io/AeroSpace/commands#move-mouse
-# Fallback value (if you omit the key): on-focused-monitor-changed = []
+# 焦点跨显示器变化时移动鼠标；当前主要是保留默认行为，方便之后接外屏时调整。
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 
+# 通知 SketchyBar 刷新工作区状态。
 exec-on-workspace-change = [
     '/bin/bash',
     '-c',
     'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
 ]
 
+# 通知 SketchyBar 刷新前台应用或焦点相关 widget。
 on-focus-changed = [
     'exec-and-forget sketchybar --trigger aerospace_focus_change',
 ]
 
-# You can effectively turn off macOS "Hide application" (cmd-h) feature by toggling this flag
-# Useful if you don't use this macOS feature, but accidentally hit cmd-h or cmd-alt-h key
-# Also see: https://nikitabobko.github.io/AeroSpace/goodies#disable-hide-app
 automatically-unhide-macos-hidden-apps = false
 
-# List of workspaces that should stay alive even when they contain no windows,
-# even when they are invisible.
-# This config version is only available since 'config-version = 2'
-# Fallback value (if you omit the key): persistent-workspaces = []
+# 语义工作区：比纯数字更接近日常任务切换时的心理模型。
 persistent-workspaces = ["files", "web", "dev", "net", "game", "chat", "vm"]
 
-# A callback that runs every time binding mode changes
-# See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
-# See: https://nikitabobko.github.io/AeroSpace/commands#mode
+# 当前没有 mode 状态提示；保留显式空数组作为以后扩展入口。
 on-mode-changed = []
 
-# Possible values: (qwerty|dvorak|colemak)
-# See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
 [key-mapping]
     preset = 'qwerty'
 
-# Gaps between windows (inner-*) and between monitor edges (outer-*).
-# Possible values:
-# - Constant:     gaps.outer.top = 8
-# - Per monitor:  gaps.outer.top = [{ monitor.main = 16 }, { monitor."some-pattern" = 32 }, 24]
-#                 In this example, 24 is a default value when there is no match.
-#                 Monitor pattern is the same as for 'workspace-to-monitor-force-assignment'.
-#                 See:
-#                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
+# 外边距配合 SketchyBar 和 borders；顶部给菜单栏/SketchyBar 留空间。
 [gaps]
     inner.horizontal = 0
     inner.vertical =   0
@@ -86,64 +58,32 @@ on-mode-changed = []
     outer.top =        38
     outer.right =      5
 
-# 'main' binding mode declaration
-# See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
-# 'main' binding mode must be always presented
-# Fallback value (if you omit the key): mode.main.binding = {}
 [mode.main.binding]
 
-    # All possible keys:
-    # - Letters.        a, b, c, ..., z
-    # - Numbers.        0, 1, 2, ..., 9
-    # - Keypad numbers. keypad0, keypad1, keypad2, ..., keypad9
-    # - F-keys.         f1, f2, ..., f20
-    # - Special keys.   minus, equal, period, comma, slash, backslash, quote, semicolon,
-    #                   backtick, leftSquareBracket, rightSquareBracket, space, enter, esc,
-    #                   backspace, tab, pageUp, pageDown, home, end, forwardDelete,
-    #                   sectionSign (ISO keyboards only, european keyboards only)
-    # - Keypad special. keypadClear, keypadDecimalMark, keypadDivide, keypadEnter, keypadEqual,
-    #                   keypadMinus, keypadMultiply, keypadPlus
-    # - Arrows.         left, down, up, right
-
-    # All possible modifiers: cmd, alt, ctrl, shift
-
-    # All possible commands: https://nikitabobko.github.io/AeroSpace/commands
-
-    # See: https://nikitabobko.github.io/AeroSpace/commands#exec-and-forget
-    # You can uncomment the following lines to open up terminal with alt + enter shortcut
-    # (like in i3)
-    # alt-enter = '''exec-and-forget osascript -e '
-    # tell application "Terminal"
-    #     do script
-    #     activate
-    # end tell'
-    # '''
-
-    # 终端
+    # 终端：保留 Alt+Enter 的 i3 习惯，同时提供 Alt+T 作为语义入口。
     alt-t = '''exec-and-forget open -na WezTerm'''
     alt-enter = '''exec-and-forget open -na WezTerm'''
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#layout
+    # 布局切换：tiles 用于并排工作，accordion 用于同类窗口堆叠。
     alt-slash = 'layout tiles horizontal vertical'
     alt-comma = 'layout accordion horizontal vertical'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#focus
+    # Vim/tmux 风格方向键。
     alt-h = 'focus left'
     alt-j = 'focus down'
     alt-k = 'focus up'
     alt-l = 'focus right'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#move
     alt-shift-h = 'move left'
     alt-shift-j = 'move down'
     alt-shift-k = 'move up'
     alt-shift-l = 'move right'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#resize
+    # 快速调整当前容器大小。
     alt-minus = 'resize smart -50'
     alt-equal = 'resize smart +50'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
+    # 工作区：字母是主入口，数字 1-7 保留用于兼容旧配置和肌肉记忆。
     alt-f = 'workspace files'
     alt-w = 'workspace web'
     alt-d = 'workspace dev'
@@ -160,7 +100,7 @@ on-mode-changed = []
     alt-6 = 'workspace chat'
     alt-7 = 'workspace vm'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
+    # 移动窗口后立即切换到目标工作区，保持操作反馈明确。
     alt-shift-f = ['move-node-to-workspace files', 'workspace files']
     alt-shift-w = ['move-node-to-workspace web', 'workspace web']
     alt-shift-d = ['move-node-to-workspace dev', 'workspace dev']
@@ -177,16 +117,12 @@ on-mode-changed = []
     alt-shift-6 = ['move-node-to-workspace chat', 'workspace chat']
     alt-shift-7 = ['move-node-to-workspace vm', 'workspace vm']
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
     alt-tab = 'workspace-back-and-forth'
-    # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
     alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#mode
+    # service mode 放维护类操作，避免常用模式里塞太多危险快捷键。
     alt-shift-semicolon = 'mode service'
 
-# 'service' binding mode declaration.
-# See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 [mode.service.binding]
     esc = ['reload-config', 'mode main']
     r = ['flatten-workspace-tree', 'mode main'] # reset layout
@@ -201,53 +137,32 @@ on-mode-changed = []
     alt-shift-k = ['join-with up', 'mode main']
     alt-shift-l = ['join-with right', 'mode main']
 
-[[on-window-detected]]
-    if.app-id = 'io.geph.GephGui'
-    run = ['layout floating', 'move-node-to-workspace net']
-
+# files: 文件管理、系统工具、密码管理器等短任务窗口。
 [[on-window-detected]]
     if.app-id = 'com.apple.finder'
     run = ['layout floating', 'move-node-to-workspace files']
-
-[[on-window-detected]]
-    if.app-id = 'com.microsoft.VSCode'
-    run = ['layout accordion', 'move-node-to-workspace dev']
-
-[[on-window-detected]]
-    if.app-id = 'com.kkrainbow.easytier'
-    run = ['layout floating', 'move-node-to-workspace net']
-
-[[on-window-detected]]
-    if.app-id = 'org.mozilla.firefox'
-    run = ['layout tiles', 'move-node-to-workspace web']
 
 [[on-window-detected]]
     if.app-id = 'com.apple.ActivityMonitor'
     run = ['layout floating', 'move-node-to-workspace files']
 
 [[on-window-detected]]
-    if.app-name-regex-substring = '[Ss]team'
-    run = ['layout accordion', 'move-node-to-workspace game']
-
-[[on-window-detected]]
-    if.app-id = 'com.tencent.xinWeChat'
-    run = ['layout accordion', 'move-node-to-workspace chat']
-
-[[on-window-detected]]
-    if.app-id = 'com.parallels.desktop.console'
-    run = ['layout accordion', 'move-node-to-workspace vm']
-
-[[on-window-detected]]
     if.app-id = 'com.apple.audio.AudioMIDISetup'
     run = ['layout floating', 'move-node-to-workspace files']
 
 [[on-window-detected]]
-    if.app-id = 'sh.ppy.osu.lazer'
-    run = ['layout accordion', 'move-node-to-workspace game']
-
-[[on-window-detected]]
     if.app-id = 'org.keepassxc.keepassxc'
     run = ['layout floating', 'move-node-to-workspace files']
+
+# web: 浏览器窗口默认平铺。
+[[on-window-detected]]
+    if.app-id = 'org.mozilla.firefox'
+    run = ['layout tiles', 'move-node-to-workspace web']
+
+# dev: 编辑器、IDE 和 Java GUI 工具默认堆叠，减少开发工作区横向拥挤。
+[[on-window-detected]]
+    if.app-id = 'com.microsoft.VSCode'
+    run = ['layout accordion', 'move-node-to-workspace dev']
 
 [[on-window-detected]]
     if.app-id = 'net.java.openjdk.java'
@@ -256,6 +171,34 @@ on-mode-changed = []
 [[on-window-detected]]
     if.app-id = 'com.google.android.studio'
     run = ['layout accordion', 'move-node-to-workspace dev']
+
+# net: 网络、代理和组网工具。
+[[on-window-detected]]
+    if.app-id = 'io.geph.GephGui'
+    run = ['layout floating', 'move-node-to-workspace net']
+
+[[on-window-detected]]
+    if.app-id = 'com.kkrainbow.easytier'
+    run = ['layout floating', 'move-node-to-workspace net']
+
+# game: 游戏启动器和游戏窗口默认堆叠。
+[[on-window-detected]]
+    if.app-name-regex-substring = '[Ss]team'
+    run = ['layout accordion', 'move-node-to-workspace game']
+
+[[on-window-detected]]
+    if.app-id = 'sh.ppy.osu.lazer'
+    run = ['layout accordion', 'move-node-to-workspace game']
+
+# chat: 聊天工具集中放置。
+[[on-window-detected]]
+    if.app-id = 'com.tencent.xinWeChat'
+    run = ['layout accordion', 'move-node-to-workspace chat']
+
+# vm: 虚拟机和远程桌面。
+[[on-window-detected]]
+    if.app-id = 'com.parallels.desktop.console'
+    run = ['layout accordion', 'move-node-to-workspace vm']
 
 [[on-window-detected]]
     if.app-id = 'com.carriez.rustdesk'
