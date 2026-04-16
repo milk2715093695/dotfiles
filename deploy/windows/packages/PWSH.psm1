@@ -1,12 +1,7 @@
 Set-StrictMode -Version Latest
 
-# 配置 PowerShell
-function Initialize-PWSH {
-    param(
-        [Parameter(Mandatory)]
-        [hashtable]$DeployContext
-    )
-
+# 设置 PowerShell 为 OpenSSH 默认 shell
+function Set-PWSHDefaultOpenSshShell {
     if (Read-Confirmation "是否将 pwsh 设为默认 ssh 登录客户端？") {
         $pwshPath = (where.exe pwsh 2>$null | Select-Object -First 1)
 
@@ -24,8 +19,15 @@ function Initialize-PWSH {
 
         Restart-Service sshd
     }
+}
 
-    $target = "$HOME\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
+# 创建 PowerShell 配置链接
+function New-PWSHConfigLink {
+    param(
+        [Parameter(Mandatory)]
+        [hashtable]$DeployContext
+    )
+
     $target = "$PROFILE"
     $source = "$REPO_ROOT\pwsh\Microsoft.PowerShell_profile.ps1"
     New-SymbolicLink -DeployContext $DeployContext -TargetPath $target -SourcePath $source
@@ -35,4 +37,4 @@ function Initialize-PWSH {
     New-SymbolicLink -DeployContext $DeployContext -TargetPath $target -SourcePath $source
 }
 
-Export-ModuleMember -Function Initialize-PWSH
+Export-ModuleMember -Function Set-PWSHDefaultOpenSshShell, New-PWSHConfigLink

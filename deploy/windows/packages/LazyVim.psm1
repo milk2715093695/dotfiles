@@ -16,28 +16,33 @@ function Test-Nvim {
     return $false
 }
 
-# 配置 LazyVim
-function Initialize-LazyVim {
+# 检查 LazyVim deploy unit 是否可用
+function Test-LazyVim {
+    Test-Nvim
+}
+
+# 安装 LazyVim 运行时依赖
+function Install-LazyVim {
     param(
         [Parameter(Mandatory)]
         [hashtable]$DeployContext
     )
 
-    if (Test-Nvim) {
-        Write-SKIP "Neovim 已存在，跳过安装。"
-    } else {
-        Install-ScoopPackage -DeployContext $DeployContext -Name @(
-            "neovim", "python", "nodejs", "fd"
-        )
-    }
-
-    if (Test-Nvim) {
-        $target = Join-Path $env:LocalAppData "nvim"
-        $source = Join-Path $REPO_ROOT "nvim"
-        New-SymbolicLink -DeployContext $DeployContext -TargetPath $target -SourcePath $source
-    } else {
-        Write-WARNING "没有 Neovim，跳过 LazyVim 配置。"
-    }
+    Install-ScoopPackage -DeployContext $DeployContext -Name @(
+        "neovim", "python", "nodejs", "fd"
+    )
 }
 
-Export-ModuleMember -Function Test-Nvim, Initialize-LazyVim
+# 创建 LazyVim 配置链接
+function New-LazyVimConfigLink {
+    param(
+        [Parameter(Mandatory)]
+        [hashtable]$DeployContext
+    )
+
+    $target = Join-Path $env:LocalAppData "nvim"
+    $source = Join-Path $REPO_ROOT "nvim"
+    New-SymbolicLink -DeployContext $DeployContext -TargetPath $target -SourcePath $source
+}
+
+Export-ModuleMember -Function Test-Nvim, Test-LazyVim, Install-LazyVim, New-LazyVimConfigLink

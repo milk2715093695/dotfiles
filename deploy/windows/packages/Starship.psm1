@@ -16,26 +16,26 @@ function Test-Starship {
     return $false
 }
 
-# 配置 Starship
-function Initialize-Starship {
+# 安装 Starship
+function Install-Starship {
     param(
         [Parameter(Mandatory)]
         [hashtable]$DeployContext
     )
 
-    if (Test-Starship) {
-        Write-SKIP "Starship 已存在，跳过安装。"
-    } else {
-        Install-ScoopPackage -DeployContext $DeployContext -Name starship
-    }
-
-    if (Test-Starship) {
-        $target = "$HOME\.config\starship.toml"
-        $source = "$REPO_ROOT\starship\starship.toml"
-        New-SymbolicLink -DeployContext $DeployContext -TargetPath $target -SourcePath $source
-    } else {
-        Write-WARNING "没有 Starship，跳过 Starship 配置。"
-    }
+    Install-ScoopPackage -DeployContext $DeployContext -Name starship
 }
 
-Export-ModuleMember -Function Initialize-Starship
+# 创建 Starship 配置链接
+function New-StarshipConfigLink {
+    param(
+        [Parameter(Mandatory)]
+        [hashtable]$DeployContext
+    )
+
+    $target = "$HOME\.config\starship.toml"
+    $source = "$REPO_ROOT\starship\starship.toml"
+    New-SymbolicLink -DeployContext $DeployContext -TargetPath $target -SourcePath $source
+}
+
+Export-ModuleMember -Function Test-Starship, Install-Starship, New-StarshipConfigLink

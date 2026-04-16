@@ -1,9 +1,16 @@
 Set-StrictMode -Version Latest
 
 # 是否以管理员运行
-$IsAdmin = ([Security.Principal.WindowsPrincipal] `
-    [Security.Principal.WindowsIdentity]::GetCurrent()
-).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+function Test-WindowsAdministrator {
+    if (-not $IsWindows) {
+        return $false
+    }
+
+    $principal = [Security.Principal.WindowsPrincipal] `
+        [Security.Principal.WindowsIdentity]::GetCurrent()
+
+    return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+}
 
 # 部署入口
 function Main {
@@ -12,55 +19,117 @@ function Main {
         [hashtable]$DeployContext
     )
 
-    if (-not $IsAdmin) {
+    if (-not (Test-WindowsAdministrator)) {
         Write-WARNING "当前不是管理员权限运行。"
         Write-WARNING "如果未开启 Windows 开发者模式，创建符号链接可能失败。"
     }
 
     Initialize-DeployOutputView
 
-    Invoke-DeployStage -Name "安装 AltSnap" -ScriptBlock {
-        Install-AltSnap -DeployContext $DeployContext
-    }
+    $deployUnits = @(
+        @{
+            StageName = "安装 AltSnap"
+            Name = "AltSnap"
+            AvailabilityCheck = $null
+            Prepare = $null
+            Install = ({ Install-AltSnap -DeployContext $DeployContext }).GetNewClosure()
+            Link = $null
+            Update = $null
+        }
+        @{
+            StageName = "安装 JetBrains Mono"
+            Name = "JetBrains Mono"
+            AvailabilityCheck = ({ Test-JetBrainsMono }).GetNewClosure()
+            Prepare = $null
+            Install = ({ Install-JetBrainsMono -DeployContext $DeployContext }).GetNewClosure()
+            Link = $null
+            Update = $null
+        }
+        @{
+            StageName = "配置 WezTerm"
+            Name = "WezTerm"
+            AvailabilityCheck = ({ Test-WezTerm }).GetNewClosure()
+            Prepare = $null
+            Install = ({ Install-WezTerm -DeployContext $DeployContext }).GetNewClosure()
+            Link = ({ New-WezTermConfigLink -DeployContext $DeployContext }).GetNewClosure()
+            Update = $null
+        }
+        @{
+            StageName = "初始化 PSGallery"
+            Name = "PSGallery"
+            AvailabilityCheck = ({ Test-PSGalleryRepository }).GetNewClosure()
+            Prepare = $null
+            Install = ({ Register-PSGalleryRepository -DeployContext $DeployContext }).GetNewClosure()
+            Link = $null
+            Update = $null
+        }
+        @{
+            StageName = "安装常用命令行工具"
+            Name = "CLI Tools"
+            AvailabilityCheck = ({ Test-CliToolSet }).GetNewClosure()
+            Prepare = $null
+            Install = ({ Install-CliToolSet -DeployContext $DeployContext }).GetNewClosure()
+            Link = $null
+            Update = $null
+        }
+        @{
+            StageName = "配置 Starship"
+            Name = "Starship"
+            AvailabilityCheck = ({ Test-Starship }).GetNewClosure()
+            Prepare = $null
+            Install = ({ Install-Starship -DeployContext $DeployContext }).GetNewClosure()
+            Link = ({ New-StarshipConfigLink -DeployContext $DeployContext }).GetNewClosure()
+            Update = $null
+        }
+        @{
+            StageName = "配置 PSFzf"
+            Name = "PSFzf"
+            AvailabilityCheck = ({ Test-PSFzf }).GetNewClosure()
+            Prepare = $null
+            Install = $null
+            Link = $null
+            Update = $null
+        }
+        @{
+            StageName = "配置 PowerShell"
+            Name = "PowerShell"
+            AvailabilityCheck = $null
+            Prepare = ({ Set-PWSHDefaultOpenSshShell }).GetNewClosure()
+            Install = $null
+            Link = ({ New-PWSHConfigLink -DeployContext $DeployContext }).GetNewClosure()
+            Update = $null
+        }
+        @{
+            StageName = "配置 Yazi"
+            Name = "Yazi"
+            AvailabilityCheck = ({ Test-Yazi }).GetNewClosure()
+            Prepare = $null
+            Install = ({ Install-Yazi -DeployContext $DeployContext }).GetNewClosure()
+            Link = ({ New-YaziConfigLink -DeployContext $DeployContext }).GetNewClosure()
+            Update = ({ Update-YaziPlugin -DeployContext $DeployContext }).GetNewClosure()
+        }
+        @{
+            StageName = "配置 Cava"
+            Name = "Cava"
+            AvailabilityCheck = ({ Test-Cava }).GetNewClosure()
+            Prepare = $null
+            Install = ({ Install-Cava -DeployContext $DeployContext }).GetNewClosure()
+            Link = ({ New-CavaConfigLink -DeployContext $DeployContext }).GetNewClosure()
+            Update = $null
+        }
+        @{
+            StageName = "配置 LazyVim"
+            Name = "LazyVim"
+            AvailabilityCheck = ({ Test-LazyVim }).GetNewClosure()
+            Prepare = $null
+            Install = ({ Install-LazyVim -DeployContext $DeployContext }).GetNewClosure()
+            Link = ({ New-LazyVimConfigLink -DeployContext $DeployContext }).GetNewClosure()
+            Update = $null
+        }
+    )
 
-    Invoke-DeployStage -Name "安装 JetBrains Mono" -ScriptBlock {
-        Install-JetBrainsMono -DeployContext $DeployContext
-    }
-
-    Invoke-DeployStage -Name "配置 WezTerm" -ScriptBlock {
-        Initialize-WezTerm -DeployContext $DeployContext
-    }
-
-    Invoke-DeployStage -Name "初始化 PSGallery" -ScriptBlock {
-        Initialize-PSGalleryRepository -DeployContext $DeployContext
-    }
-
-    Invoke-DeployStage -Name "安装常用命令行工具" -ScriptBlock {
-        Install-ScoopPackage -DeployContext $DeployContext -Name @('fd','fzf','zoxide')
-    }
-
-    Invoke-DeployStage -Name "配置 Starship" -ScriptBlock {
-        Initialize-Starship -DeployContext $DeployContext
-    }
-
-    Invoke-DeployStage -Name "配置 PSFzf" -ScriptBlock {
-        Initialize-PSFzf
-    }
-
-    Invoke-DeployStage -Name "配置 PowerShell" -ScriptBlock {
-        Initialize-PWSH -DeployContext $DeployContext
-    }
-
-    Invoke-DeployStage -Name "配置 Yazi" -ScriptBlock {
-        Initialize-Yazi -DeployContext $DeployContext
-    }
-
-    Invoke-DeployStage -Name "配置 Cava" -ScriptBlock {
-        Initialize-Cava -DeployContext $DeployContext
-    }
-
-    Invoke-DeployStage -Name "配置 LazyVim" -ScriptBlock {
-        Initialize-LazyVim -DeployContext $DeployContext
+    foreach ($unit in $deployUnits) {
+        Invoke-DeployUnitStage -Unit $unit
     }
 
     Write-PLAIN ""

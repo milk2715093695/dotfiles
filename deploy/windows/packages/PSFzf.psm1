@@ -1,12 +1,12 @@
 Set-StrictMode -Version Latest
 
-# 配置 PSFzf
-function Initialize-PSFzf {
+# 检查 PSFzf 依赖是否存在
+function Test-PSFzf {
     if (Get-Command "fzf" -ErrorAction SilentlyContinue) {
-        
-    } else {
-        Write-WARNING "fzf 未安装，跳过 PSFzf 初始化"
+        return $true
     }
+
+    return $false
 }
 
-Export-ModuleMember -Function Initialize-PSFzf
+Export-ModuleMember -Function Test-PSFzf

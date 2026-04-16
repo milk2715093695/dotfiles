@@ -16,41 +16,48 @@ function Test-Yazi {
     return $false
 }
 
-# 配置 Yazi
-function Initialize-Yazi {
+# 安装 Yazi 运行时依赖
+function Install-Yazi {
     param(
         [Parameter(Mandatory)]
         [hashtable]$DeployContext
     )
 
-    if (Test-Yazi) {
-        Write-SKIP "Yazi 已存在，跳过安装。"
-    } else {
-        Install-ScoopPackage -DeployContext $DeployContext -Name @(
-            "yazi", "ffmpeg", "7zip",
-            "jq", "poppler", "fd",
-            "ripgrep", "fzf", "zoxide",
-            "resvg", "imagemagick", "clipboard",
-            "bat", "less", "glow",
-            "file"
-        )
-    }
+    Install-ScoopPackage -DeployContext $DeployContext -Name @(
+        "yazi", "ffmpeg", "7zip",
+        "jq", "poppler", "fd",
+        "ripgrep", "fzf", "zoxide",
+        "resvg", "imagemagick", "clipboard",
+        "bat", "less", "glow",
+        "file"
+    )
+}
 
-    if (Test-Yazi) {
-        $target = Join-Path $env:AppData "yazi\config"
-        $source = Join-Path $REPO_ROOT "yazi"
-        New-SymbolicLink -DeployContext $DeployContext -TargetPath $target -SourcePath $source
+# 创建 Yazi 配置链接
+function New-YaziConfigLink {
+    param(
+        [Parameter(Mandatory)]
+        [hashtable]$DeployContext
+    )
 
-        # 插件安装属于安装类操作，可由 -YesInstall 自动确认
-        if (Read-InstallConfirmation -DeployContext $DeployContext -Message "是否安装或更新 yazi 插件？") {
-            Write-STEP "安装或更新 Yazi 插件"
-            ya pkg install
-        } else {
-            Write-SKIP "跳过 Yazi 插件安装。"
-        }
+    $target = Join-Path $env:AppData "yazi\config"
+    $source = Join-Path $REPO_ROOT "yazi"
+    New-SymbolicLink -DeployContext $DeployContext -TargetPath $target -SourcePath $source
+}
+
+# 更新 Yazi 插件
+function Update-YaziPlugin {
+    param(
+        [Parameter(Mandatory)]
+        [hashtable]$DeployContext
+    )
+
+    if (Read-InstallConfirmation -DeployContext $DeployContext -Message "是否安装或更新 yazi 插件？") {
+        Write-STEP "安装或更新 Yazi 插件"
+        ya pkg install
     } else {
-        Write-WARNING "没有 Yazi，跳过 Yazi 配置。"
+        Write-SKIP "跳过 Yazi 插件安装。"
     }
 }
 
-Export-ModuleMember -Function Test-Yazi, Initialize-Yazi
+Export-ModuleMember -Function Test-Yazi, Install-Yazi, New-YaziConfigLink, Update-YaziPlugin

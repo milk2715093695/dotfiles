@@ -23,6 +23,12 @@ function Install-WezTerm {
         [hashtable]$DeployContext
     )
 
+    if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
+        Write-WARNING "系统未安装 wezterm，且未检测到 scoop。"
+        Write-SKIP "将跳过 WezTerm 配置。"
+        return
+    }
+
     Write-WARNING "未安装 wezterm，但存在 scoop。"
 
     if (Read-InstallConfirmation -DeployContext $DeployContext -Message "是否使用 scoop 安装 wezterm？") {
@@ -33,31 +39,16 @@ function Install-WezTerm {
     }
 }
 
-# 配置 WezTerm
-function Initialize-WezTerm {
+# 创建 WezTerm 配置链接
+function New-WezTermConfigLink {
     param(
         [Parameter(Mandatory)]
         [hashtable]$DeployContext
     )
 
-    if (Test-WezTerm) {
-        Write-SKIP "WezTerm 已存在，跳过安装。"
-    } else {
-        if (Get-Command scoop -ErrorAction SilentlyContinue) {
-            Install-WezTerm -DeployContext $DeployContext
-        } else {
-            Write-WARNING "系统未安装 wezterm，且未检测到 scoop。"
-            Write-SKIP "将跳过 WezTerm 配置。"
-        }
-    }
-
-    if (Test-WezTerm) {
-        $target = "$HOME\.config\wezterm"
-        $source = Join-Path $REPO_ROOT "wezterm"
-        New-SymbolicLink -DeployContext $DeployContext -TargetPath $target -SourcePath $source
-    } else {
-        Write-WARNING "没有 WezTerm，跳过 WezTerm 配置。"
-    }
+    $target = "$HOME\.config\wezterm"
+    $source = Join-Path $REPO_ROOT "wezterm"
+    New-SymbolicLink -DeployContext $DeployContext -TargetPath $target -SourcePath $source
 }
 
-Export-ModuleMember -Function Test-WezTerm, Install-WezTerm, Initialize-WezTerm
+Export-ModuleMember -Function Test-WezTerm, Install-WezTerm, New-WezTermConfigLink

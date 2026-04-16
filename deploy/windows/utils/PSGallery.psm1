@@ -1,25 +1,32 @@
 Set-StrictMode -Version Latest
 
-# 保证 PowerShell Gallery 仓库可用
-function Initialize-PSGalleryRepository {
+# 检查 PowerShell Gallery 仓库是否可用
+function Test-PSGalleryRepository {
+    $repo = Get-PSRepository -Name PSGallery -ErrorAction SilentlyContinue
+    return [bool]$repo
+}
+
+# 注册 PowerShell Gallery 仓库
+function Register-PSGalleryRepository {
     param(
         [Parameter(Mandatory)]
         [hashtable]$DeployContext
     )
 
-    $repo = Get-PSRepository -Name PSGallery -ErrorAction SilentlyContinue
+    if (Test-PSGalleryRepository) {
+        Write-SKIP "PSGallery 已注册。"
+        return
+    }
 
-    if (-not $repo) {
-        Write-WARNING "PSGallery 未找到。"
+    Write-WARNING "PSGallery 未找到。"
 
-        if (Read-InstallConfirmation -DeployContext $DeployContext -Message "是否注册 PSGallery？") {
-            Write-STEP "注册 PSGallery"
-            Register-PSRepository -Default
-            Write-SUCCESS "PSGallery 已注册。"
-        } else {
-            Write-SKIP "跳过 PSGallery 注册。"
-        }
+    if (Read-InstallConfirmation -DeployContext $DeployContext -Message "是否注册 PSGallery？") {
+        Write-STEP "注册 PSGallery"
+        Register-PSRepository -Default
+        Write-SUCCESS "PSGallery 已注册。"
+    } else {
+        Write-SKIP "跳过 PSGallery 注册。"
     }
 }
 
-Export-ModuleMember -Function Initialize-PSGalleryRepository
+Export-ModuleMember -Function Test-PSGalleryRepository, Register-PSGalleryRepository
