@@ -1,7 +1,10 @@
-# 配置 zsh 插件
-configure_zsh_plugins() {
+# 安装 zsh 插件依赖
+install_zsh_plugins() {
     install_package "$PACKAGE_MANAGER" zsh-completions
+}
 
+# 更新 zsh 插件仓库
+update_zsh_plugins() {
     if ! prompt_install_confirm "是否安装或更新 zsh 插件？"; then
         skip_msg "跳过 zsh 插件安装或更新"
         return
