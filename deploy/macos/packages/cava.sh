@@ -1,15 +1,10 @@
-# 检查 Cava 是否存在
-check_cava() {
+# 检查 Cava 配置单元是否可用
+check_cava_available() {
     command -v cava >/dev/null 2>&1
 }
 
 # 安装 Cava
 install_cava() {
-    if check_cava; then
-        skip_msg "Cava 已存在，跳过安装"
-        return
-    fi
-
     install_package brew cava cask:blackhole-2ch
 }
 

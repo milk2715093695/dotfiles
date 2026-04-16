@@ -49,9 +49,16 @@ run_config_unit() {
     validate_config_unit_function "$unit_name" "更新状态" "$update_stage" || return 1
 
     run_config_unit_stage "$prepare_stage" || return 1
-    run_config_unit_stage "$install_stage" || return 1
 
-    if ! config_unit_available "$availability_check"; then
+    if [ -n "$availability_check" ] && config_unit_available "$availability_check"; then
+        if [ -n "$install_stage" ]; then
+            skip_msg "${unit_name} 已可用，跳过安装"
+        fi
+    else
+        run_config_unit_stage "$install_stage" || return 1
+    fi
+
+    if [ -n "$availability_check" ] && ! config_unit_available "$availability_check"; then
         warn "没有 ${unit_name}，跳过 ${unit_name} 配置"
         return 0
     fi

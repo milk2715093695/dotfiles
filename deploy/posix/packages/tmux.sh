@@ -1,15 +1,10 @@
-# 检查 tmux 是否存在
-check_tmux() {
+# 检查 tmux 配置单元是否可用
+check_tmux_available() {
     command -v tmux >/dev/null 2>&1
 }
 
 # 安装 tmux
 install_tmux() {
-    if check_tmux; then
-        skip_msg "tmux 已存在，跳过安装"
-        return
-    fi
-
     install_package "$PACKAGE_MANAGER" tmux bash bc coreutils gawk jq
 }
 

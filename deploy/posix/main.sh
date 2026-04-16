@@ -6,7 +6,7 @@ main() {
     run_deploy_config_unit \
         "安装字体" \
         "Fonts" \
-        check_fonts \
+        check_fonts_available \
         "" \
         install_fonts \
         "" \
@@ -15,7 +15,7 @@ main() {
     run_deploy_config_unit \
         "配置 WezTerm" \
         "WezTerm" \
-        check_wezterm \
+        check_wezterm_available \
         "" \
         install_wezterm \
         link_wezterm \
@@ -24,7 +24,7 @@ main() {
     run_deploy_config_unit \
         "安装常用命令行工具" \
         "CLI Tools" \
-        check_cli_tools \
+        check_cli_tools_available \
         "" \
         install_cli_tools \
         "" \
@@ -42,7 +42,7 @@ main() {
     run_deploy_config_unit \
         "配置 Starship" \
         "Starship" \
-        check_starship \
+        check_starship_available \
         "" \
         install_starship \
         link_starship \
@@ -60,7 +60,7 @@ main() {
     run_deploy_config_unit \
         "配置 Yazi" \
         "Yazi" \
-        check_yazi \
+        check_yazi_available \
         "" \
         install_yazi \
         link_yazi \
@@ -69,7 +69,7 @@ main() {
     run_deploy_config_unit \
         "配置 Cava" \
         "Cava" \
-        check_cava \
+        check_cava_available \
         "" \
         install_cava \
         link_cava \
@@ -78,7 +78,7 @@ main() {
     run_deploy_config_unit \
         "配置 LazyVim" \
         "LazyVim" \
-        check_nvim \
+        check_lazyvim_available \
         "" \
         install_lazyvim \
         link_lazyvim \
@@ -87,7 +87,7 @@ main() {
     run_deploy_config_unit \
         "配置 tmux" \
         "tmux" \
-        check_tmux \
+        check_tmux_available \
         "" \
         install_tmux \
         link_tmux \

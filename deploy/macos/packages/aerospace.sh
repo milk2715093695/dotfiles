@@ -1,15 +1,10 @@
-# 检查 Aerospace 是否存在
-check_aerospace() {
+# 检查 Aerospace 配置单元是否可用
+check_aerospace_available() {
     command -v aerospace >/dev/null 2>&1
 }
 
 # 安装 Aerospace
 install_aerospace() {
-    if check_aerospace; then
-        skip_msg "Aerospace 已存在，跳过安装"
-        return
-    fi
-
     if ! command -v brew >/dev/null 2>&1; then
         error "未找到 Homebrew，请先安装 Homebrew。"
         return 1

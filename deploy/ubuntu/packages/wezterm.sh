@@ -1,5 +1,5 @@
-# 检查 WezTerm 是否存在
-check_wezterm() {
+# 检查 WezTerm 配置单元是否可用
+check_wezterm_available() {
     if command -v wezterm >/dev/null 2>&1; then
         return 0
     fi
@@ -13,10 +13,5 @@ check_wezterm() {
 
 # 使用 flatpak 安装 WezTerm
 install_wezterm() {
-    if check_wezterm; then
-        skip_msg "WezTerm 已存在，跳过安装。"
-        return
-    fi
-
     install_package flatpak org.wezfurlong.wezterm
 }

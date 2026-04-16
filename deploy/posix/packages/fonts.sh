@@ -5,8 +5,8 @@ check_font_installed() {
     fc-list | grep -i "$font_name" >/dev/null 2>&1
 }
 
-# 检查常用字体是否已全部安装
-check_fonts() {
+# 检查常用字体配置单元是否可用
+check_fonts_available() {
     check_font_installed "jetbrains mono" \
         && check_font_installed "mona" \
         && check_font_installed "noto sans symbols 2"

@@ -1,5 +1,5 @@
-# 检查 WezTerm 是否存在
-check_wezterm() {
+# 检查 WezTerm 配置单元是否可用
+check_wezterm_available() {
     return 1
 }
 

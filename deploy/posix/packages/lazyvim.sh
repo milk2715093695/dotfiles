@@ -1,6 +1,11 @@
-# 检查 Neovim 是否存在
-check_nvim() {
+# 检查 Neovim 运行时是否可用
+check_nvim_available() {
     command -v nvim >/dev/null 2>&1
+}
+
+# 检查 LazyVim 配置单元是否可用
+check_lazyvim_available() {
+    check_nvim_available
 }
 
 # 安装 LazyVim 依赖

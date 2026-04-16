@@ -1,15 +1,10 @@
-# 检查 Starship 是否存在
-check_starship() {
+# 检查 Starship 配置单元是否可用
+check_starship_available() {
     command -v starship >/dev/null 2>&1
 }
 
 # 安装 Starship
 install_starship() {
-    if check_starship; then
-        skip_msg "Starship 已存在，跳过安装"
-        return
-    fi
-
     install_package "$PACKAGE_MANAGER" starship
 }
 

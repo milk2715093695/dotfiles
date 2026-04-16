@@ -1,15 +1,10 @@
-# 检查 Yazi 是否存在
-check_yazi() {
+# 检查 Yazi 配置单元是否可用
+check_yazi_available() {
     command -v yazi >/dev/null 2>&1
 }
 
 # 安装 Yazi
 install_yazi() {
-    if check_yazi; then
-        skip_msg "Yazi 已存在，跳过安装"
-        return
-    fi
-
     install_package "$PACKAGE_MANAGER" yazi ffmpeg 7zip jq poppler fd ripgrep fzf zoxide resvg imagemagick clipboard glow
 }
 
