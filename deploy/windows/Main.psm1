@@ -17,27 +17,51 @@ function Main {
         Write-WARNING "如果未开启 Windows 开发者模式，创建符号链接可能失败。"
     }
 
-    Install-AltSnap -DeployContext $DeployContext
+    Initialize-DeployOutputView
 
-    Install-JetBrainsMono -DeployContext $DeployContext
+    Invoke-DeployStage -Name "安装 AltSnap" -ScriptBlock {
+        Install-AltSnap -DeployContext $DeployContext
+    }
 
-    Initialize-WezTerm -DeployContext $DeployContext
+    Invoke-DeployStage -Name "安装 JetBrains Mono" -ScriptBlock {
+        Install-JetBrainsMono -DeployContext $DeployContext
+    }
 
-    Initialize-PSGalleryRepository
+    Invoke-DeployStage -Name "配置 WezTerm" -ScriptBlock {
+        Initialize-WezTerm -DeployContext $DeployContext
+    }
 
-    Install-ScoopPackage -DeployContext $DeployContext -Name @('fd','fzf','zoxide')
+    Invoke-DeployStage -Name "初始化 PSGallery" -ScriptBlock {
+        Initialize-PSGalleryRepository -DeployContext $DeployContext
+    }
 
-    Initialize-Starship -DeployContext $DeployContext
+    Invoke-DeployStage -Name "安装常用命令行工具" -ScriptBlock {
+        Install-ScoopPackage -DeployContext $DeployContext -Name @('fd','fzf','zoxide')
+    }
 
-    Initialize-PSFzf
+    Invoke-DeployStage -Name "配置 Starship" -ScriptBlock {
+        Initialize-Starship -DeployContext $DeployContext
+    }
 
-    Initialize-PWSH -DeployContext $DeployContext
+    Invoke-DeployStage -Name "配置 PSFzf" -ScriptBlock {
+        Initialize-PSFzf
+    }
 
-    Initialize-Yazi -DeployContext $DeployContext
+    Invoke-DeployStage -Name "配置 PowerShell" -ScriptBlock {
+        Initialize-PWSH -DeployContext $DeployContext
+    }
 
-    Initialize-Cava -DeployContext $DeployContext
+    Invoke-DeployStage -Name "配置 Yazi" -ScriptBlock {
+        Initialize-Yazi -DeployContext $DeployContext
+    }
 
-    Initialize-LazyVim -DeployContext $DeployContext
+    Invoke-DeployStage -Name "配置 Cava" -ScriptBlock {
+        Initialize-Cava -DeployContext $DeployContext
+    }
+
+    Invoke-DeployStage -Name "配置 LazyVim" -ScriptBlock {
+        Initialize-LazyVim -DeployContext $DeployContext
+    }
 
     Write-PLAIN ""
     Write-SUCCESS "部署完成。"

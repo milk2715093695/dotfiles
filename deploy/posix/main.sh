@@ -1,26 +1,28 @@
 # 部署入口
 main() {
-    install_fonts                   # 安装字体
+    init_deploy_output_view
 
-    configure_wezterm               # 配置 WezTerm
+    run_deploy_stage "安装字体" install_fonts
 
-    install_package "$PACKAGE_MANAGER" fd fzf zoxide   # 安装常用命令行工具
+    run_deploy_stage "配置 WezTerm" configure_wezterm
 
-    configure_zsh_plugins           # 配置 zsh 插件
+    run_deploy_stage "安装常用命令行工具" install_package "$PACKAGE_MANAGER" fd fzf zoxide
 
-    configure_starship              # 配置 Starship
-    
-    configure_zsh                   # 配置 zsh
+    run_deploy_stage "配置 zsh 插件" configure_zsh_plugins
 
-    configure_yazi                  # 配置 Yazi
+    run_deploy_stage "配置 Starship" configure_starship
 
-    configure_cava                  # 配置 Cava
+    run_deploy_stage "配置 zsh" configure_zsh
 
-    configure_lazyvim               # 配置 LazyVim
+    run_deploy_stage "配置 Yazi" configure_yazi
 
-    configure_tmux                  # 配置 tmux
+    run_deploy_stage "配置 Cava" configure_cava
 
-    configure_macos                 # 配置 macOS 特有行为
+    run_deploy_stage "配置 LazyVim" configure_lazyvim
+
+    run_deploy_stage "配置 tmux" configure_tmux
+
+    run_deploy_stage "配置 macOS 特有行为" configure_macos
 
     success "部署完成"
 }
