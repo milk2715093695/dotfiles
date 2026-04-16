@@ -3,14 +3,10 @@
 # - 保持 i3/Vim 风格方向键操作
 # - 和 SketchyBar、borders 组成完整 macOS 桌面体验
 
+
+# 基础行为
 # 即使部分值与默认值一致，也显式保留，方便之后直接调参。
 config-version = 2
-
-# 启动桌面辅助组件。borders 的样式暂时在这里保持内联，便于和 AeroSpace 同步启动。
-after-startup-command = [
-    'exec-and-forget borders style=round width=6.0 hidpi=off active_color=0xff7aa2f7 inactive_color=0xff1e2030',
-    'exec-and-forget sketchybar',
-]
 
 start-at-login = true
 
@@ -18,10 +14,18 @@ start-at-login = true
 enable-normalization-flatten-containers = true
 enable-normalization-opposite-orientation-for-nested-containers = true
 
-# 默认使用平铺，accordion 作为按需切换的堆叠布局。
-accordion-padding = 0
-default-root-container-layout = 'tiles'
-default-root-container-orientation = 'auto'
+automatically-unhide-macos-hidden-apps = false
+
+# 当前没有 mode 状态提示；保留显式空数组作为以后扩展入口。
+on-mode-changed = []
+
+
+# 桌面联动
+# 启动桌面辅助组件。borders 的样式暂时在这里保持内联，便于和 AeroSpace 同步启动。
+after-startup-command = [
+    'exec-and-forget borders style=round width=6.0 hidpi=off active_color=0xff7aa2f7 inactive_color=0xff1e2030',
+    'exec-and-forget sketchybar',
+]
 
 # 焦点跨显示器变化时移动鼠标；当前主要是保留默认行为，方便之后接外屏时调整。
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
@@ -38,16 +42,17 @@ on-focus-changed = [
     'exec-and-forget sketchybar --trigger aerospace_focus_change',
 ]
 
-automatically-unhide-macos-hidden-apps = false
 
+# 工作区
 # 语义工作区：比纯数字更接近日常任务切换时的心理模型。
 persistent-workspaces = ["files", "web", "dev", "net", "game", "chat", "vm"]
 
-# 当前没有 mode 状态提示；保留显式空数组作为以后扩展入口。
-on-mode-changed = []
 
-[key-mapping]
-    preset = 'qwerty'
+# 布局与间距
+# 默认使用平铺，accordion 作为按需切换的堆叠布局。
+accordion-padding = 0
+default-root-container-layout = 'tiles'
+default-root-container-orientation = 'auto'
 
 # 外边距配合 SketchyBar 和 borders；顶部给菜单栏/SketchyBar 留空间。
 [gaps]
@@ -58,6 +63,13 @@ on-mode-changed = []
     outer.top =        38
     outer.right =      5
 
+
+# 键盘布局
+[key-mapping]
+    preset = 'qwerty'
+
+
+# 主模式快捷键
 [mode.main.binding]
 
     # 终端：保留 Alt+Enter 的 i3 习惯，同时提供 Alt+T 作为语义入口。
@@ -123,6 +135,8 @@ on-mode-changed = []
     # service mode 放维护类操作，避免常用模式里塞太多危险快捷键。
     alt-shift-semicolon = 'mode service'
 
+
+# 维护模式快捷键
 [mode.service.binding]
     esc = ['reload-config', 'mode main']
     r = ['flatten-workspace-tree', 'mode main'] # reset layout
@@ -137,6 +151,8 @@ on-mode-changed = []
     alt-shift-k = ['join-with up', 'mode main']
     alt-shift-l = ['join-with right', 'mode main']
 
+
+# 窗口路由规则
 # files: 文件管理、系统工具、密码管理器等短任务窗口。
 [[on-window-detected]]
     if.app-id = 'com.apple.finder'
@@ -154,10 +170,12 @@ on-mode-changed = []
     if.app-id = 'org.keepassxc.keepassxc'
     run = ['layout floating', 'move-node-to-workspace files']
 
+
 # web: 浏览器窗口默认平铺。
 [[on-window-detected]]
     if.app-id = 'org.mozilla.firefox'
     run = ['layout tiles', 'move-node-to-workspace web']
+
 
 # dev: 编辑器、IDE 和 Java GUI 工具默认堆叠，减少开发工作区横向拥挤。
 [[on-window-detected]]
@@ -172,6 +190,7 @@ on-mode-changed = []
     if.app-id = 'com.google.android.studio'
     run = ['layout accordion', 'move-node-to-workspace dev']
 
+
 # net: 网络、代理和组网工具。
 [[on-window-detected]]
     if.app-id = 'io.geph.GephGui'
@@ -180,6 +199,7 @@ on-mode-changed = []
 [[on-window-detected]]
     if.app-id = 'com.kkrainbow.easytier'
     run = ['layout floating', 'move-node-to-workspace net']
+
 
 # game: 游戏启动器和游戏窗口默认堆叠。
 [[on-window-detected]]
@@ -190,10 +210,12 @@ on-mode-changed = []
     if.app-id = 'sh.ppy.osu.lazer'
     run = ['layout accordion', 'move-node-to-workspace game']
 
+
 # chat: 聊天工具集中放置。
 [[on-window-detected]]
     if.app-id = 'com.tencent.xinWeChat'
     run = ['layout accordion', 'move-node-to-workspace chat']
+
 
 # vm: 虚拟机和远程桌面。
 [[on-window-detected]]
