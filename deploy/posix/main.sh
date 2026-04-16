@@ -22,7 +22,7 @@ main() {
 
     run_deploy_stage "配置 tmux" configure_tmux
 
-    run_deploy_stage "配置 macOS 特有行为" configure_macos
+    run_deploy_stage "配置平台扩展行为" configure_platform
 
     success "部署完成"
 }
