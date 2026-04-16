@@ -13,7 +13,7 @@ source "$SCRIPT_DIR/posix/utils/prompt.sh"              # 提示函数
 source "$SCRIPT_DIR/posix/utils/link_action.sh"         # 链接策略
 source "$SCRIPT_DIR/posix/utils/link.sh"                # 链接函数
 source "$SCRIPT_DIR/posix/utils/install_package.sh"     # 安装包函数
-source "$SCRIPT_DIR/posix/utils/config_unit.sh"         # 配置单元生命周期
+source "$SCRIPT_DIR/posix/utils/deploy_unit.sh"         # 部署单元生命周期
 source "$SCRIPT_DIR/posix/packages/fonts.sh"            # 安装字体
 source "$SCRIPT_DIR/posix/packages/cli_tools.sh"        # 常用命令行工具
 source "$SCRIPT_DIR/posix/packages/wezterm.sh"          # WezTerm 配置

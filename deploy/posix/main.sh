@@ -2,98 +2,106 @@
 main() {
     init_deploy_output_view
 
-    # 槽位顺序：部署阶段名、配置单元名、可用性检查、依赖、安装、链接、更新
-    run_deploy_config_unit \
-        "安装字体" \
-        "Fonts" \
-        check_fonts_available \
-        "" \
-        install_fonts \
-        "" \
-        ""
+    local deploy_unit_stage_name
+    local deploy_unit_name
+    local deploy_unit_availability_check
+    local deploy_unit_prepare_stage
+    local deploy_unit_install_stage
+    local deploy_unit_link_stage
+    local deploy_unit_update_stage
 
-    run_deploy_config_unit \
-        "配置 WezTerm" \
-        "WezTerm" \
-        check_wezterm_available \
-        "" \
-        install_wezterm \
-        link_wezterm \
-        ""
+    # 每个 unit 显式填满所有槽位，空字符串表示该阶段不存在。
+    deploy_unit_stage_name="安装字体"
+    deploy_unit_name="Fonts"
+    deploy_unit_availability_check="check_fonts_available"
+    deploy_unit_prepare_stage=""
+    deploy_unit_install_stage="install_fonts"
+    deploy_unit_link_stage=""
+    deploy_unit_update_stage=""
+    run_deploy_unit_stage_from_vars
 
-    run_deploy_config_unit \
-        "安装常用命令行工具" \
-        "CLI Tools" \
-        check_cli_tools_available \
-        "" \
-        install_cli_tools \
-        "" \
-        ""
+    deploy_unit_stage_name="配置 WezTerm"
+    deploy_unit_name="WezTerm"
+    deploy_unit_availability_check="check_wezterm_available"
+    deploy_unit_prepare_stage=""
+    deploy_unit_install_stage="install_wezterm"
+    deploy_unit_link_stage="link_wezterm"
+    deploy_unit_update_stage=""
+    run_deploy_unit_stage_from_vars
 
-    run_deploy_config_unit \
-        "配置 zsh 插件" \
-        "zsh Plugins" \
-        "" \
-        "" \
-        install_zsh_plugins \
-        "" \
-        update_zsh_plugins
+    deploy_unit_stage_name="安装常用命令行工具"
+    deploy_unit_name="CLI Tools"
+    deploy_unit_availability_check="check_cli_tools_available"
+    deploy_unit_prepare_stage=""
+    deploy_unit_install_stage="install_cli_tools"
+    deploy_unit_link_stage=""
+    deploy_unit_update_stage=""
+    run_deploy_unit_stage_from_vars
 
-    run_deploy_config_unit \
-        "配置 Starship" \
-        "Starship" \
-        check_starship_available \
-        "" \
-        install_starship \
-        link_starship \
-        ""
+    deploy_unit_stage_name="配置 zsh 插件"
+    deploy_unit_name="zsh Plugins"
+    deploy_unit_availability_check=""
+    deploy_unit_prepare_stage=""
+    deploy_unit_install_stage="install_zsh_plugins"
+    deploy_unit_link_stage=""
+    deploy_unit_update_stage="update_zsh_plugins"
+    run_deploy_unit_stage_from_vars
 
-    run_deploy_config_unit \
-        "配置 zsh" \
-        "zsh" \
-        "" \
-        "" \
-        "" \
-        link_zsh \
-        ""
+    deploy_unit_stage_name="配置 Starship"
+    deploy_unit_name="Starship"
+    deploy_unit_availability_check="check_starship_available"
+    deploy_unit_prepare_stage=""
+    deploy_unit_install_stage="install_starship"
+    deploy_unit_link_stage="link_starship"
+    deploy_unit_update_stage=""
+    run_deploy_unit_stage_from_vars
 
-    run_deploy_config_unit \
-        "配置 Yazi" \
-        "Yazi" \
-        check_yazi_available \
-        "" \
-        install_yazi \
-        link_yazi \
-        update_yazi
+    deploy_unit_stage_name="配置 zsh"
+    deploy_unit_name="zsh"
+    deploy_unit_availability_check=""
+    deploy_unit_prepare_stage=""
+    deploy_unit_install_stage=""
+    deploy_unit_link_stage="link_zsh"
+    deploy_unit_update_stage=""
+    run_deploy_unit_stage_from_vars
 
-    run_deploy_config_unit \
-        "配置 Cava" \
-        "Cava" \
-        check_cava_available \
-        "" \
-        install_cava \
-        link_cava \
-        ""
+    deploy_unit_stage_name="配置 Yazi"
+    deploy_unit_name="Yazi"
+    deploy_unit_availability_check="check_yazi_available"
+    deploy_unit_prepare_stage=""
+    deploy_unit_install_stage="install_yazi"
+    deploy_unit_link_stage="link_yazi"
+    deploy_unit_update_stage="update_yazi"
+    run_deploy_unit_stage_from_vars
 
-    run_deploy_config_unit \
-        "配置 LazyVim" \
-        "LazyVim" \
-        check_lazyvim_available \
-        "" \
-        install_lazyvim \
-        link_lazyvim \
-        ""
+    deploy_unit_stage_name="配置 Cava"
+    deploy_unit_name="Cava"
+    deploy_unit_availability_check="check_cava_available"
+    deploy_unit_prepare_stage=""
+    deploy_unit_install_stage="install_cava"
+    deploy_unit_link_stage="link_cava"
+    deploy_unit_update_stage=""
+    run_deploy_unit_stage_from_vars
 
-    run_deploy_config_unit \
-        "配置 tmux" \
-        "tmux" \
-        check_tmux_available \
-        "" \
-        install_tmux \
-        link_tmux \
-        ""
+    deploy_unit_stage_name="配置 LazyVim"
+    deploy_unit_name="LazyVim"
+    deploy_unit_availability_check="check_lazyvim_available"
+    deploy_unit_prepare_stage=""
+    deploy_unit_install_stage="install_lazyvim"
+    deploy_unit_link_stage="link_lazyvim"
+    deploy_unit_update_stage=""
+    run_deploy_unit_stage_from_vars
 
-    run_deploy_stage "配置平台扩展行为" run_platform_config_units
+    deploy_unit_stage_name="配置 tmux"
+    deploy_unit_name="tmux"
+    deploy_unit_availability_check="check_tmux_available"
+    deploy_unit_prepare_stage=""
+    deploy_unit_install_stage="install_tmux"
+    deploy_unit_link_stage="link_tmux"
+    deploy_unit_update_stage=""
+    run_deploy_unit_stage_from_vars
+
+    run_deploy_stage "配置平台扩展行为" run_platform_deploy_units
 
     success "部署完成"
 }
