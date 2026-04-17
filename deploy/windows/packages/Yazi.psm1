@@ -16,8 +16,8 @@ function Test-Yazi {
     return $false
 }
 
-# 安装 Yazi 运行时依赖
-function Install-Yazi {
+# 安装 Yazi 配置所需运行时依赖
+function Install-YaziRuntimeDependencies {
     param(
         [Parameter(Mandatory)]
         [hashtable]$DeployContext
@@ -45,8 +45,8 @@ function New-YaziConfigLink {
     New-SymbolicLink -DeployContext $DeployContext -TargetPath $target -SourcePath $source
 }
 
-# 更新 Yazi 插件
-function Update-YaziPlugin {
+# 安装或更新 Yazi 插件包
+function Install-OrUpdateYaziPackages {
     param(
         [Parameter(Mandatory)]
         [hashtable]$DeployContext
@@ -60,4 +60,4 @@ function Update-YaziPlugin {
     }
 }
 
-Export-ModuleMember -Function Test-Yazi, Install-Yazi, New-YaziConfigLink, Update-YaziPlugin
+Export-ModuleMember -Function Test-Yazi, Install-YaziRuntimeDependencies, New-YaziConfigLink, Install-OrUpdateYaziPackages

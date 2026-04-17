@@ -1,21 +1,21 @@
 Set-StrictMode -Version Latest
 
-# 检查 JetBrains Mono 字体是否存在
-function Test-JetBrainsMono {
+# 检查用户字体目录中是否存在 JetBrains Mono
+function Test-UserJetBrainsMonoFont {
     $fontInstalled = Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows\Fonts" -ErrorAction SilentlyContinue |
         Where-Object { $_.Name -match "JetBrainsMono" }
 
     return [bool]$fontInstalled
 }
 
-# 安装 JetBrains Mono 字体
-function Install-JetBrainsMono {
+# 使用 Scoop 安装用户级 JetBrains Mono 字体
+function Install-JetBrainsMonoUserFont {
     param(
         [Parameter(Mandatory)]
         [hashtable]$DeployContext
     )
 
-    if (Test-JetBrainsMono) {
+    if (Test-UserJetBrainsMonoFont) {
         Write-SKIP "JetBrains Mono 已安装，跳过字体安装。"
         return
     }
@@ -37,4 +37,4 @@ function Install-JetBrainsMono {
     Write-INFO "请手动安装字体，或自行扩展脚本。"
 }
 
-Export-ModuleMember -Function Test-JetBrainsMono, Install-JetBrainsMono
+Export-ModuleMember -Function Test-UserJetBrainsMonoFont, Install-JetBrainsMonoUserFont

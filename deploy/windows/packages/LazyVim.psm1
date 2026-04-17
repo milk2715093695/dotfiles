@@ -1,7 +1,7 @@
 Set-StrictMode -Version Latest
 
-# 检查 Neovim 是否存在
-function Test-Nvim {
+# 检查 Neovim 命令是否可用
+function Test-NeovimCommand {
     if (Get-Command nvim -ErrorAction SilentlyContinue) {
         return $true
     }
@@ -16,13 +16,13 @@ function Test-Nvim {
     return $false
 }
 
-# 检查 LazyVim deploy unit 是否可用
-function Test-LazyVim {
-    Test-Nvim
+# 检查 LazyVim 配置所需运行时是否可用
+function Test-LazyVimRuntime {
+    Test-NeovimCommand
 }
 
-# 安装 LazyVim 运行时依赖
-function Install-LazyVim {
+# 安装 LazyVim 配置所需运行时依赖
+function Install-LazyVimRuntimeDependencies {
     param(
         [Parameter(Mandatory)]
         [hashtable]$DeployContext
@@ -45,4 +45,4 @@ function New-LazyVimConfigLink {
     New-SymbolicLink -DeployContext $DeployContext -TargetPath $target -SourcePath $source
 }
 
-Export-ModuleMember -Function Test-Nvim, Test-LazyVim, Install-LazyVim, New-LazyVimConfigLink
+Export-ModuleMember -Function Test-NeovimCommand, Test-LazyVimRuntime, Install-LazyVimRuntimeDependencies, New-LazyVimConfigLink

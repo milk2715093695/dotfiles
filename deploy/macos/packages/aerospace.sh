@@ -1,10 +1,10 @@
-# 检查 Aerospace 配置单元是否可用
+# 检查 Aerospace 命令是否可用
 check_aerospace_available() {
     command -v aerospace >/dev/null 2>&1
 }
 
-# 安装 Aerospace
-install_aerospace() {
+# 安装 Aerospace 窗口管理栈
+install_aerospace_window_stack() {
     if ! command -v brew >/dev/null 2>&1; then
         error "未找到 Homebrew，请先安装 Homebrew。"
         return 1
@@ -23,8 +23,8 @@ install_aerospace() {
     install_package brew cask:nikitabobko/tap/aerospace borders
 }
 
-# 链接 Aerospace 配置
-link_aerospace() {
+# 链接 Aerospace 窗口管理栈配置
+link_aerospace_window_stack_config() {
     link_item "$HOME/.config/aerospace" "$REPO_ROOT/aerospace"
     link_item "$HOME/.config/borders" "$REPO_ROOT/borders"
 }

@@ -25,7 +25,7 @@ main() {
     deploy_unit_availability_check="check_wezterm_available"
     deploy_unit_prepare_stage=""
     deploy_unit_install_stage="install_wezterm"
-    deploy_unit_link_stage="link_wezterm"
+    deploy_unit_link_stage="link_wezterm_config"
     deploy_unit_update_stage=""
     run_deploy_unit_stage_from_vars
 
@@ -52,7 +52,7 @@ main() {
     deploy_unit_availability_check="check_starship_available"
     deploy_unit_prepare_stage=""
     deploy_unit_install_stage="install_starship"
-    deploy_unit_link_stage="link_starship"
+    deploy_unit_link_stage="link_starship_config"
     deploy_unit_update_stage=""
     run_deploy_unit_stage_from_vars
 
@@ -61,7 +61,7 @@ main() {
     deploy_unit_availability_check=""
     deploy_unit_prepare_stage=""
     deploy_unit_install_stage=""
-    deploy_unit_link_stage="link_zsh"
+    deploy_unit_link_stage="link_zsh_config"
     deploy_unit_update_stage=""
     run_deploy_unit_stage_from_vars
 
@@ -69,26 +69,26 @@ main() {
     deploy_unit_name="Yazi"
     deploy_unit_availability_check="check_yazi_available"
     deploy_unit_prepare_stage=""
-    deploy_unit_install_stage="install_yazi"
-    deploy_unit_link_stage="link_yazi"
-    deploy_unit_update_stage="update_yazi"
+    deploy_unit_install_stage="install_yazi_runtime_dependencies"
+    deploy_unit_link_stage="link_yazi_config"
+    deploy_unit_update_stage="install_or_update_yazi_packages"
     run_deploy_unit_stage_from_vars
 
     deploy_unit_stage_name="配置 Cava"
     deploy_unit_name="Cava"
     deploy_unit_availability_check="check_cava_available"
     deploy_unit_prepare_stage=""
-    deploy_unit_install_stage="install_cava"
-    deploy_unit_link_stage="link_cava"
+    deploy_unit_install_stage="install_cava_runtime_dependencies"
+    deploy_unit_link_stage="link_cava_config"
     deploy_unit_update_stage=""
     run_deploy_unit_stage_from_vars
 
     deploy_unit_stage_name="配置 LazyVim"
     deploy_unit_name="LazyVim"
-    deploy_unit_availability_check="check_lazyvim_available"
+    deploy_unit_availability_check="check_lazyvim_runtime_available"
     deploy_unit_prepare_stage=""
-    deploy_unit_install_stage="install_lazyvim"
-    deploy_unit_link_stage="link_lazyvim"
+    deploy_unit_install_stage="install_lazyvim_runtime_dependencies"
+    deploy_unit_link_stage="link_lazyvim_config"
     deploy_unit_update_stage=""
     run_deploy_unit_stage_from_vars
 
@@ -96,8 +96,8 @@ main() {
     deploy_unit_name="tmux"
     deploy_unit_availability_check="check_tmux_available"
     deploy_unit_prepare_stage=""
-    deploy_unit_install_stage="install_tmux"
-    deploy_unit_link_stage="link_tmux"
+    deploy_unit_install_stage="install_tmux_runtime_dependencies"
+    deploy_unit_link_stage="link_tmux_config"
     deploy_unit_update_stage=""
     run_deploy_unit_stage_from_vars
 

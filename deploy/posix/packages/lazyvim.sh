@@ -1,19 +1,19 @@
-# 检查 Neovim 运行时是否可用
-check_nvim_available() {
+# 检查 Neovim 命令是否可用
+check_neovim_command_available() {
     command -v nvim >/dev/null 2>&1
 }
 
-# 检查 LazyVim 配置单元是否可用
-check_lazyvim_available() {
-    check_nvim_available
+# 检查 LazyVim 配置所需运行时是否可用
+check_lazyvim_runtime_available() {
+    check_neovim_command_available
 }
 
-# 安装 LazyVim 依赖
-install_lazyvim() {
+# 安装 LazyVim 配置所需运行时依赖
+install_lazyvim_runtime_dependencies() {
     install_package "$PACKAGE_MANAGER" neovim python3 nodejs fd
 }
 
 # 链接 LazyVim 配置
-link_lazyvim() {
+link_lazyvim_config() {
     link_item "$HOME/.config/nvim" "$REPO_ROOT/nvim"
 }

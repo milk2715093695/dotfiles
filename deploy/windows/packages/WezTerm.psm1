@@ -16,8 +16,8 @@ function Test-WezTerm {
     return $false
 }
 
-# 使用 scoop 安装 WezTerm
-function Install-WezTerm {
+# 使用 Scoop 安装 WezTerm
+function Install-WezTermScoopPackage {
     param(
         [Parameter(Mandatory)]
         [hashtable]$DeployContext
@@ -51,4 +51,4 @@ function New-WezTermConfigLink {
     New-SymbolicLink -DeployContext $DeployContext -TargetPath $target -SourcePath $source
 }
 
-Export-ModuleMember -Function Test-WezTerm, Install-WezTerm, New-WezTermConfigLink
+Export-ModuleMember -Function Test-WezTerm, Install-WezTermScoopPackage, New-WezTermConfigLink

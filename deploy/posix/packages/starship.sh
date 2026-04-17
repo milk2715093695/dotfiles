@@ -9,6 +9,6 @@ install_starship() {
 }
 
 # 链接 Starship 配置
-link_starship() {
+link_starship_config() {
     link_item "$HOME/.config/starship.toml" "$REPO_ROOT/starship/starship.toml"
 }

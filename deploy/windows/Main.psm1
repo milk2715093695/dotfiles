@@ -39,9 +39,9 @@ function Main {
         @{
             StageName = "安装 JetBrains Mono"
             Name = "JetBrains Mono"
-            AvailabilityCheck = ({ Test-JetBrainsMono }).GetNewClosure()
+            AvailabilityCheck = ({ Test-UserJetBrainsMonoFont }).GetNewClosure()
             Prepare = $null
-            Install = ({ Install-JetBrainsMono -DeployContext $DeployContext }).GetNewClosure()
+            Install = ({ Install-JetBrainsMonoUserFont -DeployContext $DeployContext }).GetNewClosure()
             Link = $null
             Update = $null
         }
@@ -50,7 +50,7 @@ function Main {
             Name = "WezTerm"
             AvailabilityCheck = ({ Test-WezTerm }).GetNewClosure()
             Prepare = $null
-            Install = ({ Install-WezTerm -DeployContext $DeployContext }).GetNewClosure()
+            Install = ({ Install-WezTermScoopPackage -DeployContext $DeployContext }).GetNewClosure()
             Link = ({ New-WezTermConfigLink -DeployContext $DeployContext }).GetNewClosure()
             Update = $null
         }
@@ -94,9 +94,9 @@ function Main {
             StageName = "配置 PowerShell"
             Name = "PowerShell"
             AvailabilityCheck = $null
-            Prepare = ({ Set-PWSHDefaultOpenSshShell }).GetNewClosure()
+            Prepare = ({ Set-PwshOpenSshDefaultShell }).GetNewClosure()
             Install = $null
-            Link = ({ New-PWSHConfigLink -DeployContext $DeployContext }).GetNewClosure()
+            Link = ({ New-PwshConfigLink -DeployContext $DeployContext }).GetNewClosure()
             Update = $null
         }
         @{
@@ -104,9 +104,9 @@ function Main {
             Name = "Yazi"
             AvailabilityCheck = ({ Test-Yazi }).GetNewClosure()
             Prepare = $null
-            Install = ({ Install-Yazi -DeployContext $DeployContext }).GetNewClosure()
+            Install = ({ Install-YaziRuntimeDependencies -DeployContext $DeployContext }).GetNewClosure()
             Link = ({ New-YaziConfigLink -DeployContext $DeployContext }).GetNewClosure()
-            Update = ({ Update-YaziPlugin -DeployContext $DeployContext }).GetNewClosure()
+            Update = ({ Install-OrUpdateYaziPackages -DeployContext $DeployContext }).GetNewClosure()
         }
         @{
             StageName = "配置 Cava"
@@ -120,9 +120,9 @@ function Main {
         @{
             StageName = "配置 LazyVim"
             Name = "LazyVim"
-            AvailabilityCheck = ({ Test-LazyVim }).GetNewClosure()
+            AvailabilityCheck = ({ Test-LazyVimRuntime }).GetNewClosure()
             Prepare = $null
-            Install = ({ Install-LazyVim -DeployContext $DeployContext }).GetNewClosure()
+            Install = ({ Install-LazyVimRuntimeDependencies -DeployContext $DeployContext }).GetNewClosure()
             Link = ({ New-LazyVimConfigLink -DeployContext $DeployContext }).GetNewClosure()
             Update = $null
         }
