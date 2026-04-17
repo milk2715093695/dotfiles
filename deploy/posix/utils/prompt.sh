@@ -71,7 +71,18 @@ prompt_confirm() {
 
     local answer
     while true; do
-        read -rp "$message [y/n]: " answer
+        if ! { exec 3</dev/tty; } 2>/dev/null; then
+            warn "无法读取交互输入，默认跳过。"
+            return 1
+        fi
+
+        if ! read -rp "$message [y/n]: " answer <&3; then
+            exec 3<&-
+            warn "无法读取交互输入，默认跳过。"
+            return 1
+        fi
+        exec 3<&-
+
         case "$answer" in
             [Yy]*) return 0 ;;
             [Nn]*) return 1 ;;

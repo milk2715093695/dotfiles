@@ -5,7 +5,7 @@ check_cava_available() {
 
 # 安装 Cava 配置所需运行时依赖
 install_cava_runtime_dependencies() {
-    install_package pkg cava mpv pulseaudio
+    install_software_key audio.cava
 }
 
 # 链接 Cava 配置

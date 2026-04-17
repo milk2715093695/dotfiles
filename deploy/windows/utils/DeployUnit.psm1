@@ -87,7 +87,7 @@ function Invoke-DeployUnit {
 
     if ($null -ne $availabilityCheck -and -not (Test-DeployUnitAvailable -AvailabilityCheck $availabilityCheck)) {
         Write-WARNING "没有 $unitName，跳过 $unitName 配置"
-        return
+        throw (New-DeployStageSkippedException)
     }
 
     Invoke-DeployUnitPhase -ScriptBlock $Unit.Link

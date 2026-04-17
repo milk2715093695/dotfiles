@@ -5,7 +5,7 @@ check_starship_available() {
 
 # 安装 Starship
 install_starship() {
-    install_package "$PACKAGE_MANAGER" starship
+    install_software_key shell.starship
 }
 
 # 链接 Starship 配置

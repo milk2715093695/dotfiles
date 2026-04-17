@@ -50,7 +50,7 @@ function Main {
             Name = "WezTerm"
             AvailabilityCheck = ({ Test-WezTerm }).GetNewClosure()
             Prepare = $null
-            Install = ({ Install-WezTermScoopPackage -DeployContext $DeployContext }).GetNewClosure()
+            Install = ({ Install-WezTermPackage -DeployContext $DeployContext }).GetNewClosure()
             Link = ({ New-WezTermConfigLink -DeployContext $DeployContext }).GetNewClosure()
             Update = $null
         }

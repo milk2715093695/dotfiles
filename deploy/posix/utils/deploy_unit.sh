@@ -70,7 +70,7 @@ run_deploy_unit() {
 
     if [ -n "$availability_check" ] && ! deploy_unit_available "$availability_check"; then
         warn "没有 ${unit_name}，跳过 ${unit_name} 配置"
-        return 0
+        return "${DEPLOY_STAGE_SKIPPED_STATUS:-90}"
     fi
 
     run_deploy_unit_phase "$link_stage" || return 1

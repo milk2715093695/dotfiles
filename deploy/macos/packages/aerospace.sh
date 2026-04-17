@@ -20,7 +20,7 @@ install_aerospace_window_stack() {
         fi
     fi
 
-    install_package brew cask:nikitabobko/tap/aerospace borders
+    install_software_key window.aerospace
 }
 
 # 链接 Aerospace 窗口管理栈配置

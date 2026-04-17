@@ -5,5 +5,5 @@ check_cli_tools_available() {
 
 # 安装常用命令行工具
 install_cli_tools() {
-    install_package "$PACKAGE_MANAGER" fd fzf zoxide
+    install_software_keys cli.fd cli.fzf cli.zoxide
 }

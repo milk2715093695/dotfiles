@@ -12,7 +12,7 @@ function Install-Starship {
         [hashtable]$DeployContext
     )
 
-    Install-ScoopPackage -DeployContext $DeployContext -Name starship
+    Install-SoftwareKey -DeployContext $DeployContext -Key "shell.starship"
 }
 
 # 创建 Starship 配置链接

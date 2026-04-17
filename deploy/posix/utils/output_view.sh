@@ -1,6 +1,7 @@
 # 部署输出视图初始化
 init_deploy_output_view() {
     DEPLOY_STAGE_SUMMARIES=()
+    DEPLOY_STAGE_SKIPPED_STATUS=90
 }
 
 # 判断是否启用摘要重绘
@@ -10,15 +11,23 @@ deploy_output_view_can_reset() {
 
 # 重绘已完成阶段摘要
 redraw_deploy_output_summary() {
-    local summary
+    local summary_record
+    local summary_level
+    local summary_message
 
     if ! deploy_output_view_can_reset; then
         return
     fi
 
     printf '\033[2J\033[H'
-    for summary in "${DEPLOY_STAGE_SUMMARIES[@]}"; do
-        info "$summary"
+    for summary_record in "${DEPLOY_STAGE_SUMMARIES[@]}"; do
+        summary_level="${summary_record%%|*}"
+        summary_message="${summary_record#*|}"
+
+        case "$summary_level" in
+            skip) skip_msg "$summary_message" ;;
+            *) info "$summary_message" ;;
+        esac
     done
 }
 
@@ -27,7 +36,7 @@ start_deploy_stage() {
     local stage_name="$1"
     local summary="开始$stage_name"
 
-    DEPLOY_STAGE_SUMMARIES+=("$summary")
+    DEPLOY_STAGE_SUMMARIES+=("info|$summary")
     info "$summary"
 }
 
@@ -36,11 +45,24 @@ complete_deploy_stage() {
     local stage_name="$1"
     local summary="$stage_name 完成"
 
-    DEPLOY_STAGE_SUMMARIES+=("$summary")
+    DEPLOY_STAGE_SUMMARIES+=("info|$summary")
     if deploy_output_view_can_reset; then
         redraw_deploy_output_summary
     else
         info "$summary"
+    fi
+}
+
+# 记录阶段跳过摘要，并在跳过路径重绘视图
+skip_deploy_stage() {
+    local stage_name="$1"
+    local summary="$stage_name 跳过"
+
+    DEPLOY_STAGE_SUMMARIES+=("skip|$summary")
+    if deploy_output_view_can_reset; then
+        redraw_deploy_output_summary
+    else
+        skip_msg "$summary"
     fi
 }
 
@@ -52,6 +74,11 @@ run_deploy_stage() {
     start_deploy_stage "$stage_name"
     "$@"
     local status=$?
+
+    if [ "$status" -eq "${DEPLOY_STAGE_SKIPPED_STATUS:-90}" ]; then
+        skip_deploy_stage "$stage_name"
+        return 0
+    fi
 
     if [ "$status" -ne 0 ]; then
         return "$status"

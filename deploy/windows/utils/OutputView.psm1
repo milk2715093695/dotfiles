@@ -1,6 +1,7 @@
 Set-StrictMode -Version Latest
 
 $script:DeployStageSummaries = @()
+$script:DeployStageSkippedReason = "DeployStageSkipped"
 
 # 初始化部署输出视图
 function Initialize-DeployOutputView {
@@ -28,7 +29,26 @@ function Show-DeployOutputSummary {
 
     Clear-Host
     foreach ($summary in $script:DeployStageSummaries) {
-        Write-INFO $summary
+        switch ($summary.Level) {
+            "SKIP" { Write-SKIP $summary.Message }
+            default { Write-INFO $summary.Message }
+        }
+    }
+}
+
+# 记录顶层阶段摘要
+function Add-DeployStageSummary {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Level,
+
+        [Parameter(Mandatory)]
+        [string]$Message
+    )
+
+    $script:DeployStageSummaries += [pscustomobject]@{
+        Level = $Level
+        Message = $Message
     }
 }
 
@@ -40,7 +60,7 @@ function Start-DeployStage {
     )
 
     $summary = "开始$Name"
-    $script:DeployStageSummaries += $summary
+    Add-DeployStageSummary -Level "INFO" -Message $summary
     Write-INFO $summary
 }
 
@@ -52,13 +72,49 @@ function Complete-DeployStage {
     )
 
     $summary = "$Name 完成"
-    $script:DeployStageSummaries += $summary
+    Add-DeployStageSummary -Level "INFO" -Message $summary
 
     if (Test-DeployOutputViewResetEnabled) {
         Show-DeployOutputSummary
     } else {
         Write-INFO $summary
     }
+}
+
+# 记录阶段跳过摘要，并在跳过路径重绘视图
+function Skip-DeployStage {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Name
+    )
+
+    $summary = "$Name 跳过"
+    Add-DeployStageSummary -Level "SKIP" -Message $summary
+
+    if (Test-DeployOutputViewResetEnabled) {
+        Show-DeployOutputSummary
+    } else {
+        Write-SKIP $summary
+    }
+}
+
+# 发出 deploy stage 稳定跳过信号
+function New-DeployStageSkippedException {
+    $exception = [System.Exception]::new($script:DeployStageSkippedReason)
+    $exception.Data["DeployStageStatus"] = $script:DeployStageSkippedReason
+    return $exception
+}
+
+# 判断异常是否表示 deploy stage 稳定跳过
+function Test-DeployStageSkippedException {
+    param(
+        [Parameter(Mandatory)]
+        [System.Management.Automation.ErrorRecord]$ErrorRecord
+    )
+
+    $exception = $ErrorRecord.Exception
+    return $exception.Data.Contains("DeployStageStatus") -and `
+        $exception.Data["DeployStageStatus"] -eq $script:DeployStageSkippedReason
 }
 
 # 执行一个顶层部署阶段
@@ -72,8 +128,18 @@ function Invoke-DeployStage {
     )
 
     Start-DeployStage -Name $Name
-    & $ScriptBlock
+    try {
+        & $ScriptBlock
+    } catch {
+        if (Test-DeployStageSkippedException -ErrorRecord $_) {
+            Skip-DeployStage -Name $Name
+            return
+        }
+
+        throw
+    }
+
     Complete-DeployStage -Name $Name
 }
 
-Export-ModuleMember -Function Initialize-DeployOutputView, Invoke-DeployStage
+Export-ModuleMember -Function Initialize-DeployOutputView, Invoke-DeployStage, New-DeployStageSkippedException

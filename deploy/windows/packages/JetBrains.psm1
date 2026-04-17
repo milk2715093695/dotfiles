@@ -17,21 +17,7 @@ function Install-JetBrainsMonoUserFont {
         return
     }
 
-    if (Get-Command scoop -ErrorAction SilentlyContinue) {
-        Write-WARNING "未安装 JetBrains Mono，但存在 scoop。"
-
-        if (Read-InstallConfirmation -DeployContext $DeployContext -Message "是否使用 scoop 安装 JetBrains Mono？") {
-            Write-STEP "使用 Scoop 安装 JetBrains Mono"
-            scoop bucket add nerd-fonts
-            scoop install jetbrains-mono
-        } else {
-            Write-SKIP "跳过字体安装。"
-        }
-        return
-    }
-
-    Write-WARNING "未检测到 scoop，无法自动安装 JetBrains Mono。"
-    Write-INFO "请手动安装字体，或自行扩展脚本。"
+    Install-SoftwareKey -DeployContext $DeployContext -Key "font.jetbrains-mono"
 }
 
 Export-ModuleMember -Function Test-UserJetBrainsMonoFont, Install-JetBrainsMonoUserFont

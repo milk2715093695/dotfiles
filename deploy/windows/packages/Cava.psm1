@@ -12,7 +12,7 @@ function Install-Cava {
         [hashtable]$DeployContext
     )
 
-    Install-ScoopPackage -DeployContext $DeployContext -Name cava
+    Install-SoftwareKey -DeployContext $DeployContext -Key "audio.cava"
 }
 
 # 创建 Cava 配置链接

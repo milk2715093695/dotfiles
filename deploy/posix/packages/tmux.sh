@@ -5,7 +5,7 @@ check_tmux_available() {
 
 # 安装 tmux 配置所需运行时依赖
 install_tmux_runtime_dependencies() {
-    install_package "$PACKAGE_MANAGER" tmux bash bc coreutils gawk jq
+    install_software_key terminal.tmux
 }
 
 # 链接 tmux 配置

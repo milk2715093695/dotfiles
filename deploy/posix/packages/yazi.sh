@@ -5,7 +5,7 @@ check_yazi_available() {
 
 # 安装 Yazi 配置所需运行时依赖
 install_yazi_runtime_dependencies() {
-    install_package "$PACKAGE_MANAGER" yazi ffmpeg 7zip jq poppler fd ripgrep fzf zoxide resvg imagemagick clipboard glow
+    install_software_key filemanager.yazi
 }
 
 # 链接 Yazi 配置

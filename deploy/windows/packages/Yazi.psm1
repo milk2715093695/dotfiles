@@ -12,14 +12,7 @@ function Install-YaziRuntimeDependencies {
         [hashtable]$DeployContext
     )
 
-    Install-ScoopPackage -DeployContext $DeployContext -Name @(
-        "yazi", "ffmpeg", "7zip",
-        "jq", "poppler", "fd",
-        "ripgrep", "fzf", "zoxide",
-        "resvg", "imagemagick", "clipboard",
-        "bat", "less", "glow",
-        "file"
-    )
+    Install-SoftwareKey -DeployContext $DeployContext -Key "filemanager.yazi"
 }
 
 # 创建 Yazi 配置链接

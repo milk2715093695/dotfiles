@@ -1,6 +1,5 @@
 Set-StrictMode -Version Latest
 
-$script:CliToolSetPackages = @("fd", "fzf", "zoxide")
 $script:CliToolSetSoftwareKeys = @("cli.fd", "cli.fzf", "cli.zoxide")
 
 # 检查常用命令行工具是否存在
@@ -15,7 +14,7 @@ function Install-CliToolSet {
         [hashtable]$DeployContext
     )
 
-    Install-ScoopPackage -DeployContext $DeployContext -Name $script:CliToolSetPackages
+    Install-SoftwareSet -DeployContext $DeployContext -Key $script:CliToolSetSoftwareKeys
 }
 
 Export-ModuleMember -Function Test-CliToolSet, Install-CliToolSet

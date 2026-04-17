@@ -10,7 +10,7 @@ check_lazyvim_runtime_available() {
 
 # 安装 LazyVim 配置所需运行时依赖
 install_lazyvim_runtime_dependencies() {
-    install_package "$PACKAGE_MANAGER" neovim python3 nodejs fd
+    install_software_key editor.neovim
 }
 
 # 链接 LazyVim 配置

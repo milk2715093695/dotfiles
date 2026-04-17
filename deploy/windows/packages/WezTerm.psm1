@@ -5,27 +5,14 @@ function Test-WezTerm {
     Test-SoftwareAvailable -Key "terminal.wezterm"
 }
 
-# 使用 Scoop 安装 WezTerm
-function Install-WezTermScoopPackage {
+# 安装 WezTerm
+function Install-WezTermPackage {
     param(
         [Parameter(Mandatory)]
         [hashtable]$DeployContext
     )
 
-    if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
-        Write-WARNING "系统未安装 wezterm，且未检测到 scoop。"
-        Write-SKIP "将跳过 WezTerm 配置。"
-        return
-    }
-
-    Write-WARNING "未安装 wezterm，但存在 scoop。"
-
-    if (Read-InstallConfirmation -DeployContext $DeployContext -Message "是否使用 scoop 安装 wezterm？") {
-        Write-STEP "使用 Scoop 安装 WezTerm"
-        scoop install wezterm
-    } else {
-        Write-SKIP "跳过 WezTerm 安装。"
-    }
+    Install-SoftwareKey -DeployContext $DeployContext -Key "terminal.wezterm"
 }
 
 # 创建 WezTerm 配置链接
@@ -40,4 +27,4 @@ function New-WezTermConfigLink {
     New-SymbolicLink -DeployContext $DeployContext -TargetPath $target -SourcePath $source
 }
 
-Export-ModuleMember -Function Test-WezTerm, Install-WezTermScoopPackage, New-WezTermConfigLink
+Export-ModuleMember -Function Test-WezTerm, Install-WezTermPackage, New-WezTermConfigLink

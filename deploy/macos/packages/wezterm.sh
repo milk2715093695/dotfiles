@@ -3,7 +3,7 @@ check_wezterm_available() {
     check_software_available terminal.wezterm
 }
 
-# 使用 Homebrew 安装 WezTerm
+# 安装 WezTerm
 install_wezterm() {
-    install_package brew cask:wezterm
+    install_software_key terminal.wezterm
 }

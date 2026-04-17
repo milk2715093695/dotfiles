@@ -17,9 +17,7 @@ function Install-LazyVimRuntimeDependencies {
         [hashtable]$DeployContext
     )
 
-    Install-ScoopPackage -DeployContext $DeployContext -Name @(
-        "neovim", "python", "nodejs", "fd"
-    )
+    Install-SoftwareKey -DeployContext $DeployContext -Key "editor.neovim"
 }
 
 # 创建 LazyVim 配置链接

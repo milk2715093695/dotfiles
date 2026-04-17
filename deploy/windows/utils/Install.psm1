@@ -107,8 +107,8 @@ function Install-PackageByManager {
                 return
             }
 
-            # winget 没有简单方法判断已安装，这里尝试查询
-            $installed = winget list --name $Name | Select-String -Pattern $Name
+            # winget 使用包 ID 安装，优先按 ID 查询现有记录。
+            $installed = winget list --id $Name | Select-String -Pattern ([regex]::Escape($Name))
             if ($installed) {
                 Write-SKIP "$Name 已安装 (winget)"
                 return
@@ -127,4 +127,105 @@ function Install-PackageByManager {
     }
 }
 
-Export-ModuleMember -Function Install-ScoopPackage, Install-PackageByManager
+# 安装一条 manager-specific install spec
+function Install-PackageInstallSpec {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [hashtable]$DeployContext,
+
+        [Parameter(Mandatory)]
+        [pscustomobject]$Spec
+    )
+
+    switch ($Spec.Manager) {
+        "scoop" {
+            switch ($Spec.Kind) {
+                "bucket" {
+                    if (scoop bucket list | Select-String -Pattern "^$([regex]::Escape($Spec.Name))\s") {
+                        Write-SKIP "$($Spec.Name) bucket 已存在。"
+                        return
+                    }
+
+                    if (Read-InstallConfirmation -DeployContext $DeployContext -Message "是否添加 Scoop bucket $($Spec.Name)？") {
+                        Write-STEP "添加 Scoop bucket $($Spec.Name)"
+                        scoop bucket add $Spec.Name
+                    } else {
+                        Write-SKIP "跳过 Scoop bucket $($Spec.Name)。"
+                    }
+                }
+                "package" {
+                    Install-ScoopPackage -DeployContext $DeployContext -Name $Spec.Name
+                }
+                default {
+                    Write-WARNING "未知 Scoop install spec 类型：$($Spec.Kind)"
+                }
+            }
+        }
+        "winget" {
+            if ($Spec.Kind -ne "package") {
+                Write-WARNING "winget 不支持 install spec 类型：$($Spec.Kind)"
+                return
+            }
+
+            Install-PackageByManager -DeployContext $DeployContext -Manager winget -Name $Spec.Name
+        }
+        default {
+            Write-WARNING "未知包管理器：$($Spec.Manager)"
+        }
+    }
+}
+
+# 根据 canonical software key 选择可用 manager 并安装
+function Install-SoftwareKey {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [hashtable]$DeployContext,
+
+        [Parameter(Mandatory)]
+        [string]$Key
+    )
+
+    if (Test-SoftwareAvailable -Key $Key) {
+        Write-SKIP "$Key 已可用"
+        return
+    }
+
+    foreach ($manager in Get-PackageManagerPriority) {
+        if (-not (Test-PackageManagerAvailable -Manager $manager)) {
+            continue
+        }
+
+        $specs = @(Get-PackageInstallSpec -Key $Key -Manager $manager)
+        if ($specs.Count -eq 0) {
+            continue
+        }
+
+        Write-STEP "选择 $manager 安装 $Key"
+        foreach ($spec in $specs) {
+            Install-PackageInstallSpec -DeployContext $DeployContext -Spec $spec
+        }
+        return
+    }
+
+    Write-WARNING "没有可用包管理器支持安装 $Key，请手动安装。"
+}
+
+# 安装一组 canonical software key
+function Install-SoftwareSet {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [hashtable]$DeployContext,
+
+        [Parameter(Mandatory)]
+        [string[]]$Key
+    )
+
+    foreach ($softwareKey in $Key) {
+        Install-SoftwareKey -DeployContext $DeployContext -Key $softwareKey
+    }
+}
+
+Export-ModuleMember -Function Install-ScoopPackage, Install-PackageByManager, Install-PackageInstallSpec, Install-SoftwareKey, Install-SoftwareSet

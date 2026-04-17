@@ -10,7 +10,7 @@ install_jetbrains_mono() {
         return
     fi
 
-    install_package "$PACKAGE_MANAGER" cask:font-jetbrains-mono
+    install_software_key font.jetbrains-mono
 }
 
 # 安装 Monaspace Nerd Font 字体
@@ -20,7 +20,7 @@ install_monaspace_nerd_font() {
         return
     fi
 
-    install_package "$PACKAGE_MANAGER" cask:font-monaspace-nerd-font
+    install_software_key font.monaspace-nerd
 }
 
 # 安装 Noto Sans Symbols 2 字体
@@ -30,7 +30,7 @@ install_noto_sans_symbols_2() {
         return
     fi
 
-    install_package "$PACKAGE_MANAGER" "cask:font-noto-sans-symbols-2"
+    install_software_key font.noto-sans-symbols-2
 }
 
 # 安装全部常用字体
