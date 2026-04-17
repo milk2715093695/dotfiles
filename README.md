@@ -7,10 +7,10 @@
   - [2. 目录结构](#2-目录结构)
   - [3. 配置路径约定](#3-配置路径约定)
   - [4. 部署](#4-部署)
-    - [4.1. Ubuntu](#41-ubuntu)
+    - [4.1. Ubuntu / Linux（Ubuntu 优先）](#41-ubuntu--linuxubuntu-优先)
     - [4.2. macOS](#42-macos)
     - [4.3. Windows](#43-windows)
-    - [4.4. Android-termux](#44-android-termux)
+    - [4.4. Termux](#44-termux)
   - [5. 未来计划](#5-未来计划)
   - [许可证](#许可证)
 
@@ -92,9 +92,10 @@ nvim 基本继承了 LazyVim 的配置，添加了部分插件：
 │   ├── termux              # Android-termux
 │   ├── ubuntu              # Ubuntu
 │   └── windows             # Windows
-├── deploy                  # 部署脚本
+├── deploy                  # 部署脚本（POSIX Bash + Windows PowerShell）
 │   ├── macos.sh            # macOS
-│   ├── ubuntu.sh           # Ubuntu（其他 Linux 系列未尝试）
+│   ├── termux.sh           # Termux
+│   ├── ubuntu.sh           # Ubuntu 优先的 Linux 部署入口
 │   └── windows.ps1         # Windows
 ├── LICENSE
 ├── nvim                    # LazyVim 配置
@@ -152,13 +153,24 @@ nvim 基本继承了 LazyVim 的配置，添加了部分插件：
 - `~/.config/wezterm/`  ->  `dotfiles/wezterm/`
 - `~/.zshrc` -> `dotfiles/zsh/.zshrc`，`~/.config/zsh/` -> `dotfiles/zsh/zsh/`
 - `~/.config/starship.toml` -> `dotfiles/starship/starship.toml`
-- `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` -> `dotfiles\pwsh\PowerShell_profile.ps1`，`~\.config\pwsh\` -> `dotfiles\pwsh\pwsh\`
-- `~/.config/yazi/` -> `dotfiles/yazi/` 或 `%AppData\config\yazi\` -> `dotfiles\yazi\`
+- `$PROFILE` -> `dotfiles\pwsh\Microsoft.PowerShell_profile.ps1`，`~\.config\pwsh\` -> `dotfiles\pwsh\pwsh\`
+- `~/.config/yazi/` -> `dotfiles/yazi/` 或 `%AppData%\yazi\config\` -> `dotfiles\yazi\`
 - `~/.config/cava/` -> `dotfiles/cava/<对应系统>`
 - `~/.config/nvim` -> `dotfiles/nvim/` 或 `%LocalAppData\nvim\` -> `dotfiles\nvim\`
 - `~/.config/tmux` -> `dotfiles/tmux/`
 
 ## 4. 部署
+
+部署脚本分为两套实现：
+
+- POSIX：`deploy/macos.sh`、`deploy/ubuntu.sh`、`deploy/termux.sh`
+- Windows：`deploy/windows.ps1`
+
+两套实现共享同一套部署思路，按 deploy unit 生命周期执行：
+
+- `prepare -> install（若缺失）-> recheck availability -> link -> update`
+- 软件安装与配置链接分离；软件仍不可用时，会跳过后续 link/update，而不是强行继续
+- 配置部署以符号链接为主，冲突处理统一由 `--config-mode` / `-ConfigMode` 控制
 
 部署脚本会：
 
@@ -166,6 +178,29 @@ nvim 基本继承了 LazyVim 的配置，添加了部分插件：
 - 自动创建符号链接
 - 对已有文件做提示，避免误覆盖
 - 可以自动确认安装类操作，但配置覆盖策略需要单独指定
+
+当前实际覆盖范围：
+
+- macOS：字体、WezTerm、CLI 工具、zsh 插件、Starship、zsh、Yazi、Cava、LazyVim、tmux，以及 Aerospace + borders 窗口管理栈
+- Ubuntu / Linux：共享 POSIX 主流程，入口脚本以 Ubuntu 为主；包管理器优先级是 `apt -> dnf -> pacman -> brew`，实测除了字体安装被跳过意外其余在 Ubuntu 均可以成功
+- Windows：AltSnap、JetBrains Mono、WezTerm、PSGallery、CLI 工具、Starship、PowerShell、Yazi、Cava、LazyVim
+- Termux：共享 POSIX 主流程，但 WezTerm 会被显式跳过，考虑到手机上使用 Termux 作为终端。
+
+已知约束：
+
+- Linux 部署目前是 Ubuntu 优先，不应理解为完整通用 Linux 部署器
+- Ubuntu 上的 Cava 仍暂时复用 `cava/macos`，这是因为 Ubuntu 的 `cava` 暂时还没有经过测试
+- Windows 的 `PSFzf` 当前只有检查占位，没有自动安装逻辑
+- 自动字体安装目前主要覆盖 macOS；Windows 只单独处理 JetBrains Mono
+- POSIX 在无交互 TTY 时无法确认安装类操作，这类步骤会倾向于跳过
+
+可能的系统副作用：
+
+- macOS 可能添加 `FelixKratz/formulae` Homebrew tap
+- Ubuntu 可能添加 WezTerm 官方 APT 源
+- Debian / Ubuntu 上可能创建 `/usr/local/bin/fd -> fdfind` 兼容链接
+- Windows 可能注册 `PSGallery`，并在确认后把 OpenSSH 默认 shell 改成 `pwsh` 后重启 `sshd`
+- Windows 未开启开发者模式且未以管理员身份运行时，符号链接创建可能失败
 
 > 使用过程中请注意提示与警告！以免错过重要信息！
 >
@@ -200,9 +235,9 @@ nvim 基本继承了 LazyVim 的配置，添加了部分插件：
 .\deploy\windows.ps1 -YesInstall -ConfigMode replace-link
 ```
 
-### 4.1. Ubuntu
+### 4.1. Ubuntu / Linux（Ubuntu 优先）
 
-推荐拥有 `flatpak` 与 `Linuxbrew` 作为前置，同时有 `zsh` 作为默认的 shell。
+推荐在 Ubuntu 上使用，并确保至少有可用的 `apt`。脚本内部对 `dnf`、`pacman`、`brew` 有部分 fallback 支持，但当前入口和实际测试范围仍以 Ubuntu 为主。
 
 在新机器上执行以下步骤即可部署配置：
 
@@ -215,7 +250,7 @@ chmod +x ./deploy/ubuntu.sh
 
 ### 4.2. macOS
 
-推荐拥有 `Homebrew` 作为前置。
+推荐提前安装 `Homebrew`。
 
 在新机器上执行以下步骤即可部署配置：
 
@@ -228,8 +263,10 @@ chmod +x ./deploy/macos.sh
 
 ### 4.3. Windows
 
-- 推荐拥有 `scoop` 作为前置。
-- 推荐以管理员身份的 `Powershell` 或 `pwsh`（推荐）运行部署脚本。
+- 推荐使用 `pwsh` 运行。
+- 包管理器优先级为 `scoop -> winget`；至少准备其中一个。
+- 推荐以管理员身份运行，或先开启 Windows 开发者模式，否则符号链接可能失败。
+- 如果确认将 OpenSSH 默认 shell 切换到 `pwsh`，脚本会修改注册表并重启 `sshd`。
 
 在 powershell 上执行以下步骤即可部署配置：
 
@@ -240,7 +277,9 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 .\deploy\windows.ps1
 ```
 
-### 4.4. Android-termux
+### 4.4. Termux
+
+Termux 使用 `pkg` 作为包管理器，并会跳过 WezTerm。zsh 插件除了 `zsh-completions` 外，还会把 `zsh-autosuggestions` 与 `zsh-syntax-highlighting` 克隆到 `~/.zsh/`。
 
 在 termux 上执行以下步骤即可部署配置：
 
