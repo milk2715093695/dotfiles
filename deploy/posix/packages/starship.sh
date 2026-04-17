@@ -1,6 +1,6 @@
 # 检查 Starship 配置单元是否可用
 check_starship_available() {
-    command -v starship >/dev/null 2>&1
+    check_software_available shell.starship
 }
 
 # 安装 Starship

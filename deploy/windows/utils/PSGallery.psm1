@@ -2,8 +2,7 @@ Set-StrictMode -Version Latest
 
 # 检查 PowerShell Gallery 仓库是否可用
 function Test-PSGalleryRepository {
-    $repo = Get-PSRepository -Name PSGallery -ErrorAction SilentlyContinue
-    return [bool]$repo
+    Test-SoftwareAvailable -Key "powershell.psgallery"
 }
 
 # 注册 PowerShell Gallery 仓库

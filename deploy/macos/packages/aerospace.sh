@@ -1,6 +1,6 @@
 # 检查 Aerospace 命令是否可用
 check_aerospace_available() {
-    command -v aerospace >/dev/null 2>&1
+    check_software_available window.aerospace
 }
 
 # 安装 Aerospace 窗口管理栈

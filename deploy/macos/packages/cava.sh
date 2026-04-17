@@ -1,6 +1,6 @@
 # 检查 Cava 配置单元是否可用
 check_cava_available() {
-    command -v cava >/dev/null 2>&1
+    check_software_available audio.cava
 }
 
 # 安装 Cava 配置所需运行时依赖

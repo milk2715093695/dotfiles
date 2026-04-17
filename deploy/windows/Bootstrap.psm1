@@ -37,6 +37,7 @@ function Import-WindowsDeployModules {
         "$ScriptDir\windows\utils\Archive.psm1"
         "$ScriptDir\windows\utils\Shortcut.psm1"
         "$ScriptDir\windows\utils\Install.psm1"
+        "$ScriptDir\windows\utils\SoftwareAvailability.psm1"
         "$ScriptDir\windows\utils\PSGallery.psm1"
         "$ScriptDir\windows\packages\AltSnap.psm1"
         "$ScriptDir\windows\packages\JetBrains.psm1"

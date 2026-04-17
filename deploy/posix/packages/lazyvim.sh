@@ -1,6 +1,6 @@
 # 检查 Neovim 命令是否可用
 check_neovim_command_available() {
-    command -v nvim >/dev/null 2>&1
+    check_software_available editor.neovim
 }
 
 # 检查 LazyVim 配置所需运行时是否可用

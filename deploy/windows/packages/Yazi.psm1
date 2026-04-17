@@ -2,18 +2,7 @@ Set-StrictMode -Version Latest
 
 # 检查 Yazi 是否存在
 function Test-Yazi {
-    if (Get-Command yazi -ErrorAction SilentlyContinue) {
-        return $true
-    }
-
-    if (Get-Command scoop -ErrorAction SilentlyContinue) {
-        $apps = scoop list 2>$null
-        if ($apps -match '^yazi') {
-            return $true
-        }
-    }
-
-    return $false
+    Test-SoftwareAvailable -Key "filemanager.yazi"
 }
 
 # 安装 Yazi 配置所需运行时依赖

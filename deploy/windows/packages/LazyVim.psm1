@@ -2,18 +2,7 @@ Set-StrictMode -Version Latest
 
 # 检查 Neovim 命令是否可用
 function Test-NeovimCommand {
-    if (Get-Command nvim -ErrorAction SilentlyContinue) {
-        return $true
-    }
-
-    if (Get-Command scoop -ErrorAction SilentlyContinue) {
-        $apps = scoop list 2>$null
-        if ($apps -match '^nvim') {
-            return $true
-        }
-    }
-
-    return $false
+    Test-SoftwareAvailable -Key "editor.neovim"
 }
 
 # 检查 LazyVim 配置所需运行时是否可用

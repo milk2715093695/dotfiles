@@ -2,18 +2,7 @@ Set-StrictMode -Version Latest
 
 # 检查 Starship 是否存在
 function Test-Starship {
-    if (Get-Command starship -ErrorAction SilentlyContinue) {
-        return $true
-    }
-
-    if (Get-Command scoop -ErrorAction SilentlyContinue) {
-        $apps = scoop list 2>$null
-        if ($apps -match "starship") {
-            return $true
-        }
-    }
-
-    return $false
+    Test-SoftwareAvailable -Key "shell.starship"
 }
 
 # 安装 Starship

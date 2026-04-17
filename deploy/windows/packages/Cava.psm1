@@ -2,18 +2,7 @@ Set-StrictMode -Version Latest
 
 # 检查 Cava 是否存在
 function Test-Cava {
-    if (Get-Command cava -ErrorAction SilentlyContinue) {
-        return $true
-    }
-
-    if (Get-Command scoop -ErrorAction SilentlyContinue) {
-        $apps = scoop list 2>$null
-        if ($apps -match '^cava') {
-            return $true
-        }
-    }
-
-    return $false
+    Test-SoftwareAvailable -Key "audio.cava"
 }
 
 # 安装 Cava

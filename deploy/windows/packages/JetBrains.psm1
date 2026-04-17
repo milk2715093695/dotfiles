@@ -2,10 +2,7 @@ Set-StrictMode -Version Latest
 
 # 检查用户字体目录中是否存在 JetBrains Mono
 function Test-UserJetBrainsMonoFont {
-    $fontInstalled = Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows\Fonts" -ErrorAction SilentlyContinue |
-        Where-Object { $_.Name -match "JetBrainsMono" }
-
-    return [bool]$fontInstalled
+    Test-SoftwareAvailable -Key "font.jetbrains-mono"
 }
 
 # 使用 Scoop 安装用户级 JetBrains Mono 字体

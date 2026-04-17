@@ -1,6 +1,6 @@
 # 检查 Yazi 配置单元是否可用
 check_yazi_available() {
-    command -v yazi >/dev/null 2>&1
+    check_software_available filemanager.yazi
 }
 
 # 安装 Yazi 配置所需运行时依赖

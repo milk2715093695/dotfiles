@@ -2,18 +2,7 @@ Set-StrictMode -Version Latest
 
 # 检查 WezTerm 是否存在
 function Test-WezTerm {
-    if (Get-Command wezterm -ErrorAction SilentlyContinue) {
-        return $true
-    }
-
-    if (Get-Command scoop -ErrorAction SilentlyContinue) {
-        $apps = scoop list 2>$null
-        if ($apps -match '^wezterm') {
-            return $true
-        }
-    }
-
-    return $false
+    Test-SoftwareAvailable -Key "terminal.wezterm"
 }
 
 # 使用 Scoop 安装 WezTerm
