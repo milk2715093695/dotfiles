@@ -108,7 +108,7 @@ nvim 基本继承了 LazyVim 的配置，添加了部分插件：
 │       ├── Functions.ps1                       # 自定义函数
 │       ├── Hook.ps1                            # hook
 │       ├── Microsoft.PowerShell_profile.ps1    # pwsh 配置文件二级入口
-│       ├── Options.ps1                         # zsh 选项配置
+│       ├── Options.ps1                         # pwsh 选项配置
 │       ├── Plugins.ps1                         # 插件配置
 │       └── Secrets                             # 密码管理（除了示例文件外不会被追踪）
 │           └── Example.ps1                     # 示例
@@ -182,7 +182,7 @@ nvim 基本继承了 LazyVim 的配置，添加了部分插件：
 当前实际覆盖范围：
 
 - macOS：字体、WezTerm、CLI 工具、zsh 插件、Starship、zsh、Yazi、Cava、LazyVim、tmux，以及 Aerospace + borders 窗口管理栈
-- Ubuntu / Linux：共享 POSIX 主流程，入口脚本以 Ubuntu 为主；包管理器优先级是 `apt -> dnf -> pacman -> brew`，实测除了字体安装被跳过意外其余在 Ubuntu 均可以成功
+- Ubuntu / Linux：共享 POSIX 主流程，入口脚本以 Ubuntu 为主；包管理器优先级是 `apt -> dnf -> pacman -> brew`，实测除了字体安装被跳过以外其余在 Ubuntu 均可以成功
 - Windows：AltSnap、JetBrains Mono、WezTerm、PSGallery、CLI 工具、Starship、PowerShell、Yazi、Cava、LazyVim
 - Termux：共享 POSIX 主流程，但 WezTerm 会被显式跳过，考虑到手机上使用 Termux 作为终端。
 
