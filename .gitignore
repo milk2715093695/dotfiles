@@ -22,6 +22,7 @@ $RECYCLE.BIN/
 /Cache/
 /cache/
 /taskbooks/
+/.taskbook-backups/
 /.vscode/
 
 # 代理配置与本地索引
