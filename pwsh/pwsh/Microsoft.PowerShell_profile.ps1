@@ -20,7 +20,7 @@ foreach ($part in $profileParts) {
     $profilePart = "$MY_PWSH_CONFIG\$part.ps1"
     . $profilePart
 
-    $localProfilePart = "$MY_PWSH_CONFIG\locals\$part.ps1"
+    $localProfilePart = "$MY_PWSH_CONFIG\Locals\$part.ps1"
     if (Test-Path -LiteralPath $localProfilePart -PathType Leaf) {
         . $localProfilePart
     }
