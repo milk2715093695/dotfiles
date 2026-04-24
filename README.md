@@ -29,7 +29,7 @@ cava 配置了主题颜色：
 <details>
 <summary>nvim</summary>
 
-nvim 基本继承了 LazyVim 的配置，添加了部分插件：
+nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航等插件：
 
 ![nvim 配置效果](assets/screenshots/nvim.webp)
 
@@ -87,6 +87,9 @@ nvim 基本继承了 LazyVim 的配置，添加了部分插件：
 
 ```text
 .
+├── aerospace               # macOS AeroSpace 配置
+├── assets                  # README 截图资源
+├── borders                 # macOS borders 配置
 ├── cava                    # cava 配置
 │   ├── macos               # macOS
 │   ├── termux              # Android-termux
@@ -98,7 +101,7 @@ nvim 基本继承了 LazyVim 的配置，添加了部分插件：
 │   ├── ubuntu.sh           # Ubuntu 优先的 Linux 部署入口
 │   └── windows.ps1         # Windows
 ├── LICENSE
-├── nvim                    # LazyVim 配置
+├── nvim                    # 基于 LazyVim 的轻量定制配置
 ├── pwsh                                        # pwsh 配置
 │   ├── Microsoft.PowerShell_profile.ps1        # pwsh 配置文件一级入口
 │   └── pwsh
@@ -113,18 +116,19 @@ nvim 基本继承了 LazyVim 的配置，添加了部分插件：
 │       └── Secrets                             # 密码管理（除了示例文件外不会被追踪）
 │           └── Example.ps1                     # 示例
 ├── README.md
+├── sketchybar              # SketchyBar 配置子模块（独立维护，当前未纳入主部署脚本）
 ├── starship
 │   └── starship.toml       # starship 配置
 ├── tmux                    # tmux 配置
-│   ├── plugins             # tmux 插件目录
+│   ├── plugins             # tpm 子模块与本地插件目录
 │   └── tmux.conf           # tmux 配置文件
-├── wezterm                 # WezTerm 配置以及文件
+├── wezterm                 # WezTerm 配置以及背景资源
 ├── yazi                    # yazi 配置
-│   ├── flavors             # yazi 主题目录
+│   ├── flavors             # yazi 主题目录（可再生成资源）
 │   ├── init.lua            # yazi lua 初始化脚本
 │   ├── keymap.toml         # yazi 快捷键配置
 │   ├── package.toml        # yazi 插件配置
-│   ├── plugins             # yazi 插件目录
+│   ├── plugins             # yazi 插件目录（可再生成资源）
 │   ├── theme.toml          # yazi 主题配置
 │   ├── vfs.toml            # yazi 文件系统配置
 │   └── yazi.toml           # yazi 主配置文件
@@ -158,6 +162,12 @@ nvim 基本继承了 LazyVim 的配置，添加了部分插件：
 - `~/.config/cava/` -> `dotfiles/cava/<对应系统>`
 - `~/.config/nvim` -> `dotfiles/nvim/` 或 `%LocalAppData\nvim\` -> `dotfiles\nvim\`
 - `~/.config/tmux` -> `dotfiles/tmux/`
+- `~/.config/aerospace/` -> `dotfiles/aerospace/`
+- `~/.config/borders/` -> `dotfiles/borders/`
+
+其中 `sketchybar/` 当前作为独立维护的子模块保留，尚未纳入主部署脚本，使用时请参考子模块内的 README 单独安装。
+
+`locals/` 目录用于存放机器特定的本地覆盖配置，不进入 Git 追踪。例如 conda 使用懒加载——首次输入 `conda` 命令时，才会 source `~/.config/zsh/locals/conda.zsh`（或 Windows 下的 `~\.config\pwsh\locals\Conda.ps1`）。用户需运行 `conda init zsh`（或 `conda init powershell`），然后将输出的初始化块放入对应文件即可。
 
 ## 4. 部署
 
@@ -185,6 +195,11 @@ nvim 基本继承了 LazyVim 的配置，添加了部分插件：
 - Ubuntu / Linux：共享 POSIX 主流程，入口脚本以 Ubuntu 为主；包管理器优先级是 `apt -> dnf -> pacman -> brew`，实测除了字体安装被跳过以外其余在 Ubuntu 均可以成功
 - Windows：AltSnap、JetBrains Mono、WezTerm、PSGallery、CLI 工具、Starship、PowerShell、Yazi、Cava、LazyVim
 - Termux：共享 POSIX 主流程，但 WezTerm 会被显式跳过，考虑到手机上使用 Termux 作为终端。
+
+补充说明：
+
+- 仓库还包含 `sketchybar/` 子模块，但它当前不在主部署脚本覆盖范围内，需要按子模块 README 单独安装。
+- 仓库当前包含 `tmux/plugins/tpm` 与 `sketchybar/` 两个子模块，因此示例中的克隆命令保留 `--recurse-submodules`。
 
 已知约束：
 
@@ -311,4 +326,4 @@ chmod +x ./deploy/termux.sh
 
 本仓库采用 MIT 许可证。详情见 [LICENSE](./LICENSE) 文件。
 
-关于配置中使用到了 AltDrag（GPLv3）的问题：本仓库不包含 AltDrag 源码或可执行文件，部署时会自动从官方仓库下载并安装。AltDrag 许可请参见：[AltDrag 仓库](https://github.com/RamonUnch/AltSnap)
+关于 Windows 配置中使用 AltSnap（GPLv3）的问题：AltSnap 是 Stefan Sundin 的 AltDrag 的 fork；本仓库不包含 AltSnap / AltDrag 源码或可执行文件，部署时会从 `RamonUnch/AltSnap` 发布页下载并安装。AltSnap 许可、Wiki 与更新记录请参见：[AltSnap 仓库](https://github.com/RamonUnch/AltSnap)；AltDrag 原始文档仅作历史参考：[AltDrag 原始文档](https://stefansundin.github.io/altdrag/doc/)。

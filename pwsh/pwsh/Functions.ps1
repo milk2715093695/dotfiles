@@ -110,7 +110,7 @@ function ll {
 
 # 自动懒加载的 conda 函数
 function conda {
-    . "$HOME\.config\pwsh\Conda.ps1"
+    . "$HOME\.config\pwsh\locals\Conda.ps1"
     Remove-Item Function:conda -ErrorAction SilentlyContinue
     & conda @Args
 }

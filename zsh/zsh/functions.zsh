@@ -111,7 +111,7 @@ load_secrets() {
 # conda 懒加载
 conda() {
     unfunction conda
-    source "$HOME/.config/zsh/conda.zsh"
+    source "$HOME/.config/zsh/locals/conda.zsh"
     conda "$@"
 }
 
