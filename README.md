@@ -17,6 +17,16 @@
 ## 1. 效果展示
 
 <details>
+<summary>aerospace</summary>
+
+aerospace 是 macOS 的 i3 风格的平铺窗口管理器：
+
+![aerospace 配置效果](assets/screenshots/aerospace.webp)
+
+</details>
+
+
+<details>
 <summary>cava</summary>
 
 cava 配置了主题颜色：

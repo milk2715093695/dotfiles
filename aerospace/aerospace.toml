@@ -56,8 +56,8 @@ default-root-container-orientation = 'auto'
 
 # 外边距配合 SketchyBar 和 borders；顶部给菜单栏/SketchyBar 留空间。
 [gaps]
-    inner.horizontal = 0
-    inner.vertical =   0
+    inner.horizontal = 10
+    inner.vertical =   10
     outer.left =       5
     outer.bottom =     3
     outer.top =        38
