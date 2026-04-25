@@ -27,6 +27,16 @@ aerospace 是 macOS 的 i3 风格的平铺窗口管理器：
 
 
 <details>
+<summary>borders</summary>
+
+borders 是 macOS 的窗口边框管理器，搭配 aerospace 使用，用于高亮被聚焦的窗口：
+
+![borders 配置效果](assets/screenshots/borders.webp)
+
+</details>
+
+
+<details>
 <summary>cava</summary>
 
 cava 配置了主题颜色：
