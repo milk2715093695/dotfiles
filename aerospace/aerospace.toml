@@ -153,21 +153,13 @@ default-root-container-orientation = 'auto'
 
 
 # 窗口路由规则
-# files: 文件管理、系统工具、密码管理器等短任务窗口。
-[[on-window-detected]]
-    if.app-id = 'com.apple.finder'
-    run = ['layout floating', 'move-node-to-workspace files']
-
+# files: 文件管理、系统工具等短任务窗口。
 [[on-window-detected]]
     if.app-id = 'com.apple.ActivityMonitor'
     run = ['layout floating', 'move-node-to-workspace files']
 
 [[on-window-detected]]
     if.app-id = 'com.apple.audio.AudioMIDISetup'
-    run = ['layout floating', 'move-node-to-workspace files']
-
-[[on-window-detected]]
-    if.app-id = 'org.keepassxc.keepassxc'
     run = ['layout floating', 'move-node-to-workspace files']
 
 
@@ -203,10 +195,6 @@ default-root-container-orientation = 'auto'
 
 # game: 游戏启动器和游戏窗口默认堆叠。
 [[on-window-detected]]
-    if.app-name-regex-substring = '[Ss]team'
-    run = ['layout accordion', 'move-node-to-workspace game']
-
-[[on-window-detected]]
     if.app-id = 'sh.ppy.osu.lazer'
     run = ['layout accordion', 'move-node-to-workspace game']
 
@@ -229,3 +217,39 @@ default-root-container-orientation = 'auto'
 [[on-window-detected]]
     if.app-id = 'com.youqu.todesk.mac'
     run = ['layout accordion', 'move-node-to-workspace vm']
+
+
+# 上下文窗口，不参与窗口路由规则。
+[[on-window-detected]]
+    if.app-id = 'com.apple.finder'
+    run = ['layout floating']
+
+[[on-window-detected]]
+    if.app-id = 'org.keepassxc.keepassxc'
+    run = ['layout floating']
+
+
+# 兜底规则
+[[on-window-detected]]
+    if.app-name-regex-substring = '[Bb]rowser'
+    run = ['layout tiles', 'move-node-to-workspace web']
+
+[[on-window-detected]]
+    if.app-name-regex-substring = '([Pp]roxy|[Vv][Pp][Nn])'
+    run = ['layout floating', 'move-node-to-workspace net']
+
+[[on-window-detected]]
+    if.app-name-regex-substring = '([Ss]team|[Gg]ame)'
+    run = ['layout accordion', 'move-node-to-workspace game']
+
+[[on-window-detected]]
+    if.app-name-regex-substring = '([Cc]hat|[Mm]essenger|[Mm]essage|[Mm]eeting|[Cc]onference)'
+    run = ['layout accordion', 'move-node-to-workspace chat']
+
+[[on-window-detected]]
+    if.app-name-regex-substring = '([Vv]m[Ww]are|[Rr]emote|[Pp]arallel|[Vv]irtual)'
+    run = ['layout accordion', 'move-node-to-workspace vm']
+
+[[on-window-detected]]
+    if.window-title-regex-substring = '(settings|preferences|options|about|properties|设置|偏好|选项|关于|属性)'
+    run = 'layout floating'
