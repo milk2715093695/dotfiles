@@ -70,11 +70,12 @@ run_deploy_unit() {
 
     if [ -n "$availability_check" ] && ! deploy_unit_available "$availability_check"; then
         warn "没有 ${unit_name}，跳过 ${unit_name} 配置"
-        return "${DEPLOY_STAGE_SKIPPED_STATUS:-90}"
+        DEPLOY_UNIT_SKIPPED=true
+        return 0
     fi
 
     run_deploy_unit_phase "$link_stage" || return 1
-    run_deploy_unit_phase "$update_stage"
+    run_deploy_unit_phase "$update_stage" || return 1
 }
 
 # 以顶层部署阶段执行一个部署单元生命周期

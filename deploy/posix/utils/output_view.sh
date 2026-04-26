@@ -1,7 +1,7 @@
 # 部署输出视图初始化
 init_deploy_output_view() {
     DEPLOY_STAGE_SUMMARIES=()
-    DEPLOY_STAGE_SKIPPED_STATUS=90
+    DEPLOY_UNIT_SKIPPED=false
 }
 
 # 判断是否启用摘要重绘
@@ -75,8 +75,9 @@ run_deploy_stage() {
     "$@"
     local status=$?
 
-    if [ "$status" -eq "${DEPLOY_STAGE_SKIPPED_STATUS:-90}" ]; then
+    if [ "${DEPLOY_UNIT_SKIPPED:-false}" = true ]; then
         skip_deploy_stage "$stage_name"
+        DEPLOY_UNIT_SKIPPED=false
         return 0
     fi
 
