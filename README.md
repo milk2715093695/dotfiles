@@ -111,11 +111,14 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 ├── assets                  # README 截图资源
 ├── borders                 # macOS borders 配置
 ├── cava                    # cava 配置
-│   ├── macos               # macOS
-│   ├── termux              # Android-termux
-│   ├── ubuntu              # Ubuntu
-│   └── windows             # Windows
-├── deploy                  # 部署脚本（POSIX Bash + Windows PowerShell）
+│   ├── common              # cava 跨平台配置
+│   │   ├── themes          # cava 主题
+│   │   └── shaders         # cava 着色器
+│   ├── macos               # macOS 配置
+│   ├── termux              # Android-termux 配置
+│   ├── ubuntu              # Ubuntu 配置
+│   └── windows             # Windows 配置
+├── deploy                  # 部署脚本
 │   ├── macos.sh            # macOS
 │   ├── termux.sh           # Termux
 │   ├── ubuntu.sh           # Ubuntu 优先的 Linux 部署入口
@@ -179,7 +182,9 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 - `~/.config/starship.toml` -> `dotfiles/starship/starship.toml`
 - `$PROFILE` -> `dotfiles\pwsh\Microsoft.PowerShell_profile.ps1`，`~\.config\pwsh\` -> `dotfiles\pwsh\pwsh\`
 - `~/.config/yazi/` -> `dotfiles/yazi/` 或 `%AppData%\yazi\config\` -> `dotfiles\yazi\`
-- `~/.config/cava/` -> `dotfiles/cava/<对应系统>`
+- `~/.config/cava/config` -> `dotfiles/cava/<对应系统>/config`
+- `~/.config/cava/themes` -> `dotfiles/cava/common/themes`
+- `~/.config/cava/shaders` -> `dotfiles/cava/common/shaders`
 - `~/.config/nvim` -> `dotfiles/nvim/` 或 `%LocalAppData\nvim\` -> `dotfiles\nvim\`
 - `~/.config/tmux` -> `dotfiles/tmux/`
 - `~/.config/aerospace/` -> `dotfiles/aerospace/`

@@ -11,5 +11,7 @@ install_cava_runtime_dependencies() {
 # 链接 Cava 配置
 link_cava_config() {
     # Ubuntu 版 Cava 配置尚未调试完成，暂时复用 macOS 配置。
-    link_item "$HOME/.config/cava" "$REPO_ROOT/cava/macos"
+    link_item "$HOME/.config/cava/config"  "$REPO_ROOT/cava/macos/config"
+    link_item "$HOME/.config/cava/themes"  "$REPO_ROOT/cava/common/themes"
+    link_item "$HOME/.config/cava/shaders" "$REPO_ROOT/cava/common/shaders"
 }

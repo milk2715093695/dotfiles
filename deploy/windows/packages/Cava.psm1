@@ -22,9 +22,16 @@ function New-CavaConfigLink {
         [hashtable]$DeployContext
     )
 
-    $target = "$HOME\.config\cava"
-    $source = Join-Path $REPO_ROOT "cava\windows"
-    New-SymbolicLink -DeployContext $DeployContext -TargetPath $target -SourcePath $source
+    $configTarget  = Join-Path $HOME ".config\cava\config"
+    $configSource  = Join-Path $REPO_ROOT "cava\windows\config"
+    $themesTarget  = Join-Path $HOME ".config\cava\themes"
+    $themesSource  = Join-Path $REPO_ROOT "cava\common\themes"
+    $shadersTarget = Join-Path $HOME ".config\cava\shaders"
+    $shadersSource = Join-Path $REPO_ROOT "cava\common\shaders"
+
+    New-SymbolicLink -DeployContext $DeployContext -TargetPath $configTarget  -SourcePath $configSource
+    New-SymbolicLink -DeployContext $DeployContext -TargetPath $themesTarget  -SourcePath $themesSource
+    New-SymbolicLink -DeployContext $DeployContext -TargetPath $shadersTarget -SourcePath $shadersSource
 }
 
 Export-ModuleMember -Function Test-Cava, Install-Cava, New-CavaConfigLink
