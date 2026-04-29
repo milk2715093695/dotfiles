@@ -7,6 +7,7 @@ main() {
     local deploy_unit_availability_check
     local deploy_unit_prepare_stage
     local deploy_unit_install_stage
+    local deploy_unit_render_stage
     local deploy_unit_link_stage
     local deploy_unit_update_stage
 
@@ -16,6 +17,7 @@ main() {
     deploy_unit_availability_check="check_fonts_available"
     deploy_unit_prepare_stage=""
     deploy_unit_install_stage="install_fonts"
+    deploy_unit_render_stage=""
     deploy_unit_link_stage=""
     deploy_unit_update_stage=""
     run_deploy_unit_stage_from_vars
@@ -25,6 +27,7 @@ main() {
     deploy_unit_availability_check="check_wezterm_available"
     deploy_unit_prepare_stage=""
     deploy_unit_install_stage="install_wezterm"
+    deploy_unit_render_stage=""
     deploy_unit_link_stage="link_wezterm_config"
     deploy_unit_update_stage=""
     run_deploy_unit_stage_from_vars
@@ -34,6 +37,7 @@ main() {
     deploy_unit_availability_check="check_cli_tools_available"
     deploy_unit_prepare_stage=""
     deploy_unit_install_stage="install_cli_tools"
+    deploy_unit_render_stage=""
     deploy_unit_link_stage=""
     deploy_unit_update_stage=""
     run_deploy_unit_stage_from_vars
@@ -43,6 +47,7 @@ main() {
     deploy_unit_availability_check=""
     deploy_unit_prepare_stage=""
     deploy_unit_install_stage="install_zsh_plugins"
+    deploy_unit_render_stage=""
     deploy_unit_link_stage=""
     deploy_unit_update_stage="update_zsh_plugins"
     run_deploy_unit_stage_from_vars
@@ -52,6 +57,7 @@ main() {
     deploy_unit_availability_check="check_starship_available"
     deploy_unit_prepare_stage=""
     deploy_unit_install_stage="install_starship"
+    deploy_unit_render_stage="render_starship_config"
     deploy_unit_link_stage="link_starship_config"
     deploy_unit_update_stage=""
     run_deploy_unit_stage_from_vars
@@ -61,6 +67,7 @@ main() {
     deploy_unit_availability_check=""
     deploy_unit_prepare_stage=""
     deploy_unit_install_stage=""
+    deploy_unit_render_stage=""
     deploy_unit_link_stage="link_zsh_config"
     deploy_unit_update_stage=""
     run_deploy_unit_stage_from_vars
@@ -70,6 +77,7 @@ main() {
     deploy_unit_availability_check="check_yazi_available"
     deploy_unit_prepare_stage=""
     deploy_unit_install_stage="install_yazi_runtime_dependencies"
+    deploy_unit_render_stage="render_yazi_config"
     deploy_unit_link_stage="link_yazi_config"
     deploy_unit_update_stage="install_or_update_yazi_packages"
     run_deploy_unit_stage_from_vars
@@ -79,6 +87,7 @@ main() {
     deploy_unit_availability_check="check_cava_available"
     deploy_unit_prepare_stage=""
     deploy_unit_install_stage="install_cava_runtime_dependencies"
+    deploy_unit_render_stage="render_cava_config"
     deploy_unit_link_stage="link_cava_config"
     deploy_unit_update_stage=""
     run_deploy_unit_stage_from_vars
@@ -88,6 +97,7 @@ main() {
     deploy_unit_availability_check="check_lazyvim_runtime_available"
     deploy_unit_prepare_stage=""
     deploy_unit_install_stage="install_lazyvim_runtime_dependencies"
+    deploy_unit_render_stage=""
     deploy_unit_link_stage="link_lazyvim_config"
     deploy_unit_update_stage=""
     run_deploy_unit_stage_from_vars
@@ -97,6 +107,7 @@ main() {
     deploy_unit_availability_check="check_tmux_available"
     deploy_unit_prepare_stage=""
     deploy_unit_install_stage="install_tmux_runtime_dependencies"
+    deploy_unit_render_stage=""
     deploy_unit_link_stage="link_tmux_config"
     deploy_unit_update_stage=""
     run_deploy_unit_stage_from_vars

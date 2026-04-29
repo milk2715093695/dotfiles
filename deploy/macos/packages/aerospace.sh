@@ -23,8 +23,15 @@ install_aerospace_window_stack() {
     install_software_key window.aerospace
 }
 
+# 渲染 Aerospace 窗口管理栈配置
+render_aerospace_window_stack_config() {
+    step "渲染 Aerospace 配置"
+    mkdir -p "$REPO_ROOT/generated/aerospace"
+    cp "$REPO_ROOT/aerospace/aerospace.toml" "$REPO_ROOT/generated/aerospace/aerospace.toml"
+}
+
 # 链接 Aerospace 窗口管理栈配置
 link_aerospace_window_stack_config() {
-    link_item "$HOME/.config/aerospace" "$REPO_ROOT/aerospace"
+    link_item "$HOME/.config/aerospace" "$REPO_ROOT/generated/aerospace"
     link_item "$HOME/.config/borders" "$REPO_ROOT/borders"
 }

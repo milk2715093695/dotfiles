@@ -31,6 +31,9 @@ $RECYCLE.BIN/
 /AGENTS.md
 /CLAUDE.md
 
+# 配置渲染产物：纯文件型配置的合并输出
+/generated/
+
 # 私密配置：忽略本地内容，保留示例文件
 /zsh/zsh/secrets/*
 !/zsh/zsh/secrets/example.sh

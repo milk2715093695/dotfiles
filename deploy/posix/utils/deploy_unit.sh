@@ -40,8 +40,8 @@ require_deploy_unit_variable() {
 
 # 执行一个部署单元生命周期
 run_deploy_unit() {
-    if [ "$#" -ne 6 ]; then
-        error "run_deploy_unit 需要 6 个参数：name availability_check prepare install link update"
+    if [ "$#" -ne 7 ]; then
+        error "run_deploy_unit 需要 7 个参数：name availability_check prepare install render link update"
         return 1
     fi
 
@@ -49,12 +49,14 @@ run_deploy_unit() {
     local availability_check="$2"
     local prepare_stage="$3"
     local install_stage="$4"
-    local link_stage="$5"
-    local update_stage="$6"
+    local render_stage="$5"
+    local link_stage="$6"
+    local update_stage="$7"
 
     validate_deploy_unit_function "$unit_name" "availability check" "$availability_check" || return 1
     validate_deploy_unit_function "$unit_name" "依赖准备" "$prepare_stage" || return 1
     validate_deploy_unit_function "$unit_name" "安装" "$install_stage" || return 1
+    validate_deploy_unit_function "$unit_name" "渲染" "$render_stage" || return 1
     validate_deploy_unit_function "$unit_name" "链接" "$link_stage" || return 1
     validate_deploy_unit_function "$unit_name" "更新状态" "$update_stage" || return 1
 
@@ -74,14 +76,15 @@ run_deploy_unit() {
         return 0
     fi
 
+    run_deploy_unit_phase "$render_stage" || return 1
     run_deploy_unit_phase "$link_stage" || return 1
     run_deploy_unit_phase "$update_stage" || return 1
 }
 
 # 以顶层部署阶段执行一个部署单元生命周期
 run_deploy_unit_stage() {
-    if [ "$#" -ne 7 ]; then
-        error "run_deploy_unit_stage 需要 7 个参数：stage_name name availability_check prepare install link update"
+    if [ "$#" -ne 8 ]; then
+        error "run_deploy_unit_stage 需要 8 个参数：stage_name name availability_check prepare install render link update"
         return 1
     fi
 
@@ -98,6 +101,7 @@ run_deploy_unit_stage_from_vars() {
     require_deploy_unit_variable deploy_unit_availability_check || return 1
     require_deploy_unit_variable deploy_unit_prepare_stage || return 1
     require_deploy_unit_variable deploy_unit_install_stage || return 1
+    require_deploy_unit_variable deploy_unit_render_stage || return 1
     require_deploy_unit_variable deploy_unit_link_stage || return 1
     require_deploy_unit_variable deploy_unit_update_stage || return 1
 
@@ -107,6 +111,7 @@ run_deploy_unit_stage_from_vars() {
         "$deploy_unit_availability_check" \
         "$deploy_unit_prepare_stage" \
         "$deploy_unit_install_stage" \
+        "$deploy_unit_render_stage" \
         "$deploy_unit_link_stage" \
         "$deploy_unit_update_stage"
 }
