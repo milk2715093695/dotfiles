@@ -153,71 +153,9 @@ default-root-container-orientation = 'auto'
 
 
 # 窗口路由规则
-# files: 文件管理、系统工具等短任务窗口。
-[[on-window-detected]]
-    if.app-id = 'com.apple.ActivityMonitor'
-    run = ['layout floating', 'move-node-to-workspace files']
+# 精确规则通过 @dotfiles: 标记注入，此处只保留通用兜底。
 
-[[on-window-detected]]
-    if.app-id = 'com.apple.audio.AudioMIDISetup'
-    run = ['layout floating', 'move-node-to-workspace files']
-
-
-# web: 浏览器窗口默认平铺。
-[[on-window-detected]]
-    if.app-id = 'org.mozilla.firefox'
-    run = ['layout tiles', 'move-node-to-workspace web']
-
-
-# dev: 编辑器、IDE 和 Java GUI 工具默认堆叠，减少开发工作区横向拥挤。
-[[on-window-detected]]
-    if.app-id = 'com.microsoft.VSCode'
-    run = ['layout accordion', 'move-node-to-workspace dev']
-
-[[on-window-detected]]
-    if.app-id = 'net.java.openjdk.java'
-    run = ['layout accordion', 'move-node-to-workspace dev']
-
-[[on-window-detected]]
-    if.app-id = 'com.google.android.studio'
-    run = ['layout accordion', 'move-node-to-workspace dev']
-
-
-# net: 网络、代理和组网工具。
-[[on-window-detected]]
-    if.app-id = 'io.geph.GephGui'
-    run = ['layout floating', 'move-node-to-workspace net']
-
-[[on-window-detected]]
-    if.app-id = 'com.kkrainbow.easytier'
-    run = ['layout floating', 'move-node-to-workspace net']
-
-
-# game: 游戏启动器和游戏窗口默认堆叠。
-[[on-window-detected]]
-    if.app-id = 'sh.ppy.osu.lazer'
-    run = ['layout accordion', 'move-node-to-workspace game']
-
-
-# chat: 聊天工具集中放置。
-[[on-window-detected]]
-    if.app-id = 'com.tencent.xinWeChat'
-    run = ['layout accordion', 'move-node-to-workspace chat']
-
-
-# vm: 虚拟机和远程桌面。
-[[on-window-detected]]
-    if.app-id = 'com.parallels.desktop.console'
-    run = ['layout accordion', 'move-node-to-workspace vm']
-
-[[on-window-detected]]
-    if.app-id = 'com.carriez.rustdesk'
-    run = ['layout accordion', 'move-node-to-workspace vm']
-
-[[on-window-detected]]
-    if.app-id = 'com.youqu.todesk.mac'
-    run = ['layout accordion', 'move-node-to-workspace vm']
-
+# @dotfiles:app-rules.toml
 
 # 上下文窗口，不参与窗口路由规则。
 [[on-window-detected]]

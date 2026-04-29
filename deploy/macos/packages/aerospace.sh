@@ -26,8 +26,9 @@ install_aerospace_window_stack() {
 # 渲染 Aerospace 窗口管理栈配置
 render_aerospace_window_stack_config() {
     step "渲染 Aerospace 配置"
-    mkdir -p "$REPO_ROOT/generated/aerospace"
-    cp "$REPO_ROOT/aerospace/aerospace.toml" "$REPO_ROOT/generated/aerospace/aerospace.toml"
+    render_config_file "$REPO_ROOT/aerospace/aerospace.toml" \
+                       "$REPO_ROOT/aerospace/locals" \
+                       "$REPO_ROOT/generated/aerospace/aerospace.toml"
 }
 
 # 链接 Aerospace 窗口管理栈配置
