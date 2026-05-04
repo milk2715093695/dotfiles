@@ -153,9 +153,9 @@ default-root-container-orientation = 'auto'
 
 
 # 窗口路由规则
-# 精确规则通过 @dotfiles: 标记注入，此处只保留通用兜底。
+# 精确规则通过 @locals: 标记注入，此处只保留通用兜底。
 
-# @dotfiles:app-rules.toml
+# @locals:app-rules.toml
 
 # 上下文窗口，不参与窗口路由规则。
 [[on-window-detected]]

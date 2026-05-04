@@ -179,7 +179,7 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 
 对于**脚本型**配置（zsh、pwsh、wezterm、nvim、tmux），源目录直接链接到目标路径，本地覆盖通过各自 `locals/` 子目录在运行时加载。
 
-对于**纯文件型**配置（aerospace、cava、starship、yazi），部署时通过 render 阶段将基础配置与 `locals/` 本地差异合并，输出到统一的 `/generated/` 目录（gitignored），再链接到目标路径。基础配置中可使用 `# @dotfiles:<file>` 注释标记精确控制本地内容的插入位置。
+对于**纯文件型**配置（aerospace、cava、starship、yazi），部署时通过 render 阶段将基础配置与 `locals/` 本地差异合并，输出到统一的 `/generated/` 目录（gitignored），再链接到目标路径。基础配置中可使用 `# @locals:<file>` 注释标记精确控制本地内容的插入位置。
 
 例如：
 
@@ -201,7 +201,7 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 `locals/` 目录用于存放机器特定的本地覆盖配置，不进入 Git 追踪。它与 `generated/` 渲染目录配合：
 
 - **脚本型 config**（zsh、pwsh）：`locals/` 在运行时被 `source`/`dofile` 加载。例如 conda 使用懒加载——首次输入 `conda` 命令时，才会 source `~/.config/zsh/locals/conda.zsh`（或 Windows 下的 `~\.config\pwsh\Locals\Conda.ps1`）。用户需运行 `conda init zsh`（或 `conda init powershell`），然后将输出的初始化块放入对应文件即可。
-- **纯文件型 config**（aerospace、cava、starship、yazi）：基础配置中通过 `# @dotfiles:<file>` 标记预留插入点，部署 render 阶段将 locals 内容注入标记位置，输出到 `generated/`。
+- **纯文件型 config**（aerospace、cava、starship、yazi）：基础配置中通过 `# @locals:<file>` 标记预留插入点，部署 render 阶段将 locals 内容注入标记位置，输出到 `generated/`。
 
 `generated/` 是统一的渲染产物目录（gitignored），由 deploy 的 render 阶段自动生成。纯文件型配置的符号链接指向 `generated/` 而非源目录。
 
@@ -241,7 +241,7 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 已知约束：
 
 - Linux 部署目前是 Ubuntu 优先，不应理解为完整通用 Linux 部署器
-- Ubuntu 上的 Cava 仍暂时复用 `cava/macos`，这是因为 Ubuntu 的 `cava` 暂时还没有经过测试
+- Ubuntu 上的 Cava 使用独立的 `cava/ubuntu` 配置
 - Windows 的 `PSFzf` 当前只有检查占位，没有自动安装逻辑
 - 自动字体安装目前主要覆盖 macOS；Windows 只单独处理 JetBrains Mono
 - POSIX 在无交互 TTY 时无法确认安装类操作，这类步骤会倾向于跳过
