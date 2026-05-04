@@ -23,6 +23,7 @@ source "$SCRIPT_DIR/posix/packages/fonts.sh"                    # 安装字体
 source "$SCRIPT_DIR/posix/packages/cli_tools.sh"                # 常用命令行工具
 source "$SCRIPT_DIR/posix/packages/wezterm.sh"                  # WezTerm 配置
 source "$SCRIPT_DIR/posix/packages/zsh.sh"                      # zsh 配置
+source "$SCRIPT_DIR/posix/packages/zsh_plugins.sh"              # zsh 插件配置
 source "$SCRIPT_DIR/posix/packages/starship.sh"                 # Starship 安装
 source "$SCRIPT_DIR/posix/packages/yazi.sh"                     # Yazi 配置
 source "$SCRIPT_DIR/posix/packages/lazyvim.sh"                  # LazyVim 配置
@@ -30,7 +31,6 @@ source "$SCRIPT_DIR/posix/packages/tmux.sh"                     # tmux 配置
 source "$SCRIPT_DIR/posix/packages/platform.sh"                 # 平台扩展配置（占位）
 
 source "$SCRIPT_DIR/termux/packages/wezterm.sh"         # WezTerm 占位处理
-source "$SCRIPT_DIR/termux/packages/zsh_plugins.sh"     # zsh 插件配置
 source "$SCRIPT_DIR/termux/packages/cava.sh"            # Cava 配置
 
 source "$SCRIPT_DIR/posix/main.sh"  # 入口函数
