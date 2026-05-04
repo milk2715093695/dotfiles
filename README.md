@@ -150,13 +150,14 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 │   └── tmux.conf           # tmux 配置文件
 ├── wezterm                 # WezTerm 配置以及背景资源
 ├── yazi                    # yazi 配置
-│   ├── flavors             # yazi 主题目录（可再生成资源）
 │   ├── init.lua            # yazi lua 初始化脚本
-│   ├── keymap.toml         # yazi 快捷键配置
+│   ├── keymap.toml         # yazi 快捷键配置（tracked，SFTP 快捷键在 locals/ 中）
+│   ├── locals              # yazi 本地隐私配置（gitignored）
+│   │   ├── keymap-sftp.toml
+│   │   └── vfs.toml
 │   ├── package.toml        # yazi 插件配置
-│   ├── plugins             # yazi 插件目录（可再生成资源）
 │   ├── theme.toml          # yazi 主题配置
-│   ├── vfs.toml            # yazi 文件系统配置
+│   ├── vfs.toml            # yazi SFTP 服务定义标记文件（tracked，实际定义在 locals/ 中）
 │   └── yazi.toml           # yazi 主配置文件
 └── zsh                     # zsh 配置
     ├── .zshrc              # zsh 配置文件一级入口
@@ -188,9 +189,7 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 - `~/.config/starship.toml` -> `dotfiles/generated/starship/starship.toml`
 - `$PROFILE` -> `dotfiles\pwsh\Microsoft.PowerShell_profile.ps1`，`~\.config\pwsh\` -> `dotfiles\pwsh\pwsh\`
 - `~/.config/yazi/` -> `dotfiles/generated/yazi/` 或 `%AppData%\yazi\config\` -> `dotfiles\generated\yazi\`
-- `~/.config/cava/config` -> `dotfiles/generated/cava/config`
-- `~/.config/cava/themes` -> `dotfiles/generated/cava/themes`
-- `~/.config/cava/shaders` -> `dotfiles/generated/cava/shaders`
+- `~/.config/cava` -> `dotfiles/generated/cava`
 - `~/.config/nvim` -> `dotfiles/nvim/` 或 `%LocalAppData\nvim\` -> `dotfiles\nvim\`
 - `~/.config/tmux` -> `dotfiles/tmux/`
 - `~/.config/aerospace/` -> `dotfiles/generated/aerospace/`
@@ -242,7 +241,7 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 
 - Linux 部署目前是 Ubuntu 优先，不应理解为完整通用 Linux 部署器
 - Ubuntu 上的 Cava 使用独立的 `cava/ubuntu` 配置
-- Windows 的 `PSFzf` 当前只有检查占位，没有自动安装逻辑
+- Windows 的 `PSFzf` 部署单元已移除（fzf 可用性由 CLI Tools 覆盖）
 - 自动字体安装目前主要覆盖 macOS；Windows 只单独处理 JetBrains Mono
 - POSIX 在无交互 TTY 时无法确认安装类操作，这类步骤会倾向于跳过
 
@@ -363,9 +362,9 @@ chmod +x ./deploy/termux.sh
 - 重构
   - 配置文件拆分
     - [X] AeroSpace 配置拆分
-    - [ ] cava 配置拆分
+    - [X] cava 配置拆分
   - 部署脚本优化
-    - [ ] 消除重复代码
+    - [X] 消除重复代码
 
 ## 许可证
 
