@@ -1,5 +1,35 @@
 Set-StrictMode -Version Latest
 
+# 顶层导入：模块注册为嵌套模块，函数自然暴露
+@(
+    "$PSScriptRoot\utils\DeployContext.psm1"
+    "$PSScriptRoot\utils\Colors.psm1"
+    "$PSScriptRoot\utils\OutputView.psm1"
+    "$PSScriptRoot\utils\DeployUnit.psm1"
+    "$PSScriptRoot\utils\Prompt.psm1"
+    "$PSScriptRoot\utils\LinkAction.psm1"
+    "$PSScriptRoot\utils\Link.psm1"
+    "$PSScriptRoot\utils\GitHub.psm1"
+    "$PSScriptRoot\utils\Archive.psm1"
+    "$PSScriptRoot\utils\Shortcut.psm1"
+    "$PSScriptRoot\utils\SoftwareAvailability.psm1"
+    "$PSScriptRoot\utils\PackageMapping.psm1"
+    "$PSScriptRoot\utils\PackageManagerSelection.psm1"
+    "$PSScriptRoot\utils\Install.psm1"
+    "$PSScriptRoot\utils\RenderConfig.psm1"
+    "$PSScriptRoot\utils\PSGallery.psm1"
+    "$PSScriptRoot\packages\AltSnap.psm1"
+    "$PSScriptRoot\packages\JetBrains.psm1"
+    "$PSScriptRoot\packages\WezTerm.psm1"
+    "$PSScriptRoot\packages\PWSH.psm1"
+    "$PSScriptRoot\packages\CliTools.psm1"
+    "$PSScriptRoot\packages\Starship.psm1"
+    "$PSScriptRoot\packages\Yazi.psm1"
+    "$PSScriptRoot\packages\Cava.psm1"
+    "$PSScriptRoot\packages\LazyVim.psm1"
+    "$PSScriptRoot\Main.psm1"
+) | ForEach-Object { Import-Module $_ -Force }
+
 # 打印部署脚本帮助
 function Show-DeployUsage {
 @"
@@ -79,10 +109,6 @@ function Start-WindowsDeploy {
         return
     }
 
-    Import-WindowsDeployModules -ScriptDir $ScriptDir
-
     $deployContext = New-DeployContext -AutoInstall $YesInstall -ConfigMode $ConfigMode
     Main -DeployContext $deployContext
 }
-
-Export-ModuleMember -Function Show-DeployUsage, Import-WindowsDeployModules, Start-WindowsDeploy
