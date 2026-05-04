@@ -19,7 +19,5 @@ render_cava_config() {
 
 # 链接 Cava 配置
 link_cava_config() {
-    link_item "$HOME/.config/cava/config"  "$REPO_ROOT/generated/cava/config"
-    link_item "$HOME/.config/cava/themes"  "$REPO_ROOT/generated/cava/themes"
-    link_item "$HOME/.config/cava/shaders" "$REPO_ROOT/generated/cava/shaders"
+    link_item "$HOME/.config/cava" "$REPO_ROOT/generated/cava"
 }
