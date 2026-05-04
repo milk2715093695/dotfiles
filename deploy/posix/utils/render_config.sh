@@ -16,7 +16,6 @@
 # 行为：
 #   标记存在 + locals 文件存在   → 标记行被 locals 文件内容替换
 #   标记存在 + locals 文件不存在 → 标记行被删除（空操作）
-#   locals 文件存在 + 标记不存在 → 输出 warning
 render_config_file() {
     local source="$1"
     local locals_dir="$2"
@@ -38,7 +37,6 @@ render_config_file() {
     fi
 
     # 逐行扫描，处理标记
-    local referenced=" "
     local line
 
     : > "$output"
@@ -50,23 +48,10 @@ render_config_file() {
 
             if [ -f "$full_path" ]; then
                 cat "$full_path" >> "$output"
-                referenced="${referenced}${ref_file} "
             fi
             # locals 文件不存在：删除标记行（不输出任何内容）
         else
             printf '%s\n' "$line" >> "$output"
         fi
     done < "$source"
-
-    # 检测孤立的 locals 文件（存在但未被任何标记引用）
-    if [ -d "$locals_dir" ]; then
-        for local_file in "$locals_dir"/*; do
-            [ -f "$local_file" ] || continue
-            local base="${local_file##*/}"
-            case "$referenced" in
-                *" $base "*) ;;
-                *) warn "locals 文件未被任何 @locals: 标记引用：${locals_dir}/${base}" ;;
-            esac
-        done
-    fi
 }

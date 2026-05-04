@@ -18,7 +18,6 @@ Set-StrictMode -Version Latest
 # 行为：
 #   标记存在 + locals 文件存在   → 标记行被 locals 文件内容替换
 #   标记存在 + locals 文件不存在 → 标记行被删除（空操作）
-#   locals 文件存在 + 标记不存在 → 输出 warning
 function Invoke-RenderConfigFile {
     param(
         [Parameter(Mandatory)]
@@ -52,7 +51,6 @@ function Invoke-RenderConfigFile {
 
     # 逐行扫描，处理标记
     $markerRegex = "^\s*${escapedComment}\s*@locals:(.+)\s*$"
-    $referenced = @{}
     $outputLines = [System.Collections.Generic.List[string]]::new()
 
     $sourceLines = Get-Content $Source
@@ -64,7 +62,6 @@ function Invoke-RenderConfigFile {
             if (Test-Path $fullPath -PathType Leaf) {
                 $localContent = Get-Content $fullPath -Raw
                 $outputLines.Add($localContent)
-                $referenced[$refFile] = $true
             }
             # locals 文件不存在：删除标记行
         } else {
@@ -74,15 +71,6 @@ function Invoke-RenderConfigFile {
 
     $outputText = $outputLines -join [Environment]::NewLine
     Set-Content -Path $Output -Value $outputText -NoNewline
-
-    # 检测孤立的 locals 文件
-    if (Test-Path $LocalsDir -PathType Container) {
-        Get-ChildItem $LocalsDir -File | ForEach-Object {
-            if (-not $referenced.ContainsKey($_.Name)) {
-                Write-WARNING "locals 文件未被任何 @locals: 标记引用：$($_.FullName)"
-            }
-        }
-    }
 }
 
 Export-ModuleMember -Function Invoke-RenderConfigFile
