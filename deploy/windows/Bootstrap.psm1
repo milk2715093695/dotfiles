@@ -45,7 +45,6 @@ function Import-WindowsDeployModules {
         "$ScriptDir\windows\packages\JetBrains.psm1"
         "$ScriptDir\windows\packages\WezTerm.psm1"
         "$ScriptDir\windows\packages\PWSH.psm1"
-        "$ScriptDir\windows\packages\PSFzf.psm1"
         "$ScriptDir\windows\packages\CliTools.psm1"
         "$ScriptDir\windows\packages\Starship.psm1"
         "$ScriptDir\windows\packages\Yazi.psm1"

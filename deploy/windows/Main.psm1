@@ -82,15 +82,6 @@ function Main {
             Update = $null
         }
         @{
-            StageName = "配置 PSFzf"
-            Name = "PSFzf"
-            AvailabilityCheck = ({ Test-PSFzf }).GetNewClosure()
-            Prepare = $null
-            Install = $null
-            Link = $null
-            Update = $null
-        }
-        @{
             StageName = "配置 PowerShell"
             Name = "PowerShell"
             AvailabilityCheck = $null
