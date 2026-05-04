@@ -15,6 +15,35 @@ function Install-YaziRuntimeDependencies {
     Install-SoftwareKey -DeployContext $DeployContext -Key "filemanager.yazi"
 }
 
+# 渲染 Yazi 配置
+function New-YaziRenderConfig {
+    Write-STEP "渲染 Yazi 配置"
+
+    $generatedDir = Join-Path $REPO_ROOT "generated\yazi"
+    New-Item -ItemType Directory -Path $generatedDir -Force | Out-Null
+
+    $localsDir = Join-Path $REPO_ROOT "yazi\locals"
+
+    Invoke-RenderConfigFile `
+        -Source (Join-Path $REPO_ROOT "yazi\yazi.toml") `
+        -LocalsDir $localsDir `
+        -Output (Join-Path $generatedDir "yazi.toml")
+
+    Invoke-RenderConfigFile `
+        -Source (Join-Path $REPO_ROOT "yazi\keymap.toml") `
+        -LocalsDir $localsDir `
+        -Output (Join-Path $generatedDir "keymap.toml")
+
+    Invoke-RenderConfigFile `
+        -Source (Join-Path $REPO_ROOT "yazi\vfs.toml") `
+        -LocalsDir $localsDir `
+        -Output (Join-Path $generatedDir "vfs.toml")
+
+    Copy-Item (Join-Path $REPO_ROOT "yazi\theme.toml") (Join-Path $generatedDir "theme.toml") -Force
+    Copy-Item (Join-Path $REPO_ROOT "yazi\package.toml") (Join-Path $generatedDir "package.toml") -Force
+    Copy-Item (Join-Path $REPO_ROOT "yazi\init.lua") (Join-Path $generatedDir "init.lua") -Force
+}
+
 # 创建 Yazi 配置链接
 function New-YaziConfigLink {
     param(
@@ -23,7 +52,7 @@ function New-YaziConfigLink {
     )
 
     $target = Join-Path $env:AppData "yazi\config"
-    $source = Join-Path $REPO_ROOT "yazi"
+    $source = Join-Path $REPO_ROOT "generated\yazi"
     New-SymbolicLink -DeployContext $DeployContext -TargetPath $target -SourcePath $source
 }
 
@@ -42,4 +71,4 @@ function Install-OrUpdateYaziPackages {
     }
 }
 
-Export-ModuleMember -Function Test-Yazi, Install-YaziRuntimeDependencies, New-YaziConfigLink, Install-OrUpdateYaziPackages
+Export-ModuleMember -Function Test-Yazi, Install-YaziRuntimeDependencies, New-YaziRenderConfig, New-YaziConfigLink, Install-OrUpdateYaziPackages

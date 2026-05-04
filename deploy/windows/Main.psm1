@@ -33,6 +33,7 @@ function Main {
             AvailabilityCheck = $null
             Prepare = $null
             Install = ({ Install-AltSnap -DeployContext $DeployContext }).GetNewClosure()
+            Render = $null
             Link = $null
             Update = $null
         }
@@ -42,6 +43,7 @@ function Main {
             AvailabilityCheck = ({ Test-UserJetBrainsMonoFont }).GetNewClosure()
             Prepare = $null
             Install = ({ Install-JetBrainsMonoUserFont -DeployContext $DeployContext }).GetNewClosure()
+            Render = $null
             Link = $null
             Update = $null
         }
@@ -51,6 +53,7 @@ function Main {
             AvailabilityCheck = ({ Test-WezTerm }).GetNewClosure()
             Prepare = $null
             Install = ({ Install-WezTermPackage -DeployContext $DeployContext }).GetNewClosure()
+            Render = $null
             Link = ({ New-WezTermConfigLink -DeployContext $DeployContext }).GetNewClosure()
             Update = $null
         }
@@ -60,6 +63,7 @@ function Main {
             AvailabilityCheck = ({ Test-PSGalleryRepository }).GetNewClosure()
             Prepare = $null
             Install = ({ Register-PSGalleryRepository -DeployContext $DeployContext }).GetNewClosure()
+            Render = $null
             Link = $null
             Update = $null
         }
@@ -69,6 +73,7 @@ function Main {
             AvailabilityCheck = ({ Test-CliToolSet }).GetNewClosure()
             Prepare = $null
             Install = ({ Install-CliToolSet -DeployContext $DeployContext }).GetNewClosure()
+            Render = $null
             Link = $null
             Update = $null
         }
@@ -78,6 +83,7 @@ function Main {
             AvailabilityCheck = ({ Test-Starship }).GetNewClosure()
             Prepare = $null
             Install = ({ Install-Starship -DeployContext $DeployContext }).GetNewClosure()
+            Render = ({ New-StarshipRenderConfig }).GetNewClosure()
             Link = ({ New-StarshipConfigLink -DeployContext $DeployContext }).GetNewClosure()
             Update = $null
         }
@@ -87,6 +93,7 @@ function Main {
             AvailabilityCheck = $null
             Prepare = ({ Set-PwshOpenSshDefaultShell }).GetNewClosure()
             Install = $null
+            Render = $null
             Link = ({ New-PwshConfigLink -DeployContext $DeployContext }).GetNewClosure()
             Update = $null
         }
@@ -96,6 +103,7 @@ function Main {
             AvailabilityCheck = ({ Test-Yazi }).GetNewClosure()
             Prepare = $null
             Install = ({ Install-YaziRuntimeDependencies -DeployContext $DeployContext }).GetNewClosure()
+            Render = ({ New-YaziRenderConfig }).GetNewClosure()
             Link = ({ New-YaziConfigLink -DeployContext $DeployContext }).GetNewClosure()
             Update = ({ Install-OrUpdateYaziPackages -DeployContext $DeployContext }).GetNewClosure()
         }
@@ -105,6 +113,7 @@ function Main {
             AvailabilityCheck = ({ Test-Cava }).GetNewClosure()
             Prepare = $null
             Install = ({ Install-Cava -DeployContext $DeployContext }).GetNewClosure()
+            Render = ({ New-CavaRenderConfig }).GetNewClosure()
             Link = ({ New-CavaConfigLink -DeployContext $DeployContext }).GetNewClosure()
             Update = $null
         }
@@ -114,6 +123,7 @@ function Main {
             AvailabilityCheck = ({ Test-LazyVimRuntime }).GetNewClosure()
             Prepare = $null
             Install = ({ Install-LazyVimRuntimeDependencies -DeployContext $DeployContext }).GetNewClosure()
+            Render = $null
             Link = ({ New-LazyVimConfigLink -DeployContext $DeployContext }).GetNewClosure()
             Update = $null
         }

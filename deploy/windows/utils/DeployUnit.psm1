@@ -6,6 +6,7 @@ $script:DeployUnitSlots = @(
     "AvailabilityCheck",
     "Prepare",
     "Install",
+    "Render",
     "Link",
     "Update"
 )
@@ -29,7 +30,7 @@ function Test-DeployUnitManifest {
         }
     }
 
-    foreach ($slot in @("AvailabilityCheck", "Prepare", "Install", "Link", "Update")) {
+    foreach ($slot in @("AvailabilityCheck", "Prepare", "Install", "Render", "Link", "Update")) {
         $value = $Unit[$slot]
         if ($null -ne $value -and $value -isnot [scriptblock]) {
             throw "$($Unit.Name) 的 $slot 阶段必须是 scriptblock 或 null"
@@ -90,6 +91,7 @@ function Invoke-DeployUnit {
         throw (New-DeployStageSkippedException)
     }
 
+    Invoke-DeployUnitPhase -ScriptBlock $Unit.Render
     Invoke-DeployUnitPhase -ScriptBlock $Unit.Link
     Invoke-DeployUnitPhase -ScriptBlock $Unit.Update
 }
