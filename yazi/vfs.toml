@@ -1,11 +1,4 @@
-[services.my-oplus]
-type     = "sftp"
-host     = "10.66.0.20"
-user     = "u0_a346"
-port     = 8022
+# SFTP service definitions are local (host IPs, ports, usernames are machine-specific).
+# Add your services in yazi/locals/vfs.toml
 
-[services.my-windows]
-type     = "sftp"
-host     = "10.66.0.11"
-user     = "mac"
-port     = 2358
+# @locals:vfs.toml

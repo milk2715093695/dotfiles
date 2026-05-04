@@ -47,6 +47,9 @@ $RECYCLE.BIN/
 # 私密配置：忽略 Aerospace 本地应用规则
 /aerospace/locals/*
 
+# 私密配置：忽略 Yazi 本地覆盖配置
+/yazi/locals/
+
 # 可再生成资源：yazi 插件和主题
 /yazi/plugins/
 /yazi/flavors/
