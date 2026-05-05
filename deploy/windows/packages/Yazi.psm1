@@ -22,21 +22,16 @@ function New-YaziRenderConfig {
     $generatedDir = Join-Path $REPO_ROOT "generated\yazi"
     New-Item -ItemType Directory -Path $generatedDir -Force | Out-Null
 
-    $localsDir = Join-Path $REPO_ROOT "yazi\locals"
-
     Invoke-RenderConfigFile `
         -Source (Join-Path $REPO_ROOT "yazi\yazi.toml") `
-        -LocalsDir $localsDir `
         -Output (Join-Path $generatedDir "yazi.toml")
 
     Invoke-RenderConfigFile `
         -Source (Join-Path $REPO_ROOT "yazi\keymap.toml") `
-        -LocalsDir $localsDir `
         -Output (Join-Path $generatedDir "keymap.toml")
 
     Invoke-RenderConfigFile `
         -Source (Join-Path $REPO_ROOT "yazi\vfs.toml") `
-        -LocalsDir $localsDir `
         -Output (Join-Path $generatedDir "vfs.toml")
 
     Copy-Item (Join-Path $REPO_ROOT "yazi\theme.toml") (Join-Path $generatedDir "theme.toml") -Force

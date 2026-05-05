@@ -14,15 +14,12 @@ render_yazi_config() {
     mkdir -p "$REPO_ROOT/generated/yazi"
 
     render_config_file "$REPO_ROOT/yazi/yazi.toml" \
-                       "$REPO_ROOT/yazi/locals" \
                        "$REPO_ROOT/generated/yazi/yazi.toml"
 
     render_config_file "$REPO_ROOT/yazi/keymap.toml" \
-                       "$REPO_ROOT/yazi/locals" \
                        "$REPO_ROOT/generated/yazi/keymap.toml"
 
     render_config_file "$REPO_ROOT/yazi/vfs.toml" \
-                       "$REPO_ROOT/yazi/locals" \
                        "$REPO_ROOT/generated/yazi/vfs.toml"
 
     cp "$REPO_ROOT/yazi/theme.toml" "$REPO_ROOT/generated/yazi/theme.toml"

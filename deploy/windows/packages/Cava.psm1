@@ -22,11 +22,8 @@ function New-CavaRenderConfig {
     $generatedDir = Join-Path $REPO_ROOT "generated\cava"
     New-Item -ItemType Directory -Path $generatedDir -Force | Out-Null
 
-    $localsDir = Join-Path $REPO_ROOT "cava\windows\locals"
-
     Invoke-RenderConfigFile `
         -Source (Join-Path $REPO_ROOT "cava\windows\config") `
-        -LocalsDir $localsDir `
         -Output (Join-Path $generatedDir "config")
 
     Copy-Item (Join-Path $REPO_ROOT "cava\common\themes") (Join-Path $generatedDir "themes") -Recurse -Force

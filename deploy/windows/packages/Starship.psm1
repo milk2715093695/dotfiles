@@ -22,11 +22,8 @@ function New-StarshipRenderConfig {
     $generatedDir = Join-Path $REPO_ROOT "generated\starship"
     New-Item -ItemType Directory -Path $generatedDir -Force | Out-Null
 
-    $localsDir = Join-Path $REPO_ROOT "starship\locals"
-
     Invoke-RenderConfigFile `
         -Source (Join-Path $REPO_ROOT "starship\starship.toml") `
-        -LocalsDir $localsDir `
         -Output (Join-Path $generatedDir "starship.toml")
 }
 
