@@ -354,11 +354,13 @@ chmod +x ./deploy/termux.sh
   - [X] nvim 配置
   - [X] AeroSpace 配置
   - [X] Sketchybar 配置
+  - [ ] fastfetch 配置
 - 部署
   - [X] Ubuntu 部署脚本
   - [X] macOS 部署脚本
   - [X] Windows 部署脚本
   - [X] Android-termux 部署脚本
+  - [ ] Sketchybar 主部署集成
 - 重构
   - 配置文件拆分
     - [X] AeroSpace 配置拆分
