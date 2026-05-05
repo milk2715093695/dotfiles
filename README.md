@@ -123,13 +123,12 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 ├── assets                  # README 截图资源
 ├── borders                 # macOS borders 配置
 ├── cava                    # cava 配置
-│   ├── common              # cava 跨平台配置
-│   │   ├── themes          # cava 主题
-│   │   └── shaders         # cava 着色器
-│   ├── macos               # macOS 配置
-│   ├── termux              # Android-termux 配置
-│   ├── ubuntu              # Ubuntu 配置
-│   └── windows             # Windows 配置
+│   ├── base.config         # 所有平台共享配置
+│   ├── common              # cava 跨平台资源
+│   ├── macos               # macOS 平台差异（input.conf）
+│   ├── termux              # Android-termux 平台差异（input.conf）
+│   ├── ubuntu              # Ubuntu 平台差异（input.conf）
+│   └── windows             # Windows 平台差异（input.conf）
 ├── deploy                  # 部署脚本
 │   ├── macos.sh            # macOS
 │   ├── termux.sh           # Termux
@@ -192,7 +191,7 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 
 对于**脚本型**配置（zsh、pwsh、wezterm、nvim、tmux），源目录直接链接到目标路径，本地覆盖通过各自 `locals/` 子目录在运行时加载。
 
-对于**纯文件型**配置（aerospace、cava、starship、yazi），部署时通过 render 阶段将基础配置与 `locals/` 本地差异合并，输出到统一的 `/generated/` 目录（gitignored），再链接到目标路径。基础配置中可使用 `# @locals:<file>` 注释标记精确控制本地内容的插入位置。
+对于**纯文件型**配置（aerospace、cava、starship、yazi），部署时通过 render 阶段将基础配置与 `locals/` 本地差异合并，输出到统一的 `/generated/` 目录（gitignored），再链接到目标路径。基础配置中可使用 `# @platform:<file>` 或 `# @locals:<file>` 注释标记精确控制内容插入位置。
 
 例如：
 
@@ -228,7 +227,7 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 
 - `prepare -> install（若缺失）-> recheck availability -> render -> link -> update`
 - 软件安装与配置链接分离；软件仍不可用时，会跳过后续 render/link/update，而不是强行继续
-- render 阶段负责将基础配置与 `locals/` 本地差异合并，输出到 `generated/`；无标记时走快路径（直接复制）
+- render 阶段负责将基础配置与平台差异（`@platform:`）和本地差异（`@locals:`）合并，输出到 `generated/`；无标记时走快路径（直接复制）
 - 配置部署以符号链接为主，冲突处理统一由 `--config-mode` / `-ConfigMode` 控制
 
 部署脚本会：
@@ -240,9 +239,9 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 
 当前实际覆盖范围：
 
-- macOS：字体、WezTerm、CLI 工具、zsh 插件、Starship、zsh、Yazi、Cava、LazyVim、tmux，以及 Aerospace + borders 窗口管理栈
+- macOS：字体、WezTerm、CLI 工具、zsh 插件、Starship、zsh、Yazi、Cava、LazyVim、fastfetch、tmux，以及 Aerospace + borders 窗口管理栈
 - Ubuntu / Linux：共享 POSIX 主流程，入口脚本以 Ubuntu 为主；包管理器优先级是 `apt -> dnf -> pacman -> brew`，实测除了字体安装被跳过以外其余在 Ubuntu 均可以成功
-- Windows：AltSnap、JetBrains Mono、WezTerm、PSGallery、CLI 工具、Starship、PowerShell、Yazi、Cava、LazyVim
+- Windows：AltSnap、JetBrains Mono、WezTerm、PSGallery、CLI 工具、Starship、PowerShell、Yazi、Cava、LazyVim、fastfetch
 - Termux：共享 POSIX 主流程，但 WezTerm 会被显式跳过，考虑到手机上使用 Termux 作为终端。
 
 补充说明：
