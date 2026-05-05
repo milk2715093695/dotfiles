@@ -2,7 +2,7 @@
 install_zsh_plugins() {
     case "$DEPLOY_PLATFORM" in
         macos)   install_package "$PACKAGE_MANAGER" zsh-autosuggestions zsh-syntax-highlighting zsh-completions ;;
-        linux)   install_package "$PACKAGE_MANAGER" zsh-autosuggestions zsh-syntax-highlighting ;;
+        ubuntu)  install_package "$PACKAGE_MANAGER" zsh-autosuggestions zsh-syntax-highlighting ;;
         termux)  install_package "$PACKAGE_MANAGER" zsh-completions ;;
     esac
 }

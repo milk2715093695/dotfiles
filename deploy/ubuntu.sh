@@ -4,7 +4,7 @@ set -euo pipefail   # 失败即退出
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"  # 脚本目录
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"                   # 仓库目录
-DEPLOY_PLATFORM="linux"                                     # 部署平台
+DEPLOY_PLATFORM="ubuntu"                                    # 部署平台
 PACKAGE_MANAGER="apt"                                       # 传统安装默认包管理器
 
 source "$SCRIPT_DIR/posix/utils/colors.sh"                      # 颜色变量

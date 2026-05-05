@@ -2,7 +2,7 @@
 get_package_manager_priority() {
     case "${DEPLOY_PLATFORM:-}" in
         macos) printf '%s\n' "brew" ;;
-        linux) printf '%s\n' "apt" "dnf" "pacman" "brew" ;;
+        ubuntu) printf '%s\n' "apt" "dnf" "pacman" "brew" ;;
         termux) printf '%s\n' "pkg" ;;
         *)
             if [ -n "${PACKAGE_MANAGER:-}" ]; then
