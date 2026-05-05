@@ -127,6 +127,16 @@ function Main {
             Link = ({ New-LazyVimConfigLink -DeployContext $DeployContext }).GetNewClosure()
             Update = $null
         }
+        @{
+            StageName = "配置 fastfetch"
+            Name = "fastfetch"
+            AvailabilityCheck = ({ Test-Fastfetch }).GetNewClosure()
+            Prepare = $null
+            Install = ({ Install-Fastfetch -DeployContext $DeployContext }).GetNewClosure()
+            Render = $null
+            Link = ({ New-FastfetchConfigLink -DeployContext $DeployContext }).GetNewClosure()
+            Update = $null
+        }
     )
 
     foreach ($unit in $deployUnits) {

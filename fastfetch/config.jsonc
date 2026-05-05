@@ -1,0 +1,77 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
+
+  "logo": {
+    "type": "auto",
+    "padding": {
+      "top": 0,
+      "left": 0,
+      "right": 4
+    },
+    "printRemaining": true,
+    "recache": false,
+    "position": "left",
+    "chafa": {
+      "fgOnly": false,
+      "symbols": "block+border+space-wide-inverted"
+    }
+  },
+
+  "display": {
+    "stat": false,
+    "pipe": false,
+    "showErrors": true,
+    "disableLinewrap": true,
+    "hideCursor": true,
+    "separator": ": ",
+    "key": {
+      "width": 10,
+      "type": "string",
+      "paddingLeft": 0
+    },
+    "brightColor": true,
+    "duration": {
+      "abbreviation": true,
+      "spaceBeforeUnit": "never"
+    },
+    "size": {
+      "binaryPrefix": "iec",
+      "ndigits": 1,
+      "spaceBeforeUnit": "default"
+    },
+    "percent": {
+      "type": [
+        "num",
+        "num-color",
+        "bar",
+        "bar-monochrome"
+      ],
+      "spaceBeforeUnit": "default"
+    }
+  },
+
+  "modules": [
+    { "type": "os", "key": "OS", "keyColor": "red" },
+    { "type": "kernel", "key": " ├  ", "keyColor": "red" },
+    { "type": "packages", "key": " ├ 󰏖 ", "keyColor": "red" },
+    { "type": "shell", "key": " └  ", "keyColor": "red" },
+    "break",
+
+    { "type": "wm", "key": "WM", "keyColor": "green" },
+    { "type": "wmtheme", "key": " ├ 󰉼 ", "keyColor": "green" },
+    { "type": "terminal", "key": " ├  ", "keyColor": "green" },
+    { "type": "terminalfont", "key": " └  ", "keyColor": "green" },
+    "break",
+
+    { "type": "host", "key": "PC", "keyColor": "yellow" },
+    { "type": "uptime", "key": " ├  ", "keyColor": "yellow" },
+    { "type": "cpu", "key": " ├  ", "keyColor": "yellow" },
+    { "type": "gpu", "key": " ├ 󰢮 ", "keyColor": "yellow" },
+    { "type": "memory", "key": " ├  ", "keyColor": "yellow", "format": "{percentage-bar} {used} / {total}" },
+    { "type": "disk", "key": " ├ 󰋊 ", "keyColor": "yellow", "format": "{size-percentage-bar} {size-used} / {size-total}" },
+    { "type": "display", "key": " └  ", "keyColor": "yellow" },
+    "break",
+
+    { "type": "colors", "symbol": "circle" }
+  ]
+}

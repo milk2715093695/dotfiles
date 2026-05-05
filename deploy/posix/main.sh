@@ -114,5 +114,15 @@ main() {
 
     run_deploy_stage "配置平台扩展行为" run_platform_deploy_units
 
+    deploy_unit_stage_name="配置 fastfetch"
+    deploy_unit_name="fastfetch"
+    deploy_unit_availability_check="check_fastfetch_available"
+    deploy_unit_prepare_stage=""
+    deploy_unit_install_stage="install_fastfetch"
+    deploy_unit_render_stage=""
+    deploy_unit_link_stage="link_fastfetch_config"
+    deploy_unit_update_stage=""
+    run_deploy_unit_stage_from_vars
+
     success "部署完成"
 }

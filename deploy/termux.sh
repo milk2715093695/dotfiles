@@ -29,9 +29,10 @@ source "$SCRIPT_DIR/posix/packages/yazi.sh"                     # Yazi 配置
 source "$SCRIPT_DIR/posix/packages/lazyvim.sh"                  # LazyVim 配置
 source "$SCRIPT_DIR/posix/packages/tmux.sh"                     # tmux 配置
 source "$SCRIPT_DIR/posix/packages/platform.sh"                 # 平台扩展配置（占位）
+source "$SCRIPT_DIR/posix/packages/cava.sh"                     # Cava 配置
+source "$SCRIPT_DIR/posix/packages/fastfetch.sh"                # fastfetch 配置
 
 source "$SCRIPT_DIR/termux/packages/wezterm.sh"         # WezTerm 占位处理
-source "$SCRIPT_DIR/posix/packages/cava.sh"                        # Cava 配置
 
 source "$SCRIPT_DIR/posix/main.sh"  # 入口函数
 

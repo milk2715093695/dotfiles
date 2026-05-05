@@ -95,6 +95,16 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 
 
 <details>
+<summary>fastfetch</summary>
+
+为 fastfetch 配置了系统信息展示布局：
+
+![fastfetch 配置效果](assets/screenshots/fastfetch.webp)
+
+</details>
+
+
+<details>
 <summary>Yazi</summary>
 
 为 yazi 配置了主题以及常用插件：
@@ -125,6 +135,8 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 │   ├── termux.sh           # Termux
 │   ├── ubuntu.sh           # Ubuntu 优先的 Linux 部署入口
 │   └── windows.ps1         # Windows
+├── fastfetch                # fastfetch 配置
+│   └── config.jsonc         # fastfetch 系统信息展示配置
 ├── generated/              # 渲染产物目录（gitignored）：部署时由 render 阶段生成
 ├── LICENSE
 ├── nvim                    # 基于 LazyVim 的轻量定制配置
@@ -194,6 +206,7 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 - `~/.config/tmux` -> `dotfiles/tmux/`
 - `~/.config/aerospace/` -> `dotfiles/generated/aerospace/`
 - `~/.config/borders/` -> `dotfiles/borders/`
+- `~/.config/fastfetch/` -> `dotfiles/fastfetch/`
 
 其中 `sketchybar/` 当前作为独立维护的子模块保留，尚未纳入主部署脚本，使用时请参考子模块内的 README 单独安装。
 
@@ -354,7 +367,7 @@ chmod +x ./deploy/termux.sh
   - [X] nvim 配置
   - [X] AeroSpace 配置
   - [X] Sketchybar 配置
-  - [ ] fastfetch 配置
+  - [X] fastfetch 配置
 - 部署
   - [X] Ubuntu 部署脚本
   - [X] macOS 部署脚本

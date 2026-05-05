@@ -13,6 +13,9 @@ $script:PackageSpecsByManagerAndKey = @{
     "scoop:shell.starship" = @(
         @{ Kind = "package"; Name = "starship" }
     )
+    "scoop:shell.fastfetch" = @(
+        @{ Kind = "package"; Name = "fastfetch" }
+    )
     "scoop:editor.neovim" = @(
         @{ Kind = "package"; Name = "neovim" }
         @{ Kind = "package"; Name = "python" }
@@ -50,6 +53,9 @@ $script:PackageSpecsByManagerAndKey = @{
 
     "winget:shell.starship" = @(
         @{ Kind = "package"; Name = "Starship.Starship" }
+    )
+    "winget:shell.fastfetch" = @(
+        @{ Kind = "package"; Name = "fastfetch" }
     )
     "winget:editor.neovim" = @(
         @{ Kind = "package"; Name = "Neovim.Neovim" }

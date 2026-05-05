@@ -8,6 +8,7 @@ get_package_install_specs() {
         brew:cli.fzf) printf '%s\n' "package|fzf" ;;
         brew:cli.zoxide) printf '%s\n' "package|zoxide" ;;
         brew:shell.starship) printf '%s\n' "package|starship" ;;
+        brew:shell.fastfetch) printf '%s\n' "package|fastfetch" ;;
         brew:editor.neovim)
             printf '%s\n' \
                 "package|neovim" \
@@ -81,6 +82,12 @@ get_package_install_specs() {
                 "package|curl|Starship 官方安装脚本下载工具" \
                 "installer|starship-official"
             ;;
+        apt:shell.fastfetch)
+            printf '%s\n' \
+                "package|software-properties-common|PPA 管理工具" \
+                "apt-repo|fastfetch-ppa" \
+                "package|fastfetch|fastfetch 系统信息工具"
+            ;;
         apt:editor.neovim)
             printf '%s\n' \
                 "package|neovim" \
@@ -125,6 +132,7 @@ get_package_install_specs() {
         dnf:cli.fd) printf '%s\n' "package|fd-find" ;;
         dnf:cli.fzf) printf '%s\n' "package|fzf" ;;
         dnf:cli.zoxide) printf '%s\n' "package|zoxide" ;;
+        dnf:shell.fastfetch) printf '%s\n' "package|fastfetch" ;;
         dnf:editor.neovim)
             printf '%s\n' \
                 "package|neovim" \
@@ -146,6 +154,7 @@ get_package_install_specs() {
         pacman:cli.fzf) printf '%s\n' "package|fzf" ;;
         pacman:cli.zoxide) printf '%s\n' "package|zoxide" ;;
         pacman:shell.starship) printf '%s\n' "package|starship" ;;
+        pacman:shell.fastfetch) printf '%s\n' "package|fastfetch" ;;
         pacman:editor.neovim)
             printf '%s\n' \
                 "package|neovim" \
@@ -221,6 +230,7 @@ get_package_install_specs() {
                 "package|mpv" \
                 "package|pulseaudio"
             ;;
+        pkg:shell.fastfetch) printf '%s\n' "package|fastfetch" ;;
 
         *) return 1 ;;
     esac

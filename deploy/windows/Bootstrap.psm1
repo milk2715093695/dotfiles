@@ -26,6 +26,7 @@ Set-StrictMode -Version Latest
     "$PSScriptRoot\packages\Starship.psm1"
     "$PSScriptRoot\packages\Yazi.psm1"
     "$PSScriptRoot\packages\Cava.psm1"
+    "$PSScriptRoot\packages\Fastfetch.psm1"
     "$PSScriptRoot\packages\LazyVim.psm1"
     "$PSScriptRoot\Main.psm1"
 ) | ForEach-Object { Import-Module $_ -Force }
@@ -79,6 +80,7 @@ function Import-WindowsDeployModules {
         "$ScriptDir\windows\packages\Starship.psm1"
         "$ScriptDir\windows\packages\Yazi.psm1"
         "$ScriptDir\windows\packages\Cava.psm1"
+        "$ScriptDir\windows\packages\Fastfetch.psm1"
         "$ScriptDir\windows\packages\LazyVim.psm1"
         "$ScriptDir\windows\Main.psm1"
     )

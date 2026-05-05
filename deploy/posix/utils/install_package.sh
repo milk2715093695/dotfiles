@@ -136,6 +136,32 @@ check_wezterm_fury_apt_repository_configured() {
     [ -f "$keyring_path" ] && [ -f "$source_path" ] && grep -Fxq "$source_line" "$source_path"
 }
 
+# 检查 fastfetch PPA 是否已配置
+check_fastfetch_ppa_apt_repository_configured() {
+    [ -f "/etc/apt/sources.list.d/zhangsongcui3371-ubuntu-fastfetch-"*".sources" ] 2>/dev/null
+}
+
+# 配置 fastfetch PPA 源
+configure_fastfetch_ppa_apt_repository() {
+    if check_fastfetch_ppa_apt_repository_configured; then
+        skip_msg "fastfetch PPA 已配置。"
+        return 0
+    fi
+
+    if ! command -v add-apt-repository >/dev/null 2>&1; then
+        error "未找到 add-apt-repository，无法配置 fastfetch PPA。"
+        return 1
+    fi
+
+    if prompt_install_confirm "是否添加 fastfetch 官方 PPA？"; then
+        step "添加 fastfetch 官方 PPA"
+        sudo add-apt-repository ppa:zhangsongcui3371/fastfetch -y
+        sudo apt update
+    else
+        skip_msg "跳过 fastfetch PPA 配置"
+    fi
+}
+
 # 配置 WezTerm 官方 APT 源
 configure_wezterm_fury_apt_repository() {
     local source_line="deb [signed-by=/usr/share/keyrings/wezterm-fury.gpg] https://apt.fury.io/wez/ * *"
@@ -174,6 +200,9 @@ configure_apt_repository_spec() {
     case "$repository_name" in
         wezterm-fury)
             configure_wezterm_fury_apt_repository
+            ;;
+        fastfetch-ppa)
+            configure_fastfetch_ppa_apt_repository
             ;;
         *)
             warn "未知 apt-repo install spec：$repository_name"

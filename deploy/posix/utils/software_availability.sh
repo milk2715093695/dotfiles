@@ -7,6 +7,7 @@ get_software_command_name() {
         cli.fzf) printf '%s\n' "fzf" ;;
         cli.zoxide) printf '%s\n' "zoxide" ;;
         shell.starship) printf '%s\n' "starship" ;;
+        shell.fastfetch) printf '%s\n' "fastfetch" ;;
         editor.neovim) printf '%s\n' "nvim" ;;
         terminal.wezterm) printf '%s\n' "wezterm" ;;
         terminal.tmux) printf '%s\n' "tmux" ;;
