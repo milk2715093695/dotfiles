@@ -4,10 +4,10 @@ add_to_path() {
         if [[ -d "$dir" ]]; then
             if [[ ":$PATH:" != *":$dir:"* ]]; then
                 export PATH="$dir:$PATH"
-                echo "目录 $dir 被添加到 PATH 中"
+                [[ -o interactive ]] && echo "目录 $dir 被添加到 PATH 中"
             fi
         else
-            echo "错误：目录 $dir 不存在"
+            [[ -o interactive ]] && echo "错误：目录 $dir 不存在"
         fi
     done
 }
@@ -18,10 +18,10 @@ add_to_fpath() {
         if [[ -d "$dir" ]]; then
             if [[ ":$FPATH:" != *":$dir:"* ]]; then
                 export FPATH="$dir:$FPATH"
-                echo "目录 $dir 被添加到 FPATH 中"
+                [[ -o interactive ]] && echo "目录 $dir 被添加到 FPATH 中"
             fi
         else
-            echo "错误：目录 $dir 不存在"
+            [[ -o interactive ]] && echo "错误：目录 $dir 不存在"
         fi
     done
 }

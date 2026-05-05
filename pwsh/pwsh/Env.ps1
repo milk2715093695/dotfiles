@@ -12,13 +12,13 @@ function Add-PathEntry {
             if ($currentPaths -notcontains $dir) {
 
                 $env:PATH = "$dir;$env:PATH"
-                Write-Host "目录 $dir 被添加到 PATH 中"
+                if ([Environment]::UserInteractive) { Write-Host "目录 $dir 被添加到 PATH 中" }
 
             }
 
         } 
         else {
-            Write-Host "错误：目录 $dir 不存在"
+            if ([Environment]::UserInteractive) { Write-Host "错误：目录 $dir 不存在" }
         }
     }
 }
@@ -42,13 +42,13 @@ function Add-ModulePath {
             # 如果还没有这个路径，则添加
             if ($currentPaths -notcontains $dir) {
                 $env:PSModulePath = "$dir;$env:PSModulePath"
-                Write-Host "目录 $dir 被添加到 PSModulePath 中"
+                if ([Environment]::UserInteractive) { Write-Host "目录 $dir 被添加到 PSModulePath 中" }
             } else {
-                Write-Host "目录 $dir 已经存在于 PSModulePath 中"
+                if ([Environment]::UserInteractive) { Write-Host "目录 $dir 已经存在于 PSModulePath 中" }
             }
 
         } else {
-            Write-Host "错误：目录 $dir 不存在"
+            if ([Environment]::UserInteractive) { Write-Host "错误：目录 $dir 不存在" }
         }
     }
 }
