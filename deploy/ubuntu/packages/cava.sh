@@ -12,7 +12,7 @@ install_cava_runtime_dependencies() {
 render_cava_config() {
     step "渲染 Cava 配置"
     mkdir -p "$REPO_ROOT/generated/cava"
-    cp "$REPO_ROOT/cava/ubuntu/config" "$REPO_ROOT/generated/cava/config"
+    render_config_file "$REPO_ROOT/cava/base.config" "$REPO_ROOT/generated/cava/config"
     cp -r "$REPO_ROOT/cava/common/themes" "$REPO_ROOT/generated/cava/themes"
     cp -r "$REPO_ROOT/cava/common/shaders" "$REPO_ROOT/generated/cava/shaders"
 }
