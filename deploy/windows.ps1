@@ -16,6 +16,7 @@ $ErrorActionPreference = "Stop"     # 失败即退出
 
 $global:SCRIPT_DIR = Split-Path -Parent $MyInvocation.MyCommand.Path   # 脚本目录
 $global:REPO_ROOT  = Resolve-Path "$SCRIPT_DIR\.."                     # 仓库目录
+$env:DEPLOY_PLATFORM = "windows"                                        # 部署平台
 
 Import-Module "$SCRIPT_DIR\windows\Bootstrap.psm1" -Force  # 启动入口
 Start-WindowsDeploy -ScriptDir $SCRIPT_DIR -YesInstall ([bool]$YesInstall) -ConfigMode $ConfigMode -Help ([bool]$Help)
