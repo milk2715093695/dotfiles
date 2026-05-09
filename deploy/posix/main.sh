@@ -57,7 +57,7 @@ main() {
     deploy_unit_availability_check="check_starship_available"
     deploy_unit_prepare_stage=""
     deploy_unit_install_stage="install_starship"
-    deploy_unit_render_stage="render_starship_config"
+    deploy_unit_render_stage=""
     deploy_unit_link_stage="link_starship_config"
     deploy_unit_update_stage=""
     run_deploy_unit_stage_from_vars

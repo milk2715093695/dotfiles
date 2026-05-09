@@ -83,7 +83,7 @@ function Main {
             AvailabilityCheck = ({ Test-Starship }).GetNewClosure()
             Prepare = $null
             Install = ({ Install-Starship -DeployContext $DeployContext }).GetNewClosure()
-            Render = ({ New-StarshipRenderConfig }).GetNewClosure()
+            Render = $null
             Link = ({ New-StarshipConfigLink -DeployContext $DeployContext }).GetNewClosure()
             Update = $null
         }
