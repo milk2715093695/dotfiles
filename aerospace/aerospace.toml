@@ -1,11 +1,4 @@
-# AeroSpace 配置目标：
-# - 使用语义化工作区组织日常任务
-# - 保持 i3/Vim 风格方向键操作
-# - 和 SketchyBar、borders 组成完整 macOS 桌面体验
-
-
 # 基础行为
-# 即使部分值与默认值一致，也显式保留，方便之后直接调参。
 config-version = 2
 
 start-at-login = true
