@@ -1,6 +1,7 @@
 # 部署入口
 main() {
     init_deploy_output_view
+    check_system_tools
 
     local deploy_unit_stage_name
     local deploy_unit_name

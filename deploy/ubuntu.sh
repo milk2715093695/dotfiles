@@ -19,6 +19,7 @@ source "$SCRIPT_DIR/posix/utils/package_manager_selection.sh"   # 包管理器�
 source "$SCRIPT_DIR/posix/utils/install_package.sh"             # 安装包函数
 source "$SCRIPT_DIR/posix/utils/deploy_unit.sh"                 # 部署单元生命周期
 source "$SCRIPT_DIR/posix/utils/render_config.sh"               # 配置渲染工具
+source "$SCRIPT_DIR/posix/utils/tool_check.sh"             # 系统工具预检
 source "$SCRIPT_DIR/posix/packages/fonts.sh"                    # 安装字体
 source "$SCRIPT_DIR/posix/packages/cli_tools.sh"                # 常用命令行工具
 source "$SCRIPT_DIR/posix/packages/wezterm.sh"                  # WezTerm 配置
