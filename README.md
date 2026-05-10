@@ -380,7 +380,7 @@ chmod +x ./deploy/termux.sh
   - [X] macOS 部署脚本
   - [X] Windows 部署脚本
   - [X] Android-termux 部署脚本
-  - [ ] Sketchybar 主部署集成
+  - [X] Sketchybar 主部署集成
 - 重构
   - 配置文件拆分
     - [X] AeroSpace 配置拆分
