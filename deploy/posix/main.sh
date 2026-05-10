@@ -2,6 +2,7 @@
 main() {
     init_deploy_output_view
     check_system_tools
+    check_package_manager
 
     local deploy_unit_stage_name
     local deploy_unit_name

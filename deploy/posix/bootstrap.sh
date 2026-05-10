@@ -14,6 +14,7 @@ source "$_BOOT_DIR/utils/install_package.sh"             # 安装包函数
 source "$_BOOT_DIR/utils/deploy_unit.sh"                 # 部署单元生命周期
 source "$_BOOT_DIR/utils/render_config.sh"               # 配置渲染工具
 source "$_BOOT_DIR/utils/tool_check.sh"                  # 系统工具预检
+source "$_BOOT_DIR/utils/ensure_package_manager.sh"   # 包管理器预检
 
 source "$_BOOT_DIR/packages/fonts.sh"                    # 安装字体
 source "$_BOOT_DIR/packages/cli_tools.sh"                # 常用命令行工具

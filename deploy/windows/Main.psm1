@@ -26,6 +26,7 @@ function Main {
 
     Initialize-DeployOutputView
     Test-SystemTools
+    Test-PackageManagerAvailability
 
     $deployUnits = @(
         @{
