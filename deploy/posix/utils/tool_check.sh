@@ -1,7 +1,7 @@
 # 系统工具预检：在部署开始前检查必需系统命令是否可用
 
 # 检查 curl 和 wget 是否至少有一个可用
-_has_http_client() {
+has_http_client() {
     command -v curl >/dev/null 2>&1 || command -v wget >/dev/null 2>&1
 }
 
@@ -16,7 +16,7 @@ check_system_tools() {
         missing+=("git")
     fi
 
-    if ! _has_http_client; then
+    if ! has_http_client; then
         missing+=("curl 或 wget")
     fi
 
@@ -28,6 +28,11 @@ check_system_tools() {
         ubuntu)
             if ! command -v sudo >/dev/null 2>&1; then
                 missing+=("sudo")
+            fi
+            ;;
+        termux)
+            if [ ! -d "$HOME/storage" ]; then
+                missing+=("存储权限")
             fi
             ;;
     esac
@@ -70,6 +75,7 @@ check_system_tools() {
                     git)    plain "  pkg install git" ;;
                     tar)    plain "  pkg install tar" ;;
                     "curl 或 wget") plain "  pkg install curl" ;;
+                    "存储权限") plain "  termux-setup-storage（授予存储访问权限）" ;;
                 esac
             done
             ;;
@@ -79,4 +85,35 @@ check_system_tools() {
     plain "安装后重新运行部署脚本即可。"
 
     exit 1
+}
+
+# macOS Xcode Command Line Tools 检测（独立于通用系统工具预检）
+check_xcode_clt() {
+    [ "$DEPLOY_PLATFORM" != "macos" ] && return 0
+    if xcode-select -p >/dev/null 2>&1; then
+        return 0
+    fi
+
+    warn "未检测到 Xcode Command Line Tools。"
+    plain "macOS 部署依赖 Xcode CLT 提供 git、clang 等编译工具。"
+
+    if prompt_install_confirm "是否安装 Xcode Command Line Tools？"; then
+        step "安装 Xcode Command Line Tools"
+        plain '系统将弹出安装窗口，请在窗口中点击"安装"完成操作。'
+        xcode-select --install
+
+        plain ""
+        plain "安装完成后按 Enter 继续..."
+        read -r
+
+        if xcode-select -p >/dev/null 2>&1; then
+            success "Xcode Command Line Tools 安装成功"
+        else
+            warn "Xcode Command Line Tools 安装未完成，部分功能可能不可用。"
+            plain "可稍后手动执行：xcode-select --install"
+        fi
+    else
+        warn "跳过 Xcode Command Line Tools 安装，部分功能可能不可用。"
+        plain "可稍后手动执行：xcode-select --install"
+    fi
 }
