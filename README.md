@@ -331,7 +331,15 @@ chmod +x ./deploy/macos.sh
 - 推荐以管理员身份运行，或先开启 Windows 开发者模式，否则符号链接可能失败。
 - 如果确认将 OpenSSH 默认 shell 切换到 `pwsh`，脚本会修改注册表并重启 `sshd`。
 
-在 powershell 上执行以下步骤即可部署配置：
+> **Scoop 需要手动安装**：部署脚本推荐以管理员身份运行（创建符号链接需要管理员权限），但 Scoop 官方要求非管理员安装，而 Windows 不支持对部分命令降权。考虑到安全性与官方推荐，脚本不会自动安装 Scoop，请按以下步骤手动准备：
+>
+> ```powershell
+> # 以普通用户身份（非管理员）打开 PowerShell，执行：
+> Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+> irm get.scoop.sh | iex
+> ```
+
+部署步骤：
 
 ```powershell
 git clone --recurse-submodules https://github.com/milk2715093695/dotfiles.git
