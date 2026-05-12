@@ -13,6 +13,7 @@ main() {
     local deploy_unit_render_stage
     local deploy_unit_link_stage
     local deploy_unit_update_stage
+    local deploy_unit_tags
 
     # 每个 unit 显式填满所有槽位，空字符串表示该阶段不存在。
     deploy_unit_stage_name="安装字体"
@@ -23,6 +24,7 @@ main() {
     deploy_unit_render_stage=""
     deploy_unit_link_stage=""
     deploy_unit_update_stage=""
+    deploy_unit_tags="beauty dev"
     run_deploy_unit_stage_from_vars
 
     deploy_unit_stage_name="配置 WezTerm"
@@ -33,6 +35,7 @@ main() {
     deploy_unit_render_stage=""
     deploy_unit_link_stage="link_wezterm_config"
     deploy_unit_update_stage=""
+    deploy_unit_tags="beauty dev"
     run_deploy_unit_stage_from_vars
 
     deploy_unit_stage_name="安装常用命令行工具"
@@ -43,6 +46,7 @@ main() {
     deploy_unit_render_stage=""
     deploy_unit_link_stage=""
     deploy_unit_update_stage=""
+    deploy_unit_tags="dev"
     run_deploy_unit_stage_from_vars
 
     deploy_unit_stage_name="配置 zsh 插件"
@@ -53,6 +57,7 @@ main() {
     deploy_unit_render_stage=""
     deploy_unit_link_stage=""
     deploy_unit_update_stage="update_zsh_plugins"
+    deploy_unit_tags="dev"
     run_deploy_unit_stage_from_vars
 
     deploy_unit_stage_name="配置 Starship"
@@ -63,6 +68,7 @@ main() {
     deploy_unit_render_stage=""
     deploy_unit_link_stage="link_starship_config"
     deploy_unit_update_stage=""
+    deploy_unit_tags="beauty dev"
     run_deploy_unit_stage_from_vars
 
     deploy_unit_stage_name="配置 zsh"
@@ -73,6 +79,7 @@ main() {
     deploy_unit_render_stage=""
     deploy_unit_link_stage="link_zsh_config"
     deploy_unit_update_stage=""
+    deploy_unit_tags="dev"
     run_deploy_unit_stage_from_vars
 
     deploy_unit_stage_name="配置 Yazi"
@@ -83,6 +90,7 @@ main() {
     deploy_unit_render_stage="render_yazi_config"
     deploy_unit_link_stage="link_yazi_config"
     deploy_unit_update_stage="install_or_update_yazi_packages"
+    deploy_unit_tags="beauty dev"
     run_deploy_unit_stage_from_vars
 
     deploy_unit_stage_name="配置 Cava"
@@ -93,6 +101,7 @@ main() {
     deploy_unit_render_stage="render_cava_config"
     deploy_unit_link_stage="link_cava_config"
     deploy_unit_update_stage=""
+    deploy_unit_tags="beauty"
     run_deploy_unit_stage_from_vars
 
     deploy_unit_stage_name="配置 LazyVim"
@@ -103,6 +112,7 @@ main() {
     deploy_unit_render_stage=""
     deploy_unit_link_stage="link_lazyvim_config"
     deploy_unit_update_stage=""
+    deploy_unit_tags="beauty dev"
     run_deploy_unit_stage_from_vars
 
     deploy_unit_stage_name="配置 tmux"
@@ -113,6 +123,7 @@ main() {
     deploy_unit_render_stage=""
     deploy_unit_link_stage="link_tmux_config"
     deploy_unit_update_stage=""
+    deploy_unit_tags="beauty dev"
     run_deploy_unit_stage_from_vars
 
     run_deploy_stage "配置平台扩展行为" run_platform_deploy_units
@@ -125,6 +136,7 @@ main() {
     deploy_unit_render_stage=""
     deploy_unit_link_stage="link_fastfetch_config"
     deploy_unit_update_stage=""
+    deploy_unit_tags="beauty"
     run_deploy_unit_stage_from_vars
 
     success "部署完成"

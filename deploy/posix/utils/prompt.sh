@@ -18,6 +18,39 @@ parse_deploy_args() {
             --config-mode=*)
                 DEPLOY_CONFIG_MODE="${1#*=}"
                 ;;
+            --preset)
+                shift
+                if [ "$#" -eq 0 ]; then
+                    error "缺少 --preset 的值"
+                    return 1
+                fi
+                DEPLOY_PRESET="$1"
+                ;;
+            --preset=*)
+                DEPLOY_PRESET="${1#*=}"
+                ;;
+            --skip)
+                shift
+                if [ "$#" -eq 0 ]; then
+                    error "缺少 --skip 的值"
+                    return 1
+                fi
+                DEPLOY_SKIP_UNITS="$1"
+                ;;
+            --skip=*)
+                DEPLOY_SKIP_UNITS="${1#*=}"
+                ;;
+            --only)
+                shift
+                if [ "$#" -eq 0 ]; then
+                    error "缺少 --only 的值"
+                    return 1
+                fi
+                DEPLOY_ONLY_UNITS="$1"
+                ;;
+            --only=*)
+                DEPLOY_ONLY_UNITS="${1#*=}"
+                ;;
             -h|--help)
                 print_deploy_usage
                 exit 0
@@ -36,6 +69,26 @@ parse_deploy_args() {
         shift
     done
 
+    # --only 和 --preset 互斥校验
+    if [ -n "${DEPLOY_ONLY_UNITS:-}" ] && [ -n "${DEPLOY_PRESET:-}" ]; then
+        warn "--only 和 --preset 互斥，--only 生效时 --preset 被忽略"
+        DEPLOY_PRESET=""
+    fi
+
+    # --preset 值校验
+    if [ -n "${DEPLOY_PRESET:-}" ]; then
+        local preset
+        local preset_list
+        preset_list="$(printf '%s' "${DEPLOY_PRESET:-}" | tr ',' ' ')"
+        for preset in $preset_list; do
+            if ! get_preset_tags "$preset" >/dev/null 2>&1; then
+                error "无效的预设名称: $preset（可用: beautification/beauty, development/dev）"
+                print_deploy_usage
+                return 1
+            fi
+        done
+    fi
+
     case "$DEPLOY_CONFIG_MODE" in
         ask|backup|replace|replace-link|skip)
             ;;
@@ -50,10 +103,14 @@ parse_deploy_args() {
 # 打印部署脚本帮助
 print_deploy_usage() {
     cat <<EOF
-用法: $0 [--yes-install] [--config-mode ask|backup|replace|replace-link|skip]
+用法: $0 [--yes-install] [--config-mode MODE] [--preset PRESET] [--skip UNIT,...] [--only UNIT,...]
 
   --yes-install          自动确认安装或更新类操作
   --config-mode MODE     配置冲突策略，默认 ask
+  --preset PRESET        按预设过滤部署单元（beautification/beauty, development/dev）
+                         逗号分隔多值，取并集
+  --skip UNIT,...        排除指定部署单元（逗号分隔，不区分大小写）
+  --only UNIT,...        仅部署指定单元（逗号分隔，不区分大小写；与 --preset 互斥）
   -h, --help             显示帮助信息
 
 配置模式:
@@ -62,6 +119,12 @@ print_deploy_usage() {
   replace       删除已有符号链接、文件或目录后创建新链接
   replace-link  替换符号链接，备份文件或目录
   skip          遇到已有目标时直接跳过
+
+示例:
+  $0 --yes-install --config-mode replace-link
+  $0 --preset beauty
+  $0 --preset dev --skip Cava
+  $0 --only WezTerm,LazyVim
 EOF
 }
 

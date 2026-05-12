@@ -2,6 +2,9 @@
 init_deploy_context() {
     DEPLOY_AUTO_INSTALL=false
     DEPLOY_CONFIG_MODE="ask"
+    DEPLOY_PRESET=""
+    DEPLOY_ONLY_UNITS=""
+    DEPLOY_SKIP_UNITS=""
 }
 
 # 读取自动安装开关

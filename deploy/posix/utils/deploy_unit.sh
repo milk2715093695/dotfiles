@@ -53,6 +53,12 @@ run_deploy_unit() {
     local link_stage="$6"
     local update_stage="$7"
 
+    # 过滤检查：run_platform_deploy_units 等直接调用者通过全局变量传递 tags
+    if [ -n "${deploy_unit_tags:-}" ] && ! is_unit_selected "$unit_name" "$deploy_unit_tags"; then
+        skip_msg "${unit_name} 被过滤，跳过"
+        return 0
+    fi
+
     validate_deploy_unit_function "$unit_name" "availability check" "$availability_check" || return 1
     validate_deploy_unit_function "$unit_name" "依赖准备" "$prepare_stage" || return 1
     validate_deploy_unit_function "$unit_name" "安装" "$install_stage" || return 1
@@ -104,6 +110,12 @@ run_deploy_unit_stage_from_vars() {
     require_deploy_unit_variable deploy_unit_render_stage || return 1
     require_deploy_unit_variable deploy_unit_link_stage || return 1
     require_deploy_unit_variable deploy_unit_update_stage || return 1
+    require_deploy_unit_variable deploy_unit_tags || return 1
+
+    if ! is_unit_selected "$deploy_unit_name" "$deploy_unit_tags"; then
+        skip_msg "${deploy_unit_name} 被过滤，跳过"
+        return 0
+    fi
 
     run_deploy_unit_stage \
         "$deploy_unit_stage_name" \
