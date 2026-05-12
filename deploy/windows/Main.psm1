@@ -38,66 +38,7 @@ function Main {
             Render = $null
             Link = $null
             Update = $null
-        }
-        @{
-            StageName = "安装 JetBrains Mono"
-            Name = "JetBrains Mono"
-            AvailabilityCheck = ({ Test-UserJetBrainsMonoFont }).GetNewClosure()
-            Prepare = $null
-            Install = ({ Install-JetBrainsMonoUserFont -DeployContext $DeployContext }).GetNewClosure()
-            Render = $null
-            Link = $null
-            Update = $null
-        }
-        @{
-            StageName = "配置 WezTerm"
-            Name = "WezTerm"
-            AvailabilityCheck = ({ Test-WezTerm }).GetNewClosure()
-            Prepare = $null
-            Install = ({ Install-WezTermPackage -DeployContext $DeployContext }).GetNewClosure()
-            Render = $null
-            Link = ({ New-WezTermConfigLink -DeployContext $DeployContext }).GetNewClosure()
-            Update = $null
-        }
-        @{
-            StageName = "初始化 PSGallery"
-            Name = "PSGallery"
-            AvailabilityCheck = ({ Test-PSGalleryRepository }).GetNewClosure()
-            Prepare = $null
-            Install = ({ Register-PSGalleryRepository -DeployContext $DeployContext }).GetNewClosure()
-            Render = $null
-            Link = $null
-            Update = $null
-        }
-        @{
-            StageName = "安装常用命令行工具"
-            Name = "CLI Tools"
-            AvailabilityCheck = ({ Test-CliToolSet }).GetNewClosure()
-            Prepare = $null
-            Install = ({ Install-CliToolSet -DeployContext $DeployContext }).GetNewClosure()
-            Render = $null
-            Link = $null
-            Update = $null
-        }
-        @{
-            StageName = "配置 Starship"
-            Name = "Starship"
-            AvailabilityCheck = ({ Test-Starship }).GetNewClosure()
-            Prepare = $null
-            Install = ({ Install-Starship -DeployContext $DeployContext }).GetNewClosure()
-            Render = $null
-            Link = ({ New-StarshipConfigLink -DeployContext $DeployContext }).GetNewClosure()
-            Update = $null
-        }
-        @{
-            StageName = "配置 PowerShell"
-            Name = "PowerShell"
-            AvailabilityCheck = $null
-            Prepare = ({ Set-PwshOpenSshDefaultShell }).GetNewClosure()
-            Install = $null
-            Render = $null
-            Link = ({ New-PwshConfigLink -DeployContext $DeployContext }).GetNewClosure()
-            Update = $null
+            Tags = @("dev")
         }
         @{
             StageName = "配置 Yazi"
@@ -108,6 +49,7 @@ function Main {
             Render = ({ New-YaziRenderConfig }).GetNewClosure()
             Link = ({ New-YaziConfigLink -DeployContext $DeployContext }).GetNewClosure()
             Update = ({ Install-OrUpdateYaziPackages -DeployContext $DeployContext }).GetNewClosure()
+            Tags = @("beauty", "dev")
         }
         @{
             StageName = "配置 Cava"
@@ -118,6 +60,7 @@ function Main {
             Render = ({ New-CavaRenderConfig }).GetNewClosure()
             Link = ({ New-CavaConfigLink -DeployContext $DeployContext }).GetNewClosure()
             Update = $null
+            Tags = @("beauty")
         }
         @{
             StageName = "配置 LazyVim"
@@ -128,6 +71,7 @@ function Main {
             Render = $null
             Link = ({ New-LazyVimConfigLink -DeployContext $DeployContext }).GetNewClosure()
             Update = $null
+            Tags = @("beauty", "dev")
         }
         @{
             StageName = "配置 fastfetch"
@@ -138,11 +82,12 @@ function Main {
             Render = $null
             Link = ({ New-FastfetchConfigLink -DeployContext $DeployContext }).GetNewClosure()
             Update = $null
+            Tags = @("beauty")
         }
     )
 
     foreach ($unit in $deployUnits) {
-        Invoke-DeployUnitStage -Unit $unit
+        Invoke-DeployUnitStage -Unit $unit -DeployContext $DeployContext
     }
 
     Write-PLAIN ""

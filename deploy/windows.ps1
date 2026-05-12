@@ -8,7 +8,13 @@ param(
     [switch]$YesInstall,
 
     [ValidateSet("ask", "backup", "replace", "replace-link", "skip")]
-    [string]$ConfigMode = "ask"
+    [string]$ConfigMode = "ask",
+
+    [string]$Preset = "",
+
+    [string]$Skip = "",
+
+    [string]$Only = ""
 )
 
 Set-StrictMode -Version Latest
@@ -19,4 +25,4 @@ $global:REPO_ROOT  = Resolve-Path "$SCRIPT_DIR\.."                      # 仓库
 $env:DEPLOY_PLATFORM = "windows"                                        # 部署平台
 
 Import-Module "$SCRIPT_DIR\windows\Bootstrap.psm1" -Force  # 启动入口
-Start-WindowsDeploy -ScriptDir $SCRIPT_DIR -YesInstall ([bool]$YesInstall) -ConfigMode $ConfigMode -Help ([bool]$Help)
+Start-WindowsDeploy -ScriptDir $SCRIPT_DIR -YesInstall ([bool]$YesInstall) -ConfigMode $ConfigMode -Help ([bool]$Help) -Preset $Preset -SkipUnits $Skip -OnlyUnits $Only

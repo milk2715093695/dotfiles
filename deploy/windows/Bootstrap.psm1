@@ -19,6 +19,7 @@ Set-StrictMode -Version Latest
     "$PSScriptRoot\utils\RenderConfig.psm1"
     "$PSScriptRoot\utils\PSGallery.psm1"
     "$PSScriptRoot\utils\ToolCheck.psm1"
+    "$PSScriptRoot\utils\Preset.psm1"
     "$PSScriptRoot\packages\AltSnap.psm1"
     "$PSScriptRoot\packages\JetBrains.psm1"
     "$PSScriptRoot\packages\WezTerm.psm1"
@@ -35,10 +36,14 @@ Set-StrictMode -Version Latest
 # 打印部署脚本帮助
 function Show-DeployUsage {
 @"
-用法: .\deploy\windows.ps1 [-YesInstall] [-ConfigMode ask|backup|replace|replace-link|skip] [-Help]
+用法: .\deploy\windows.ps1 [-YesInstall] [-ConfigMode ask|backup|replace|replace-link|skip] [-Preset PRESET] [-Skip UNIT,...] [-Only UNIT,...] [-Help]
 
   -YesInstall          自动确认安装或更新类操作
   -ConfigMode MODE     配置冲突策略，默认 ask
+  -Preset PRESET       按预设过滤部署单元（beautification/beauty, development/dev）
+                       逗号分隔多值，取并集
+  -Skip UNIT,...       排除指定部署单元（逗号分隔，不区分大小写）
+  -Only UNIT,...       仅部署指定单元（逗号分隔，不区分大小写；与 -Preset 互斥）
   -Help, -h, -?        显示帮助信息
 
 配置模式:
@@ -47,6 +52,12 @@ function Show-DeployUsage {
   replace       删除已有符号链接、文件或目录后创建新链接
   replace-link  替换符号链接，备份文件或目录
   skip          遇到已有目标时直接跳过
+
+示例:
+  .\deploy\windows.ps1 -YesInstall -ConfigMode replace-link
+  .\deploy\windows.ps1 -Preset beauty
+  .\deploy\windows.ps1 -Preset dev -Skip Cava
+  .\deploy\windows.ps1 -Only WezTerm,LazyVim
 "@
 }
 
@@ -74,6 +85,7 @@ function Import-WindowsDeployModules {
         "$ScriptDir\windows\utils\Install.psm1"
         "$ScriptDir\windows\utils\PSGallery.psm1"
         "$ScriptDir\windows\utils\ToolCheck.psm1"
+        "$ScriptDir\windows\utils\Preset.psm1"
         "$ScriptDir\windows\packages\AltSnap.psm1"
         "$ScriptDir\windows\packages\JetBrains.psm1"
         "$ScriptDir\windows\packages\WezTerm.psm1"
@@ -105,7 +117,16 @@ function Start-WindowsDeploy {
         [string]$ConfigMode,
 
         [Parameter(Mandatory)]
-        [bool]$Help
+        [bool]$Help,
+
+        [Parameter(Mandatory)]
+        [string]$Preset,
+
+        [Parameter(Mandatory)]
+        [string]$SkipUnits,
+
+        [Parameter(Mandatory)]
+        [string]$OnlyUnits
     )
 
     if ($Help) {
@@ -113,6 +134,7 @@ function Start-WindowsDeploy {
         return
     }
 
-    $deployContext = New-DeployContext -AutoInstall $YesInstall -ConfigMode $ConfigMode
+    $deployContext = New-DeployContext -AutoInstall $YesInstall -ConfigMode $ConfigMode `
+        -Preset $Preset -SkipUnits $SkipUnits -OnlyUnits $OnlyUnits
     Main -DeployContext $deployContext
 }

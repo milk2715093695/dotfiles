@@ -274,9 +274,15 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 - POSIX（macOS / Ubuntu / Termux）：
   - `--yes-install`：自动确认安装或更新软件包、插件等安装类操作。
   - `--config-mode ask|backup|replace|replace-link|skip`：配置目标已存在时的处理方式，默认 `ask`。
+  - `--preset beautification|beauty|development|dev`：按预设过滤部署单元（逗号分隔取并集）。
+  - `--skip UNIT,...`：排除指定部署单元（逗号分隔，不区分大小写）。
+  - `--only UNIT,...`：仅部署指定单元（逗号分隔，不区分大小写；与 `--preset` 互斥）。
 - Windows：
   - `-YesInstall`：自动确认安装或更新软件包、插件等安装类操作。
   - `-ConfigMode ask|backup|replace|replace-link|skip`：配置目标已存在时的处理方式，默认 `ask`。
+  - `-Preset beautification|beauty|development|dev`：按预设过滤部署单元（逗号分隔取并集）。
+  - `-Skip UNIT,...`：排除指定部署单元（逗号分隔，不区分大小写）。
+  - `-Only UNIT,...`：仅部署指定单元（逗号分隔，不区分大小写；与 `-Preset` 互斥）。
 
 配置处理方式：
 
@@ -292,10 +298,16 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 
 ```bash
 ./deploy/macos.sh --yes-install --config-mode replace-link
+./deploy/macos.sh --preset beauty
+./deploy/macos.sh --preset dev --skip Cava
+./deploy/macos.sh --only WezTerm,LazyVim
 ```
 
 ```powershell
 .\deploy\windows.ps1 -YesInstall -ConfigMode replace-link
+.\deploy\windows.ps1 -Preset beauty
+.\deploy\windows.ps1 -Preset dev -Skip Cava
+.\deploy\windows.ps1 -Only WezTerm,LazyVim
 ```
 
 ### 4.1. Ubuntu / Linux（Ubuntu 优先）

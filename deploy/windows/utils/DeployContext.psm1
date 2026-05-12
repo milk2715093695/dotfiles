@@ -7,12 +7,30 @@ function New-DeployContext {
         [bool]$AutoInstall,
 
         [Parameter(Mandatory)]
-        [string]$ConfigMode
+        [string]$ConfigMode,
+
+        [Parameter(Mandatory)]
+        [string]$Preset,
+
+        [Parameter(Mandatory)]
+        [string]$SkipUnits,
+
+        [Parameter(Mandatory)]
+        [string]$OnlyUnits
     )
+
+    # --only 和 --preset 互斥校验
+    if ($OnlyUnits -and $Preset) {
+        Write-WARNING "-Only 和 -Preset 互斥，-Only 生效时 -Preset 被忽略"
+        $Preset = ""
+    }
 
     return @{
         AutoInstall = $AutoInstall
-        ConfigMode = $ConfigMode
+        ConfigMode  = $ConfigMode
+        Preset      = $Preset
+        SkipUnits   = $SkipUnits
+        OnlyUnits   = $OnlyUnits
     }
 }
 
@@ -54,4 +72,40 @@ function Set-DeployConfigMode {
     $DeployContext.ConfigMode = $ConfigMode
 }
 
-Export-ModuleMember -Function New-DeployContext, Get-DeployAutoInstall, Get-DeployConfigMode, Set-DeployConfigMode
+# 读取预设过滤
+function Get-DeployPreset {
+    param(
+        [Parameter(Mandatory)]
+        [hashtable]$DeployContext
+    )
+
+    $val = [string]$DeployContext.Preset
+    if ([string]::IsNullOrWhiteSpace($val)) { return "" }
+    return $val
+}
+
+# 读取排除单元列表
+function Get-DeploySkipUnits {
+    param(
+        [Parameter(Mandatory)]
+        [hashtable]$DeployContext
+    )
+
+    $val = [string]$DeployContext.SkipUnits
+    if ([string]::IsNullOrWhiteSpace($val)) { return @() }
+    return @($val -split ',' | ForEach-Object { $_.Trim().ToLowerInvariant() })
+}
+
+# 读取仅部署单元列表
+function Get-DeployOnlyUnits {
+    param(
+        [Parameter(Mandatory)]
+        [hashtable]$DeployContext
+    )
+
+    $val = [string]$DeployContext.OnlyUnits
+    if ([string]::IsNullOrWhiteSpace($val)) { return @() }
+    return @($val -split ',' | ForEach-Object { $_.Trim().ToLowerInvariant() })
+}
+
+Export-ModuleMember -Function New-DeployContext, Get-DeployAutoInstall, Get-DeployConfigMode, Set-DeployConfigMode, Get-DeployPreset, Get-DeploySkipUnits, Get-DeployOnlyUnits

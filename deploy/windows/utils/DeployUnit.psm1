@@ -8,7 +8,8 @@ $script:DeployUnitSlots = @(
     "Install",
     "Render",
     "Link",
-    "Update"
+    "Update",
+    "Tags"
 )
 
 # 校验 deploy unit manifest 是否显式声明全部槽位
@@ -35,6 +36,11 @@ function Test-DeployUnitManifest {
         if ($null -ne $value -and $value -isnot [scriptblock]) {
             throw "$($Unit.Name) 的 $slot 阶段必须是 scriptblock 或 null"
         }
+    }
+
+    $tags = $Unit["Tags"]
+    if ($null -ne $tags -and $tags -isnot [string[]] -and $tags -isnot [array]) {
+        throw "$($Unit.Name) 的 Tags 必须是 string 数组或 null"
     }
 
     return $true
@@ -68,13 +74,24 @@ function Test-DeployUnitAvailable {
 function Invoke-DeployUnit {
     param(
         [Parameter(Mandatory)]
-        [hashtable]$Unit
+        [hashtable]$Unit,
+
+        [Parameter(Mandatory)]
+        [hashtable]$DeployContext
     )
 
     Test-DeployUnitManifest -Unit $Unit | Out-Null
 
     $unitName = [string]$Unit.Name
     $availabilityCheck = $Unit.AvailabilityCheck
+
+    # 过滤检查
+    $unitTags = $Unit.Tags
+    if ($null -eq $unitTags) { $unitTags = @() }
+    if (-not (Test-UnitSelected -UnitName $unitName -UnitTags $unitTags -DeployContext $DeployContext)) {
+        Write-SKIP "$unitName 被过滤，跳过"
+        return
+    }
 
     Invoke-DeployUnitPhase -ScriptBlock $Unit.Prepare
 
@@ -100,13 +117,16 @@ function Invoke-DeployUnit {
 function Invoke-DeployUnitStage {
     param(
         [Parameter(Mandatory)]
-        [hashtable]$Unit
+        [hashtable]$Unit,
+
+        [Parameter(Mandatory)]
+        [hashtable]$DeployContext
     )
 
     Test-DeployUnitManifest -Unit $Unit | Out-Null
 
     $scriptBlock = {
-        Invoke-DeployUnit -Unit $Unit
+        Invoke-DeployUnit -Unit $Unit -DeployContext $DeployContext
     }.GetNewClosure()
 
     Invoke-DeployStage -Name $Unit.StageName -ScriptBlock $scriptBlock
