@@ -5,6 +5,21 @@ check_sketchybar_available() {
     [ -f "$REPO_ROOT/sketchybar/config/icon_map.lua" ] || return 1
 }
 
+# 准备 SketchyBar 运行时依赖（aerospace）
+prepare_sketchybar_deps() {
+    if command -v aerospace >/dev/null 2>&1; then
+        return 0
+    fi
+
+    if prompt_install_confirm "SketchyBar 工作区组件需要 Aerospace，是否安装？"; then
+        step "安装 Aerospace"
+        brew tap FelixKratz/formulae 2>/dev/null || true
+        brew install aerospace
+    else
+        warn "跳过 Aerospace，SketchyBar 工作区组件将不可用"
+    fi
+}
+
 # 安装 SketchyBar（调用子模块黑盒安装脚本）
 install_sketchybar_package() {
     local install_script="$REPO_ROOT/sketchybar/install_sketchybar.sh"

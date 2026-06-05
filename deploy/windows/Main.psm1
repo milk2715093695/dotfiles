@@ -30,6 +30,61 @@ function Main {
 
     $deployUnits = @(
         @{
+            StageName = "安装 JetBrains 字体"
+            Name = "JetBrains"
+            AvailabilityCheck = ({ Test-UserJetBrainsMonoFont }).GetNewClosure()
+            Prepare = $null
+            Install = ({ Install-JetBrainsMonoUserFont -DeployContext $DeployContext }).GetNewClosure()
+            Render = $null
+            Link = $null
+            Update = $null
+            Tags = @("beauty", "dev")
+        }
+        @{
+            StageName = "配置 WezTerm"
+            Name = "WezTerm"
+            AvailabilityCheck = ({ Test-WezTerm }).GetNewClosure()
+            Prepare = $null
+            Install = ({ Install-WezTermPackage -DeployContext $DeployContext }).GetNewClosure()
+            Render = $null
+            Link = ({ New-WezTermConfigLink -DeployContext $DeployContext }).GetNewClosure()
+            Update = $null
+            Tags = @("beauty", "dev")
+        }
+        @{
+            StageName = "安装常用命令行工具"
+            Name = "CLI Tools"
+            AvailabilityCheck = ({ Test-CliToolSet }).GetNewClosure()
+            Prepare = $null
+            Install = ({ Install-CliToolSet -DeployContext $DeployContext }).GetNewClosure()
+            Render = $null
+            Link = $null
+            Update = $null
+            Tags = @("dev")
+        }
+        @{
+            StageName = "配置 Starship"
+            Name = "Starship"
+            AvailabilityCheck = ({ Test-Starship }).GetNewClosure()
+            Prepare = $null
+            Install = ({ Install-Starship -DeployContext $DeployContext }).GetNewClosure()
+            Render = $null
+            Link = ({ New-StarshipConfigLink -DeployContext $DeployContext }).GetNewClosure()
+            Update = $null
+            Tags = @("beauty", "dev")
+        }
+        @{
+            StageName = "配置 PowerShell"
+            Name = "PWSH"
+            AvailabilityCheck = $null
+            Prepare = $null
+            Install = $null
+            Render = $null
+            Link = ({ New-PwshConfigLink -DeployContext $DeployContext }).GetNewClosure()
+            Update = ({ Set-PwshOpenSshDefaultShell }).GetNewClosure()
+            Tags = @("dev")
+        }
+        @{
             StageName = "安装 AltSnap"
             Name = "AltSnap"
             AvailabilityCheck = $null

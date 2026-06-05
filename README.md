@@ -205,9 +205,8 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 - `~/.config/tmux` -> `dotfiles/tmux/`
 - `~/.config/aerospace/` -> `dotfiles/generated/aerospace/`
 - `~/.config/borders/` -> `dotfiles/borders/`
+- `~/.config/sketchybar/` -> `dotfiles/sketchybar/`
 - `~/.config/fastfetch/` -> `dotfiles/fastfetch/`
-
-其中 `sketchybar/` 当前作为独立维护的子模块保留，尚未纳入主部署脚本，使用时请参考子模块内的 README 单独安装。
 
 `locals/` 目录用于存放机器特定的本地覆盖配置，不进入 Git 追踪。它与 `generated/` 渲染目录配合：
 
@@ -239,14 +238,13 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 
 当前实际覆盖范围：
 
-- macOS：字体、WezTerm、CLI 工具、zsh 插件、Starship、zsh、Yazi、Cava、LazyVim、fastfetch、tmux，以及 Aerospace + borders 窗口管理栈
+- macOS：字体、WezTerm、CLI 工具、zsh 插件、Starship、zsh、Yazi、Cava、LazyVim、fastfetch、tmux，以及 Aerospace + borders + SketchyBar 窗口管理栈
 - Ubuntu / Linux：共享 POSIX 主流程，入口脚本以 Ubuntu 为主；包管理器优先级是 `apt -> dnf -> pacman -> brew`，实测除了字体安装被跳过以外其余在 Ubuntu 均可以成功
 - Windows：AltSnap、JetBrains Mono、WezTerm、PSGallery、CLI 工具、Starship、PowerShell、Yazi、Cava、LazyVim、fastfetch
 - Termux：共享 POSIX 主流程，但 WezTerm 会被显式跳过，考虑到手机上使用 Termux 作为终端。
 
 补充说明：
 
-- 仓库还包含 `sketchybar/` 子模块，但它当前不在主部署脚本覆盖范围内，需要按子模块 README 单独安装。
 - 仓库当前包含 `tmux/plugins/tpm` 与 `sketchybar/` 两个子模块，因此示例中的克隆命令保留 `--recurse-submodules`。
 
 已知约束：
