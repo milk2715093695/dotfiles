@@ -123,3 +123,36 @@ y() {
 	[ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
 	rm -f -- "$tmp"
 }
+
+# 将 add_to_path 调用持久化写入 shell 配置
+persist_path() {
+	local target_file target_line local_flag=false dir=""
+
+	for arg in "$@"; do
+		case "$arg" in
+			--local) local_flag=true ;;
+			*) dir="$arg" ;;
+		esac
+	done
+
+	if [[ ! -d "$dir" ]]; then
+		echo "persist_path: 目录 $dir 不存在" >&2
+		return 1
+	fi
+
+	if $local_flag; then
+		target_file="$HOME/.config/zsh/locals/env.zsh"
+	else
+		target_file="$HOME/.config/zsh/env.zsh"
+	fi
+
+	target_line="add_to_path \"$dir\""
+
+	if [[ -f "$target_file" ]] && grep -Fxq "$target_line" "$target_file" 2>/dev/null; then
+		return 0
+	fi
+
+	mkdir -p "$(dirname "$target_file")"
+	printf '\n%s\n' "$target_line" >> "$target_file"
+	echo "persist_path: $dir → ${target_file##*/}"
+}

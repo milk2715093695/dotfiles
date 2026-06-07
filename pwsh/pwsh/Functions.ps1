@@ -125,3 +125,40 @@ function y {
     }
     Remove-Item -Path $tmp
 }
+
+# 将 Add-PathEntry 调用持久化写入 PowerShell 配置
+function Add-PersistentPath {
+    param(
+        [Parameter(Mandatory, Position=0)]
+        [string]$Path,
+
+        [Parameter()]
+        [switch]$Local
+    )
+
+    if (-not (Test-Path -LiteralPath $Path -PathType Container)) {
+        Write-Error "Add-PersistentPath: 目录 $Path 不存在"
+        return
+    }
+
+    if ($Local) {
+        $targetFile = "$HOME\.config\pwsh\Locals\Env.ps1"
+    }
+    else {
+        $targetFile = "$HOME\.config\pwsh\Env.ps1"
+    }
+    $targetLine = 'Add-PathEntry "' + $Path + '"'
+
+    if ((Test-Path $targetFile) -and (Select-String -LiteralPath $targetFile -Pattern ([regex]::Escape($targetLine)) -SimpleMatch -Quiet)) {
+        return
+    }
+
+    $parentDir = Split-Path $targetFile -Parent
+    if (-not (Test-Path $parentDir)) {
+        New-Item -ItemType Directory -Path $parentDir -Force | Out-Null
+    }
+
+    Add-Content -Path $targetFile -Value ""
+    Add-Content -Path $targetFile -Value $targetLine
+    Write-Host "Add-PersistentPath: $Path → $(Split-Path $targetFile -Leaf)"
+}
