@@ -165,7 +165,7 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 │       └── Secrets                             # 密码管理（除了示例文件外不会被追踪）
 │           └── Example.ps1                     # 示例
 ├── README.md
-├── sketchybar              # SketchyBar 配置子模块（独立维护，当前未纳入主部署脚本）
+├── sketchybar              # SketchyBar 配置子模块
 ├── starship
 │   └── starship.toml       # starship 配置
 ├── tmux                    # tmux 配置
