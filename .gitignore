@@ -53,6 +53,9 @@ $RECYCLE.BIN/
 # 可再生成资源：yazi 插件和主题（现由 /generated/ 规则覆盖）
 # /generated/ 规则已在 "配置渲染产物" 段落中
 
+# 可再生成资源：cava shader 文件（由 cava 安装自带或首次运行生成）
+/cava/common/shaders/
+
 # 可再生成资源：tmux 插件，保留 tpm 管理器
 /tmux/plugins/*
 !/tmux/plugins/tpm/

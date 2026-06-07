@@ -14,7 +14,6 @@ render_cava_config() {
     mkdir -p "$REPO_ROOT/generated/cava"
     render_config_file "$REPO_ROOT/cava/base.config" "$REPO_ROOT/generated/cava/config"
     cp -r "$REPO_ROOT/cava/common/themes" "$REPO_ROOT/generated/cava/themes"
-    cp -r "$REPO_ROOT/cava/common/shaders" "$REPO_ROOT/generated/cava/shaders"
 }
 
 # 链接 Cava 配置
