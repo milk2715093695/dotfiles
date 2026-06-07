@@ -30,6 +30,7 @@ Set-StrictMode -Version Latest
     "$PSScriptRoot\packages\Cava.psm1"
     "$PSScriptRoot\packages\Fastfetch.psm1"
     "$PSScriptRoot\packages\LazyVim.psm1"
+    "$PSScriptRoot\packages\Gitlogue.psm1"
     "$PSScriptRoot\Main.psm1"
 ) | ForEach-Object { Import-Module $_ -Force }
 
@@ -96,6 +97,7 @@ function Import-WindowsDeployModules {
         "$ScriptDir\windows\packages\Cava.psm1"
         "$ScriptDir\windows\packages\Fastfetch.psm1"
         "$ScriptDir\windows\packages\LazyVim.psm1"
+        "$ScriptDir\windows\packages\Gitlogue.psm1"
         "$ScriptDir\windows\Main.psm1"
     )
 
@@ -119,14 +121,14 @@ function Start-WindowsDeploy {
         [Parameter(Mandatory)]
         [bool]$Help,
 
-        [Parameter(Mandatory)]
-        [string]$Preset,
+        [Parameter()]
+        [string]$Preset = "",
 
-        [Parameter(Mandatory)]
-        [string]$SkipUnits,
+        [Parameter()]
+        [string]$SkipUnits = "",
 
-        [Parameter(Mandatory)]
-        [string]$OnlyUnits
+        [Parameter()]
+        [string]$OnlyUnits = ""
     )
 
     if ($Help) {

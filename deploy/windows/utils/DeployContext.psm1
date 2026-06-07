@@ -9,14 +9,14 @@ function New-DeployContext {
         [Parameter(Mandatory)]
         [string]$ConfigMode,
 
-        [Parameter(Mandatory)]
-        [string]$Preset,
+        [Parameter()]
+        [string]$Preset = "",
 
-        [Parameter(Mandatory)]
-        [string]$SkipUnits,
+        [Parameter()]
+        [string]$SkipUnits = "",
 
-        [Parameter(Mandatory)]
-        [string]$OnlyUnits
+        [Parameter()]
+        [string]$OnlyUnits = ""
     )
 
     # --only 和 --preset 互斥校验
