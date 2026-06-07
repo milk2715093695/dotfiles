@@ -14,6 +14,7 @@ get_software_command_name() {
         filemanager.yazi) printf '%s\n' "yazi" ;;
         audio.cava) printf '%s\n' "cava" ;;
         window.aerospace) printf '%s\n' "aerospace" ;;
+        cli.gitlogue) printf '%s\n' "gitlogue" ;;
         *) return 1 ;;
     esac
 }

@@ -232,6 +232,20 @@ get_package_install_specs() {
             ;;
         pkg:shell.fastfetch) printf '%s\n' "package|fastfetch" ;;
 
-        *) return 1 ;;
+        brew:cli.gitlogue) printf '%s\n' "package|gitlogue" ;;
+        apt:cli.gitlogue)
+            printf '%s\n' \
+                "package|build-essential|gitlogue 编译 C 工具链" \
+                "package|pkg-config|gitlogue 编译系统库检测" \
+                "package|libssl-dev|gitlogue OpenSSL 头文件" \
+                "package|curl|gitlogue rustup 安装脚本下载"
+            ;;
+        pkg:cli.gitlogue)
+            printf '%s\n' \
+                "package|rust|gitlogue Rust 工具链" \
+                "package|perl|gitlogue OpenSSL 源码编译依赖"
+            ;;
+
+        *) return 1 ;;  
     esac
 }

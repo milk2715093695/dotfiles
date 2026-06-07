@@ -1,0 +1,40 @@
+# Theme to use for syntax highlighting
+theme = "tokyo-night"
+
+# Typing speed in milliseconds per character
+speed = 30
+
+# Show background colors (set to false for transparent background)
+background = true
+
+# Commit playback order: random, asc, or desc
+order = "asc"
+
+# Loop the animation continuously
+loop = false
+
+# Ignore patterns (gitignore syntax)
+# Examples: ["*.png", "*.ipynb", "dist/**"]
+ignore_patterns = [
+    "*.png",
+    "*.jpg",
+    "*.webp",
+    "*.ipynb",
+    "Cargo.lock",
+    "package-lock.json",
+    "pnpm-lock.yaml",
+    "yarn.lock",
+    "poetry.lock",
+    "dist/**",
+    "build/**",
+    ".next/**",
+    "coverage/**",
+    "*.min.js",
+    "*.map",
+    "**/__snapshots__/**",
+    "LICENSE"
+]
+
+# Speed rules for different file types (pattern:milliseconds)
+# Examples: ["*.java:50", "*.xml:5", "*.rs:30"]
+speed_rules = []

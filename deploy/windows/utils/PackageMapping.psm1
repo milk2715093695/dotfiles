@@ -50,6 +50,9 @@ $script:PackageSpecsByManagerAndKey = @{
         @{ Kind = "bucket"; Name = "nerd-fonts" }
         @{ Kind = "package"; Name = "jetbrains-mono" }
     )
+    "scoop:cli.gitlogue" = @(
+        @{ Kind = "package"; Name = "rust" }
+    )
 
     "winget:shell.starship" = @(
         @{ Kind = "package"; Name = "Starship.Starship" }

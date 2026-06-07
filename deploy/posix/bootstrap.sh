@@ -28,5 +28,6 @@ source "$_BOOT_DIR/packages/lazyvim.sh"                 # LazyVim 配置
 source "$_BOOT_DIR/packages/tmux.sh"                    # tmux 配置
 source "$_BOOT_DIR/packages/cava.sh"                    # Cava 配置
 source "$_BOOT_DIR/packages/fastfetch.sh"               # fastfetch 配置
+source "$_BOOT_DIR/packages/gitlogue.sh"             # gitlogue 配置
 
 source "$_BOOT_DIR/main.sh"                             # 入口函数

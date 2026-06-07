@@ -10,6 +10,7 @@ $script:SoftwareCommandByKey = @{
     "terminal.wezterm" = "wezterm"
     "filemanager.yazi" = "yazi"
     "audio.cava" = "cava"
+    "cli.gitlogue" = "gitlogue"
 }
 
 $script:ScoopPackageBySoftwareKey = @{

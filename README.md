@@ -7,10 +7,11 @@
   - [2. 目录结构](#2-目录结构)
   - [3. 配置路径约定](#3-配置路径约定)
   - [4. 部署](#4-部署)
-    - [4.1. Ubuntu / Linux（Ubuntu 优先）](#41-ubuntu--linuxubuntu-优先)
-    - [4.2. macOS](#42-macos)
-    - [4.3. Windows](#43-windows)
-    - [4.4. Termux](#44-termux)
+    - [4.1. 预设覆盖](#41-预设覆盖)
+    - [4.2. Ubuntu / Linux（Ubuntu 优先）](#42-ubuntu--linuxubuntu-优先)
+    - [4.3. macOS](#43-macos)
+    - [4.4. Windows](#44-windows)
+    - [4.5. Termux](#45-termux)
   - [5. 未来计划](#5-未来计划)
   - [许可证](#许可证)
 
@@ -42,6 +43,26 @@ borders 是 macOS 的窗口边框管理器，搭配 aerospace 使用，用于高
 cava 配置了主题颜色：
 
 ![cava 配置效果](assets/screenshots/cava.webp)
+
+</details>
+
+
+<details>
+<summary>fastfetch</summary>
+
+为 fastfetch 配置了系统信息展示布局：
+
+![fastfetch 配置效果](assets/screenshots/fastfetch.webp)
+
+</details>
+
+
+<details>
+<summary>gitlogue</summary>
+
+gitlogue 是 Git 历史 cinematics 回放工具，配置了主题偏好：
+
+![gitlogue 配置效果](assets/screenshots/gitlogue.webp)
 
 </details>
 
@@ -95,16 +116,6 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 
 
 <details>
-<summary>fastfetch</summary>
-
-为 fastfetch 配置了系统信息展示布局：
-
-![fastfetch 配置效果](assets/screenshots/fastfetch.webp)
-
-</details>
-
-
-<details>
 <summary>Yazi</summary>
 
 为 yazi 配置了主题以及常用插件：
@@ -134,9 +145,10 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 │   ├── termux.sh           # Termux
 │   ├── ubuntu.sh           # Ubuntu 优先的 Linux 部署入口
 │   └── windows.ps1         # Windows
-├── fastfetch                # fastfetch 配置
-│   └── config.jsonc         # fastfetch 系统信息展示配置
+├── fastfetch               # fastfetch 配置
+│   └── config.jsonc        # fastfetch 系统信息展示配置
 ├── generated/              # 渲染产物目录（gitignored）：部署时由 render 阶段生成
+├── gitlogue                # gitlogue 配置
 ├── LICENSE
 ├── nvim                    # 基于 LazyVim 的轻量定制配置
 ├── pwsh                    # pwsh 配置
@@ -207,6 +219,7 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 - `~/.config/borders/` -> `dotfiles/borders/`
 - `~/.config/sketchybar/` -> `dotfiles/sketchybar/`
 - `~/.config/fastfetch/` -> `dotfiles/fastfetch/`
+- `~/.config/gitlogue/` -> `dotfiles/gitlogue/`
 
 `locals/` 目录用于存放机器特定的本地覆盖配置，不进入 Git 追踪。它与 `generated/` 渲染目录配合：
 
@@ -238,9 +251,9 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 
 当前实际覆盖范围：
 
-- macOS：字体、WezTerm、CLI 工具、zsh 插件、Starship、zsh、Yazi、Cava、LazyVim、fastfetch、tmux，以及 Aerospace + borders + SketchyBar 窗口管理栈
+- macOS：字体、WezTerm、CLI 工具、zsh 插件、Starship、zsh、Yazi、Cava、LazyVim、fastfetch、gitlogue、tmux，以及 Aerospace + borders + SketchyBar 窗口管理栈
 - Ubuntu / Linux：共享 POSIX 主流程，入口脚本以 Ubuntu 为主；包管理器优先级是 `apt -> dnf -> pacman -> brew`，实测除了字体安装被跳过以外其余在 Ubuntu 均可以成功
-- Windows：AltSnap、JetBrains Mono、WezTerm、PSGallery、CLI 工具、Starship、PowerShell、Yazi、Cava、LazyVim、fastfetch
+- Windows：AltSnap、JetBrains Mono、WezTerm、PSGallery、CLI 工具、Starship、PowerShell、Yazi、Cava、LazyVim、fastfetch、gitlogue
 - Termux：共享 POSIX 主流程，但 WezTerm 会被显式跳过，考虑到手机上使用 Termux 作为终端。
 
 补充说明：
@@ -292,6 +305,28 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 
 > `--yes-install` / `-YesInstall` 只会自动确认安装类操作，不会自动确认配置覆盖、删除、备份、快捷方式、默认 shell 等其他操作。
 
+### 4.1. 预设覆盖
+
+| POSIX 单元 | Windows 单元 | beauty | dev |
+|------------|-------------|--------|-----|
+| Fonts | JetBrains | x | x |
+| WezTerm | WezTerm | x | x |
+| — | — | | |
+| CLI Tools | CLI Tools | | x |
+| zsh Plugins | — | | x |
+| zsh | PWSH | | x |
+| — | AltSnap | | x |
+| Starship | Starship | x | x |
+| Yazi | Yazi | x | x |
+| LazyVim | LazyVim | x | x |
+| tmux | — | x | x |
+| Cava | Cava | x | |
+| fastfetch | fastfetch | x | |
+| gitlogue | gitlogue | x | |
+| Aerospace | — | x | |
+| borders | — | x | |
+| SketchyBar | — | x | |
+
 示例：
 
 ```bash
@@ -308,7 +343,7 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 .\deploy\windows.ps1 -Only WezTerm,LazyVim
 ```
 
-### 4.1. Ubuntu / Linux（Ubuntu 优先）
+### 4.2. Ubuntu / Linux（Ubuntu 优先）
 
 推荐在 Ubuntu 上使用，并确保至少有可用的 `apt`。脚本内部对 `dnf`、`pacman`、`brew` 有部分 fallback 支持，但当前入口和实际测试范围仍以 Ubuntu 为主。
 
@@ -321,7 +356,7 @@ chmod +x ./deploy/ubuntu.sh
 ./deploy/ubuntu.sh
 ```
 
-### 4.2. macOS
+### 4.3. macOS
 
 推荐提前安装 `Homebrew`。
 
@@ -334,7 +369,7 @@ chmod +x ./deploy/macos.sh
 ./deploy/macos.sh
 ```
 
-### 4.3. Windows
+### 4.4. Windows
 
 - 推荐使用 `pwsh` 运行。
 - 包管理器优先级为 `scoop -> winget`；至少准备其中一个。
@@ -358,7 +393,7 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 .\deploy\windows.ps1
 ```
 
-### 4.4. Termux
+### 4.5. Termux
 
 Termux 使用 `pkg` 作为包管理器，并会跳过 WezTerm。zsh 插件除了 `zsh-completions` 外，还会把 `zsh-autosuggestions` 与 `zsh-syntax-highlighting` 克隆到 `~/.zsh/`。
 
@@ -385,6 +420,7 @@ chmod +x ./deploy/termux.sh
   - [X] AeroSpace 配置
   - [X] Sketchybar 配置
   - [X] fastfetch 配置
+  - [X] gitlogue 配置
 - 部署
   - [X] Ubuntu 部署脚本
   - [X] macOS 部署脚本

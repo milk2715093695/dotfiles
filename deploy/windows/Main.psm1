@@ -139,6 +139,17 @@ function Main {
             Update = $null
             Tags = @("beauty")
         }
+        @{
+            StageName = "配置 gitlogue"
+            Name = "gitlogue"
+            AvailabilityCheck = ({ Test-Gitlogue }).GetNewClosure()
+            Prepare = $null
+            Install = ({ Install-Gitlogue -DeployContext $DeployContext }).GetNewClosure()
+            Render = $null
+            Link = ({ New-GitlogueConfigLink -DeployContext $DeployContext }).GetNewClosure()
+            Update = $null
+            Tags = @("beauty")
+        }
     )
 
     foreach ($unit in $deployUnits) {
