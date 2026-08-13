@@ -2,7 +2,7 @@
 proxy() {
     # 默认参数
     local DEFAULT_IP="127.0.0.1"
-    local DEFAULT_HTTP_PORT="9910"
+    local DEFAULT_HTTP_PORT="6045"
     local DEFAULT_SOCKS5_PORT="9909"
 
     case "$1" in
