@@ -22,22 +22,12 @@ on-mode-changed = []
 after-startup-command = [
     'exec-and-forget borders style=uniform width=6.0 hidpi=on active_color=0xff7aa2f7 inactive_color=0xff1e2030 background_color=0x302c2e34',
     'exec-and-forget sketchybar',
+    'exec-and-forget /bin/bash $HOME/.config/sketchybar/subscribe_forward.sh',
 ]
 
 # 焦点跨显示器变化时移动鼠标；当前主要是保留默认行为，方便之后接外屏时调整。
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 
-# 通知 SketchyBar 刷新工作区状态。
-exec-on-workspace-change = [
-    '/bin/bash',
-    '-c',
-    'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
-]
-
-# 通知 SketchyBar 刷新前台应用或焦点相关 widget。
-on-focus-changed = [
-    'exec-and-forget sketchybar --trigger aerospace_focus_change',
-]
 
 
 # 工作区
