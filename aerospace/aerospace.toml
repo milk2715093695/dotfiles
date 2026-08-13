@@ -106,21 +106,21 @@ default-root-container-orientation = 'auto'
     alt-7 = 'workspace vm'
 
     # 移动窗口后立即切换到目标工作区，保持操作反馈明确。
-    alt-shift-f = ['move-node-to-workspace files', 'workspace files']
-    alt-shift-w = ['move-node-to-workspace web', 'workspace web']
-    alt-shift-d = ['move-node-to-workspace dev', 'workspace dev']
-    alt-shift-n = ['move-node-to-workspace net', 'workspace net']
-    alt-shift-g = ['move-node-to-workspace game', 'workspace game']
-    alt-shift-c = ['move-node-to-workspace chat', 'workspace chat']
-    alt-shift-v = ['move-node-to-workspace vm', 'workspace vm']
+    alt-shift-f = 'move-node-to-workspace files; workspace files'
+    alt-shift-w = 'move-node-to-workspace web; workspace web'
+    alt-shift-d = 'move-node-to-workspace dev; workspace dev'
+    alt-shift-n = 'move-node-to-workspace net; workspace net'
+    alt-shift-g = 'move-node-to-workspace game; workspace game'
+    alt-shift-c = 'move-node-to-workspace chat; workspace chat'
+    alt-shift-v = 'move-node-to-workspace vm; workspace vm'
 
-    alt-shift-1 = ['move-node-to-workspace files', 'workspace files']
-    alt-shift-2 = ['move-node-to-workspace web', 'workspace web']
-    alt-shift-3 = ['move-node-to-workspace dev', 'workspace dev']
-    alt-shift-4 = ['move-node-to-workspace net', 'workspace net']
-    alt-shift-5 = ['move-node-to-workspace game', 'workspace game']
-    alt-shift-6 = ['move-node-to-workspace chat', 'workspace chat']
-    alt-shift-7 = ['move-node-to-workspace vm', 'workspace vm']
+    alt-shift-1 = 'move-node-to-workspace files; workspace files'
+    alt-shift-2 = 'move-node-to-workspace web; workspace web'
+    alt-shift-3 = 'move-node-to-workspace dev; workspace dev'
+    alt-shift-4 = 'move-node-to-workspace net; workspace net'
+    alt-shift-5 = 'move-node-to-workspace game; workspace game'
+    alt-shift-6 = 'move-node-to-workspace chat; workspace chat'
+    alt-shift-7 = 'move-node-to-workspace vm; workspace vm'
 
     alt-tab = 'workspace-back-and-forth'
     alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
@@ -131,18 +131,18 @@ default-root-container-orientation = 'auto'
 
 # 维护模式快捷键
 [mode.service.binding]
-    esc = ['reload-config', 'mode main']
-    r = ['flatten-workspace-tree', 'mode main'] # reset layout
-    f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout
-    backspace = ['close-all-windows-but-current', 'mode main']
+    esc = 'reload-config; mode main'
+    r = 'flatten-workspace-tree; mode main' # reset layout
+    f = 'layout floating tiling; mode main' # Toggle between floating and tiling layout
+    backspace = 'close-all-windows-but-current; mode main'
 
     # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
-    #s = ['layout sticky tiling', 'mode main']
+    #s = 'layout sticky tiling; mode main'
 
-    alt-shift-h = ['join-with left', 'mode main']
-    alt-shift-j = ['join-with down', 'mode main']
-    alt-shift-k = ['join-with up', 'mode main']
-    alt-shift-l = ['join-with right', 'mode main']
+    alt-shift-h = 'join-with left; mode main'
+    alt-shift-j = 'join-with down; mode main'
+    alt-shift-k = 'join-with up; mode main'
+    alt-shift-l = 'join-with right; mode main'
 
 
 # 窗口路由规则
@@ -183,4 +183,4 @@ default-root-container-orientation = 'auto'
 
 [[on-window-detected]]
     if.window-title-regex-substring = '(settings|preferences|options|about|properties|设置|偏好|选项|关于|属性)'
-    run = 'layout floating'
+    run = ['layout floating']
