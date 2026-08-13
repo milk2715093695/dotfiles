@@ -20,7 +20,7 @@ on-mode-changed = []
 # 桌面联动
 # 启动桌面辅助组件。borders 的样式暂时在这里保持内联，便于和 AeroSpace 同步启动。
 after-startup-command = [
-    'exec-and-forget borders style=round width=6.0 hidpi=off active_color=0xff7aa2f7 inactive_color=0xff1e2030',
+    'exec-and-forget borders style=uniform width=6.0 hidpi=on active_color=0xff7aa2f7 inactive_color=0xff1e2030 background_color=0x302c2e34',
     'exec-and-forget sketchybar',
 ]
 
