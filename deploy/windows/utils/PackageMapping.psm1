@@ -23,6 +23,7 @@ $script:PackageSpecsByManagerAndKey = @{
         @{ Kind = "package"; Name = "fd" }
     )
     "scoop:terminal.wezterm" = @(
+        @{ Kind = "bucket"; Name = "extras" }
         @{ Kind = "package"; Name = "wezterm" }
     )
     "scoop:filemanager.yazi" = @(
