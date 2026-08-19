@@ -164,6 +164,13 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 │       ├── Plugins.ps1                         # 插件配置
 │       └── Secrets                             # 密码管理（除了示例文件外不会被追踪）
 │           └── Example.ps1                     # 示例
+├── proxy                                       # pacproxy 本地转发代理
+│   ├── pacproxy.py                             # 代理服务主体
+│   ├── autostart                               # 多平台自启动定义
+│   ├── rules                                   # 本地覆盖层（隐私，不入库）
+│   │   ├── example_direct.txt                  # 示例
+│   │   └── example_proxy.txt                   # 示例
+│   └── gfw-pac                                 # 规则资产子模块
 ├── README.md
 ├── sketchybar              # SketchyBar 配置子模块
 ├── starship
@@ -220,6 +227,7 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 - `~/.config/sketchybar/` -> `dotfiles/sketchybar/`
 - `~/.config/fastfetch/` -> `dotfiles/fastfetch/`
 - `~/.config/gitlogue/` -> `dotfiles/gitlogue/`
+- `~/.config/pacproxy/` -> `dotfiles/proxy/`
 
 `locals/` 目录用于存放机器特定的本地覆盖配置，不进入 Git 追踪。它与 `generated/` 渲染目录配合：
 
@@ -251,14 +259,14 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 
 当前实际覆盖范围：
 
-- macOS：字体、WezTerm、CLI 工具、zsh 插件、Starship、zsh、Yazi、Cava、LazyVim、fastfetch、gitlogue、tmux，以及 Aerospace + borders + SketchyBar 窗口管理栈
+- macOS：字体、WezTerm、CLI 工具、zsh 插件、Starship、zsh、Yazi、Cava、LazyVim、fastfetch、gitlogue、tmux、pacproxy，以及 Aerospace + borders + SketchyBar 窗口管理栈
 - Ubuntu / Linux：共享 POSIX 主流程，入口脚本以 Ubuntu 为主；包管理器优先级是 `apt -> dnf -> pacman -> brew`，实测除了字体安装被跳过以外其余在 Ubuntu 均可以成功
-- Windows：AltSnap、JetBrains Mono、WezTerm、PSGallery、CLI 工具、Starship、PowerShell、Yazi、Cava、LazyVim、fastfetch、gitlogue
-- Termux：共享 POSIX 主流程，但 WezTerm 会被显式跳过，考虑到手机上使用 Termux 作为终端。
+- Windows：AltSnap、JetBrains Mono、WezTerm、PSGallery、CLI 工具、Starship、PowerShell、Yazi、Cava、LazyVim、fastfetch、gitlogue、pacproxy
+- Termux：共享 POSIX 主流程，但 WezTerm 会被显式跳过，考虑到手机上使用 Termux 作为终端；pacproxy 以 runit 服务部署（Termux:Boot 拉起）
 
 补充说明：
 
-- 仓库当前包含 `tmux/plugins/tpm` 与 `sketchybar/` 两个子模块，因此示例中的克隆命令保留 `--recurse-submodules`。
+- 仓库当前包含 `tmux/plugins/tpm`、`sketchybar/` 与 `proxy/gfw-pac` 三个子模块，因此示例中的克隆命令保留 `--recurse-submodules`。
 
 已知约束：
 
@@ -326,6 +334,7 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 | Aerospace | — | x | |
 | borders | — | x | |
 | SketchyBar | — | x | |
+| pacproxy | pacproxy | | x |
 
 示例：
 
