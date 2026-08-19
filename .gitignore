@@ -60,3 +60,12 @@ $RECYCLE.BIN/
 /tmux/plugins/*
 !/tmux/plugins/tpm/
 !/tmux/plugins/tpm/**
+
+# 代理本地规则：隐私（暴露使用网站），忽略本地内容，保留示例
+/proxy/rules/*
+!/proxy/rules/example_direct.txt
+!/proxy/rules/example_proxy.txt
+
+# 代理本地产物：日志与生成的 PAC
+/proxy/pacproxy.log
+/proxy/my_proxy.pac
