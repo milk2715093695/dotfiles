@@ -13,11 +13,11 @@ check_pacproxy_available() {
 render_pacproxy_config() {
     local service_dir="$PREFIX/var/service/pacproxy"
 
-    if [ -e "$REPO_ROOT/proxy/gfw-pac/.git" ]; then
+    if [ -e "$REPO_ROOT/pacproxy/gfw-pac/.git" ]; then
         step "gfw-pac 子模块已就位，跳过初始化"
     else
         step "初始化 gfw-pac 规则子模块"
-        git submodule update --init proxy/gfw-pac || {
+        git submodule update --init pacproxy/gfw-pac || {
             error "gfw-pac 子模块初始化失败"
             return 1
         }
@@ -27,10 +27,10 @@ render_pacproxy_config() {
 
     mkdir -p "$service_dir/log"
     sed -e "s|__PYTHON__|$(command -v python3)|g" \
-        "$REPO_ROOT/proxy/autostart/termux/pacproxy/run" > "$service_dir/run"
+        "$REPO_ROOT/pacproxy/autostart/termux/pacproxy/run" > "$service_dir/run"
     chmod +x "$service_dir/run"
 
-    cp "$REPO_ROOT/proxy/autostart/termux/pacproxy/log-run" "$service_dir/log/run"
+    cp "$REPO_ROOT/pacproxy/autostart/termux/pacproxy/log-run" "$service_dir/log/run"
     chmod +x "$service_dir/log/run"
 }
 

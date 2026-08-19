@@ -164,7 +164,7 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 │       ├── Plugins.ps1                         # 插件配置
 │       └── Secrets                             # 密码管理（除了示例文件外不会被追踪）
 │           └── Example.ps1                     # 示例
-├── proxy                                    # pacproxy 本地转发代理
+├── pacproxy                                 # pacproxy 本地转发代理
 │   ├── pacproxy.py                           # 代理服务主体
 │   ├── autostart                               # 多平台自启动定义
 │   ├── rules                                   # 本地规则覆盖（隐私，不入库）
@@ -240,10 +240,10 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 
 pacproxy 的规则来自两个来源，deploy 的 render 阶段合并后输出到 `generated/pacproxy/`（`~/.config/pacproxy` 指向此目录）：
 
-- **官方规则**：`proxy/gfw-pac/` 子模块（每周自动更新），提供 `direct-domains.txt`、`proxy-domains.txt`、`local-tlds.txt`、`cidrs-cn.txt` 四份基础文件。
-- **本地覆盖**：`proxy/rules/` 下的同名文件（隐私，不入库）。用户直接添加或修改这些文件即可，deploy 时与官方规则合并去重（用户域名同时出现在两个列表时直连优先）。
+- **官方规则**：`pacproxy/gfw-pac/` 子模块（每周自动更新），提供 `direct-domains.txt`、`proxy-domains.txt`、`local-tlds.txt`、`cidrs-cn.txt` 四份基础文件。
+- **本地覆盖**：`pacproxy/rules/` 下的同名文件（隐私，不入库）。用户直接添加或修改这些文件即可，deploy 时与官方规则合并去重（用户域名同时出现在两个列表时直连优先）。
 
-合并产物包括 pacproxy 服务读的规则文件，以及给浏览器等应用使用的 `gfw.pac`（PAC 直接指向本地上游 `127.0.0.1:9910`，不经过 pacproxy 二次分流）。修改 `proxy/rules/` 后，重新执行部署的 render 阶段即可生效：`./deploy/macos.sh --only pacproxy --config-mode replace-link`（Termux 对应 `./termux.sh --only pacproxy --config-mode replace-link`）。
+合并产物包括 pacproxy 服务读的规则文件，以及给浏览器等应用使用的 `gfw.pac`（PAC 直接指向本地上游 `127.0.0.1:9910`，不经过 pacproxy 二次分流）。修改 `pacproxy/rules/` 后，重新执行部署的 render 阶段即可生效：`./deploy/macos.sh --only pacproxy --config-mode replace-link`（Termux 对应 `./termux.sh --only pacproxy --config-mode replace-link`）。
 
 ## 4. 部署
 
@@ -275,7 +275,7 @@ pacproxy 的规则来自两个来源，deploy 的 render 阶段合并后输出�
 
 补充说明：
 
-- 仓库当前包含 `tmux/plugins/tpm`、`sketchybar/` 与 `proxy/gfw-pac` 三个子模块，因此示例中的克隆命令保留 `--recurse-submodules`。
+- 仓库当前包含 `tmux/plugins/tpm`、`sketchybar/` 与 `pacproxy/gfw-pac` 三个子模块，因此示例中的克隆命令保留 `--recurse-submodules`。
 
 已知约束：
 

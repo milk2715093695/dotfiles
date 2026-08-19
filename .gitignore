@@ -62,10 +62,10 @@ $RECYCLE.BIN/
 !/tmux/plugins/tpm/**
 
 # 代理本地规则：隐私（暴露使用网站），忽略全部本地内容，目录由渲染脚本创建
-/proxy/rules/*
-!/proxy/rules/.gitkeep
+/pacproxy/rules/*
+!/pacproxy/rules/.gitkeep
 
 # 代理本地产物：运行日志与手动生成的 PAC
-/proxy/pacproxy.log
-/proxy/my_proxy.pac
-/proxy/gfw.pac
+/pacproxy/pacproxy.log
+/pacproxy/my_proxy.pac
+/pacproxy/gfw.pac

@@ -2,8 +2,8 @@
 # 产物目录自包含：合并规则 + 上游源文件 + 生成的 gfw.pac + pacproxy.py 副本
 render_pacproxy_assets() {
     local out_dir="$REPO_ROOT/generated/pacproxy"
-    local official_dir="$REPO_ROOT/proxy/gfw-pac"
-    local user_dir="$REPO_ROOT/proxy/rules"
+    local official_dir="$REPO_ROOT/pacproxy/gfw-pac"
+    local user_dir="$REPO_ROOT/pacproxy/rules"
 
     mkdir -p "$out_dir"
 
@@ -27,10 +27,10 @@ render_pacproxy_assets() {
         --ip-file="$out_dir/cidrs-cn.txt")
 
     # 自包含：复制服务脚本，产物目录可独立运行
-    cp "$REPO_ROOT/proxy/pacproxy.py" "$out_dir/pacproxy.py"
+    cp "$REPO_ROOT/pacproxy/pacproxy.py" "$out_dir/pacproxy.py"
 
     if [ ! -f "$user_dir/direct-domains.txt" ] || [ ! -f "$user_dir/proxy-domains.txt" ]; then
-        warn "proxy/rules/ 缺少用户自定义规则（隐私文件，不入库）"
-        warn "参考 proxy/gfw-pac/direct-domains.txt 创建同名文件后重新部署"
+        warn "pacproxy/rules/ 缺少用户自定义规则（隐私文件，不入库）"
+        warn "参考 pacproxy/gfw-pac/direct-domains.txt 创建同名文件后重新部署"
     fi
 }

@@ -4,6 +4,6 @@
 [submodule "sketchybar"]
 	path = sketchybar
 	url = https://github.com/milk2715093695/sketchybar-dotfiles.git
-[submodule "proxy/gfw-pac"]
-	path = proxy/gfw-pac
+[submodule "pacproxy/gfw-pac"]
+	path = pacproxy/gfw-pac
 	url = https://github.com/zhiyi7/gfw-pac.git

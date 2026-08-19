@@ -3,8 +3,8 @@ Set-StrictMode -Version Latest
 # 渲染合并规则并生成 PAC 到 generated/pacproxy/
 function Render-PacproxyAssets {
     $outDir = Join-Path $REPO_ROOT "generated\pacproxy"
-    $officialDir = Join-Path $REPO_ROOT "proxy\gfw-pac"
-    $userDir = Join-Path $REPO_ROOT "proxy\rules"
+    $officialDir = Join-Path $REPO_ROOT "pacproxy\gfw-pac"
+    $userDir = Join-Path $REPO_ROOT "pacproxy\rules"
 
     New-Item -ItemType Directory -Force -Path $outDir | Out-Null
     Write-STEP "渲染 pacproxy 规则产物 -> $outDir"
@@ -38,11 +38,11 @@ function Render-PacproxyAssets {
     if ($LASTEXITCODE -ne 0) { throw "gfw.pac 生成失败" }
 
     # 自包含：复制服务脚本，产物目录可独立运行
-    Copy-Item (Join-Path $REPO_ROOT "proxy\pacproxy.py") $outDir
+    Copy-Item (Join-Path $REPO_ROOT "pacproxy\pacproxy.py") $outDir
 
     if (-not (Test-Path (Join-Path $userDir "direct-domains.txt")) -or -not (Test-Path (Join-Path $userDir "proxy-domains.txt"))) {
-        Write-WARNING "proxy\rules\ 缺少用户自定义规则（隐私文件，不入库）"
-        Write-WARNING "参考 proxy\gfw-pac\direct-domains.txt 创建同名文件后重新部署"
+        Write-WARNING "pacproxy\rules\ 缺少用户自定义规则（隐私文件，不入库）"
+        Write-WARNING "参考 pacproxy\gfw-pac\direct-domains.txt 创建同名文件后重新部署"
     }
 }
 
@@ -53,16 +53,16 @@ function Render-PacproxyTask {
         [hashtable]$DeployContext
     )
 
-    if (Test-Path (Join-Path $REPO_ROOT "proxy\gfw-pac\.git")) {
+    if (Test-Path (Join-Path $REPO_ROOT "pacproxy\gfw-pac\.git")) {
         Write-SKIP "gfw-pac 子模块已就位，跳过初始化"
     } else {
         Write-STEP "初始化 gfw-pac 规则子模块"
         Push-Location $REPO_ROOT
         try {
-            git submodule update --init proxy/gfw-pac 2>$null
+            git submodule update --init pacproxy/gfw-pac 2>$null
             if ($LASTEXITCODE -ne 0) {
                 Write-WARNING "git submodule 注册不可用（尚未提交），改用 git clone 兜底"
-                git clone --depth 1 https://github.com/zhiyi7/gfw-pac.git proxy/gfw-pac
+                git clone --depth 1 https://github.com/zhiyi7/gfw-pac.git pacproxy/gfw-pac
             }
             if ($LASTEXITCODE -ne 0) { throw "gfw-pac 子模块初始化失败" }
         } finally {

@@ -8,7 +8,7 @@ check_pacproxy_available() {
 
 # 渲染合并规则并生成 PAC；缺失时初始化规则子模块
 render_pacproxy_config() {
-    git submodule update --init proxy/gfw-pac || {
+    git submodule update --init pacproxy/gfw-pac || {
         error "gfw-pac 子模块初始化失败"
         return 1
     }
@@ -18,7 +18,7 @@ render_pacproxy_config() {
     # 渲染 launchd plist（替换 __PYTHON__，并把 ~ 展开为绝对路径避免依赖 launchd 展开）
     sed -e "s|__PYTHON__|$(command -v python3)|g" \
         -e "s|~/.config/pacproxy|$HOME/.config/pacproxy|g" \
-        "$REPO_ROOT/proxy/autostart/macos/com.mac.pacproxy.plist" \
+        "$REPO_ROOT/pacproxy/autostart/macos/com.mac.pacproxy.plist" \
         > "$HOME/Library/LaunchAgents/com.mac.pacproxy.plist"
 }
 
