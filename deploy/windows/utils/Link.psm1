@@ -169,4 +169,4 @@ function New-SymbolicLink {
     New-Link -TargetPath $TargetPath -SourcePath $SourcePath
 }
 
-Export-ModuleMember -Function New-SymbolicLink
+Export-ModuleMember -Function New-SymbolicLink, Test-TargetExists

@@ -13,6 +13,7 @@ source "$SCRIPT_DIR/macos/ensure_brew.sh"           # Homebrew 检测与安装
 source "$SCRIPT_DIR/macos/packages/platform.sh"     # macOS 平台扩展配置
 source "$SCRIPT_DIR/macos/packages/aerospace.sh"    # Aerospace 窗口管理栈配置
 source "$SCRIPT_DIR/macos/packages/sketchybar.sh"   # SketchyBar 菜单栏配置
+source "$SCRIPT_DIR/macos/packages/pacproxy.sh"     # pacproxy 本地转发代理配置
 
 # 解析部署参数并执行入口
 parse_deploy_args "$@"

@@ -150,6 +150,17 @@ function Main {
             Update = $null
             Tags = @("beauty")
         }
+        @{
+            StageName = "配置 pacproxy 本地代理"
+            Name = "pacproxy"
+            AvailabilityCheck = ({ Test-PacproxyRuntime }).GetNewClosure()
+            Prepare = $null
+            Install = $null
+            Render = ({ Render-PacproxyTask -DeployContext $DeployContext }).GetNewClosure()
+            Link = ({ New-PacproxyConfigLink -DeployContext $DeployContext }).GetNewClosure()
+            Update = $null
+            Tags = @("dev")
+        }
     )
 
     foreach ($unit in $deployUnits) {

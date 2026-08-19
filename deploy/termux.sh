@@ -9,7 +9,7 @@ PACKAGE_MANAGER="pkg"                                       # 包管理器
 
 source "$SCRIPT_DIR/posix/bootstrap.sh"                     # 公共引导
 
-source "$SCRIPT_DIR/posix/packages/platform.sh"             # 平台扩展配置（占位）
+source "$SCRIPT_DIR/termux/packages/platform.sh"            # 平台扩展配置
 source "$SCRIPT_DIR/termux/packages/wezterm.sh"             # WezTerm 占位处理
 
 # 解析部署参数并执行入口

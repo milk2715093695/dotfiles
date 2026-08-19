@@ -18,8 +18,6 @@ function Test-PackageManagerAvailable {
     return [bool](Get-Command $Manager -ErrorAction SilentlyContinue)
 }
 
-Export-ModuleMember -Function Get-PackageManagerPriority, Test-PackageManagerAvailable, Test-PackageManagerAvailability
-
 # 包管理器预检：确保至少一个受支持的包管理器可用
 # Windows 不自动 bootstrap，仅做检测 + 指引 + 中止
 function Test-PackageManagerAvailability {
@@ -45,3 +43,5 @@ function Test-PackageManagerAvailability {
 
     throw "包管理器预检失败"
 }
+
+Export-ModuleMember -Function Get-PackageManagerPriority, Test-PackageManagerAvailable, Test-PackageManagerAvailability

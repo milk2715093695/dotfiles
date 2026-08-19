@@ -31,6 +31,7 @@ Set-StrictMode -Version Latest
     "$PSScriptRoot\packages\Fastfetch.psm1"
     "$PSScriptRoot\packages\LazyVim.psm1"
     "$PSScriptRoot\packages\Gitlogue.psm1"
+    "$PSScriptRoot\packages\Pacproxy.psm1"
     "$PSScriptRoot\Main.psm1"
 ) | ForEach-Object { Import-Module $_ -Force }
 
@@ -60,50 +61,6 @@ function Show-DeployUsage {
   .\deploy\windows.ps1 -Preset dev -Skip Cava
   .\deploy\windows.ps1 -Only WezTerm,LazyVim
 "@
-}
-
-# 导入 Windows deploy 所需模块
-function Import-WindowsDeployModules {
-    param(
-        [Parameter(Mandatory)]
-        [string]$ScriptDir
-    )
-
-    $modulePaths = @(
-        "$ScriptDir\windows\utils\DeployContext.psm1"
-        "$ScriptDir\windows\utils\Colors.psm1"
-        "$ScriptDir\windows\utils\OutputView.psm1"
-        "$ScriptDir\windows\utils\DeployUnit.psm1"
-        "$ScriptDir\windows\utils\Prompt.psm1"
-        "$ScriptDir\windows\utils\LinkAction.psm1"
-        "$ScriptDir\windows\utils\Link.psm1"
-        "$ScriptDir\windows\utils\GitHub.psm1"
-        "$ScriptDir\windows\utils\Archive.psm1"
-        "$ScriptDir\windows\utils\Shortcut.psm1"
-        "$ScriptDir\windows\utils\SoftwareAvailability.psm1"
-        "$ScriptDir\windows\utils\PackageMapping.psm1"
-        "$ScriptDir\windows\utils\PackageManagerSelection.psm1"
-        "$ScriptDir\windows\utils\Install.psm1"
-        "$ScriptDir\windows\utils\PSGallery.psm1"
-        "$ScriptDir\windows\utils\ToolCheck.psm1"
-        "$ScriptDir\windows\utils\Preset.psm1"
-        "$ScriptDir\windows\packages\AltSnap.psm1"
-        "$ScriptDir\windows\packages\JetBrains.psm1"
-        "$ScriptDir\windows\packages\WezTerm.psm1"
-        "$ScriptDir\windows\packages\PWSH.psm1"
-        "$ScriptDir\windows\packages\CliTools.psm1"
-        "$ScriptDir\windows\packages\Starship.psm1"
-        "$ScriptDir\windows\packages\Yazi.psm1"
-        "$ScriptDir\windows\packages\Cava.psm1"
-        "$ScriptDir\windows\packages\Fastfetch.psm1"
-        "$ScriptDir\windows\packages\LazyVim.psm1"
-        "$ScriptDir\windows\packages\Gitlogue.psm1"
-        "$ScriptDir\windows\Main.psm1"
-    )
-
-    foreach ($modulePath in $modulePaths) {
-        Import-Module $modulePath -Force
-    }
 }
 
 # 执行 Windows 部署入口
