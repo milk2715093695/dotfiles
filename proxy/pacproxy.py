@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 """pacproxy.py —— 复现 gfw-pac PAC 路由逻辑的本地转发代理。
 
-读取 gfw-pac 源文件，启动时预计算路由表，运行期只做查表与转发。
+读取渲染合并后的规则文件（deploy 渲染期生成），启动时预计算路由表，运行期只做查表与转发。
 
 用法:
     python3 pacproxy.py                          # 默认: 监听 127.0.0.1:6045, 上游 127.0.0.1:9910
     python3 pacproxy.py --listen 6046            # 换监听端口
     python3 pacproxy.py --upstream 127.0.0.1:7890
-    python3 pacproxy.py --rules-dir ~/my/rules   # 换规则源目录
-    python3 pacproxy.py --overlay-dir ~/my/rules # 本地覆盖层 (new_direct/proxy.txt, 可选)
+    python3 pacproxy.py --rules-dir ~/my/rules   # 换规则目录（默认 ~/.config/pacproxy）
     python3 pacproxy.py --test                   # 打印决策对拍后退出
 """
 
@@ -23,12 +22,16 @@ import re
 import socket
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Literal
 from urllib.parse import urlsplit
 
 DEFAULT_LISTEN_HOST = "127.0.0.1"
 DEFAULT_LISTEN_PORT = 6045
 DEFAULT_UPSTREAM = "127.0.0.1:9910"
-DEFAULT_RULES_DIR = Path.home() / "Desktop" / "my-repositories" / "gfw-pac"
+DEFAULT_RULES_DIR = Path.home() / ".config" / "pacproxy"
+
+# 路由决策结果类型：直接连接目标或经上游代理转发
+Decision = Literal["direct", "proxy"]
 
 # 镜像 PAC isPrivateIp：IPv4 分支锚定首尾，防止 "10.0.0.1.evil.com" 这类域名误判
 _PRIVATE_IP_RE = re.compile(
@@ -65,31 +68,18 @@ class ProxyConfig:
     upstream_host: str = "127.0.0.1"
     upstream_port: int = 9910
     rules_dir: Path = DEFAULT_RULES_DIR
-    overlay_dir: Path | None = None
     verbose: bool = False
     log_path: Path | None = None
 
     @property
     def rule_files(self) -> dict[str, Path]:
-        """gfw-pac 四份源文件路径。"""
+        """渲染合并后的四份规则文件路径（deploy 渲染期生成）。"""
 
         return {
             "direct": self.rules_dir / "direct-domains.txt",
             "proxy": self.rules_dir / "proxy-domains.txt",
             "tlds": self.rules_dir / "local-tlds.txt",
             "cidrs": self.rules_dir / "cidrs-cn.txt",
-        }
-
-    @property
-    def overlay_files(self) -> dict[str, Path]:
-        """本地覆盖层（隐私域名, 不入库）；未配置时为空。"""
-
-        if self.overlay_dir is None:
-            return {}
-
-        return {
-            "direct": self.overlay_dir / "new_direct.txt",
-            "proxy": self.overlay_dir / "new_proxy.txt",
         }
 
 
@@ -162,39 +152,30 @@ def _in_cn(ip_int: int, bit_width: int, networks: dict[int, frozenset[int]]) -> 
 
 
 class RuleStore:
-    """持有路由表，处理源文件变更热载，并按 host 缓存决策。
+    """持有路由表，处理规则文件变更热载，并按 host 缓存决策。
 
-    base 规则（gfw-pac 子模块）与本地覆盖层（--overlay-dir）双源读取，
-    加载时合并去重；两个源的文件变更都会被热载。
+    规则文件由 deploy 渲染期合并生成（官方 gfw-pac + 本地覆盖层），
+    本类只读渲染后的单一来源；文件 mtime 变更时热载。
     """
 
     def __init__(
         self,
         paths: dict[str, Path],
-        overlay_paths: dict[str, Path] | None = None,
     ) -> None:
         self._paths = paths
-        self._overlay_paths = overlay_paths or {}
         self._rules = self._load()
         self._mtime = self._snapshot_mtime()
-        self._decision_cache: dict[str, str] = {}
+        self._decision_cache: dict[str, Decision] = {}
 
     def _snapshot_mtime(self) -> dict[str, float]:
         """记录各源文件 mtime（缺失文件跳过），用于检测手动更新。"""
 
-        paths = {**self._paths, **self._overlay_paths}
-
-        return {name: path.stat().st_mtime for name, path in paths.items() if path.exists()}
+        return {name: path.stat().st_mtime for name, path in self._paths.items() if path.exists()}
 
     def _merged_lines(self, name: str) -> list[str]:
-        """base 行 + 本地覆盖层行，去重保序；覆盖层缺失时仅 base。"""
+        """读取单份规则文件，去重保序；文件缺失时为空。"""
 
-        lines = _read_lines(self._paths[name])
-
-        if name in self._overlay_paths:
-            lines += _read_lines(self._overlay_paths[name])
-
-        return list(dict.fromkeys(lines))
+        return list(dict.fromkeys(_read_lines(self._paths[name])))
 
     def _load(self) -> Rules:
         """读取两份域名源与其余源文件，构建域名分组与 CIDR 前缀表。"""
@@ -202,12 +183,6 @@ class RuleStore:
         direct = self._merged_lines("direct")
         proxy = self._merged_lines("proxy")
         local_tlds = _read_lines(self._paths["tlds"])
-
-        overlay_counts = {
-            name: len(_read_lines(path)) for name, path in self._overlay_paths.items() if path.exists()
-        }
-        if overlay_counts:
-            logger.info("覆盖层加载: %s", overlay_counts)
 
         cn_networks: dict[int, set[int]] = {}
         for cidr in _read_lines(self._paths["cidrs"]):
@@ -245,14 +220,14 @@ class RuleStore:
 
         logger.info("规则文件变更, 已热载, 决策缓存已清空")
 
-    async def decide(self, host: str) -> str:
+    async def decide(self, host: str) -> Decision:
         """返回 host 的路由决策，结果按 host 缓存避免重复 DNS 查询。
 
         Args:
             host (str): 目标主机名，可能带端口。
 
         Returns:
-            str: `direct` 或 `proxy`。
+            Decision: `direct` 或 `proxy`。
         """
 
         host = host.split(":")[0].lower()
@@ -265,7 +240,7 @@ class RuleStore:
 
         return self._decision_cache[host]
 
-    async def _decide_host(self, host: str) -> str:
+    async def _decide_host(self, host: str) -> Decision:
         """镜像 PAC `FindProxyForURL` 的分支顺序做路由决策。"""
 
         rules = self._rules
@@ -328,6 +303,38 @@ def _strip_hop_headers(rest_headers: bytes) -> bytes:
     return b"\r\n".join(lines)
 
 
+async def _connect_target(
+    config: ProxyConfig,
+    host: str,
+    port: int,
+    decision: Decision,
+) -> tuple[asyncio.StreamReader, asyncio.StreamWriter] | None:
+    """按决策建立上游连接；直连失败或上游不可达时记录日志并返回 None。
+
+    Args:
+        config (ProxyConfig): 代理运行参数。
+        host (str): 目标主机名。
+        port (int): 目标端口。
+        decision (Decision): 路由决策，`direct` 直连目标，否则走上游代理。
+
+    Returns:
+        tuple[StreamReader, StreamWriter] | None: 连接读写对；失败时 None。
+    """
+
+    if decision == "direct":
+        try:
+            return await asyncio.open_connection(host, port)
+        except OSError as exc:
+            logger.warning("直连失败 %s:%d: %s", host, port, exc)
+            return None
+
+    try:
+        return await asyncio.open_connection(config.upstream_host, config.upstream_port)
+    except OSError as exc:
+        logger.warning("上游代理不可达 %s:%d: %s", config.upstream_host, config.upstream_port, exc)
+        return None
+
+
 async def _tunnel(
     store: RuleStore,
     config: ProxyConfig,
@@ -341,23 +348,13 @@ async def _tunnel(
     decision = await store.decide(host)
     logger.info("CONNECT %s:%d -> %s", host, port, decision)
 
-    if decision == "direct":
-        try:
-            upstream_reader, upstream_writer = await asyncio.open_connection(host, port)
-        except OSError as exc:
-            logger.warning("直连失败 %s:%d: %s", host, port, exc)
-            await _write_http_error(client_writer, "502 Bad Gateway")
-            return
-    else:
-        try:
-            upstream_reader, upstream_writer = await asyncio.open_connection(
-                config.upstream_host, config.upstream_port
-            )
-        except OSError as exc:
-            logger.warning("上游代理不可达 %s:%d: %s", config.upstream_host, config.upstream_port, exc)
-            await _write_http_error(client_writer, "502 Bad Gateway")
-            return
+    upstream = await _connect_target(config, host, port, decision)
+    if upstream is None:
+        await _write_http_error(client_writer, "502 Bad Gateway")
+        return
+    upstream_reader, upstream_writer = upstream
 
+    if decision != "direct":
         connect_line = f"CONNECT {host}:{port} HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n"
         upstream_writer.write(connect_line.encode())
         await upstream_writer.drain()
@@ -413,26 +410,16 @@ async def _handle_http(
     decision = await store.decide(host)
     logger.info("HTTP %s %s -> %s", method, url, decision)
 
-    if decision == "direct":
-        try:
-            upstream_reader, upstream_writer = await asyncio.open_connection(host, port)
-        except OSError as exc:
-            logger.warning("直连失败 %s:%d: %s", host, port, exc)
-            await _write_http_error(writer, "502 Bad Gateway")
-            return
+    upstream = await _connect_target(config, host, port, decision)
+    if upstream is None:
+        await _write_http_error(writer, "502 Bad Gateway")
+        return
+    upstream_reader, upstream_writer = upstream
 
+    if decision == "direct":
         path = (parsed.path or "/") + (("?" + parsed.query) if parsed.query else "")
         outgoing = f"{method} {path} {version}\r\n".encode() + _strip_hop_headers(rest_headers)
     else:
-        try:
-            upstream_reader, upstream_writer = await asyncio.open_connection(
-                config.upstream_host, config.upstream_port
-            )
-        except OSError as exc:
-            logger.warning("上游代理不可达 %s:%d: %s", config.upstream_host, config.upstream_port, exc)
-            await _write_http_error(writer, "502 Bad Gateway")
-            return
-
         outgoing = header  # 绝对路径形式直通 9910
 
     upstream_writer.write(outgoing)
@@ -525,13 +512,7 @@ def _parse_args() -> argparse.Namespace:
         "--rules-dir",
         type=Path,
         default=DEFAULT_RULES_DIR,
-        help=f"gfw-pac 规则源目录（默认 {DEFAULT_RULES_DIR}）",
-    )
-    parser.add_argument(
-        "--overlay-dir",
-        type=Path,
-        default=None,
-        help="本地覆盖层目录（new_direct.txt / new_proxy.txt，可选）",
+        help=f"渲染合并后的规则目录（默认 {DEFAULT_RULES_DIR}）",
     )
     parser.add_argument(
         "--listen",
@@ -561,7 +542,6 @@ def _build_config(args: argparse.Namespace) -> ProxyConfig:
         upstream_host=upstream_host,
         upstream_port=int(upstream_port or DEFAULT_UPSTREAM.split(":")[1]),
         rules_dir=args.rules_dir,
-        overlay_dir=args.overlay_dir,
         verbose=args.verbose,
         log_path=args.log,
     )
@@ -573,7 +553,7 @@ def main() -> None:
     args = _parse_args()
     config = _build_config(args)
     _setup_logging(config.verbose, config.log_path)
-    store = RuleStore(config.rule_files, config.overlay_files)
+    store = RuleStore(config.rule_files)
 
     try:
         if args.test:
