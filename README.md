@@ -164,12 +164,12 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 │       ├── Plugins.ps1                         # 插件配置
 │       └── Secrets                             # 密码管理（除了示例文件外不会被追踪）
 │           └── Example.ps1                     # 示例
-├── proxy                                       # pacproxy 本地转发代理
-│   ├── pacproxy.py                             # 代理服务主体
+├── proxy                                    # pacproxy 本地转发代理
+│   ├── pacproxy.py                           # 代理服务主体
 │   ├── autostart                               # 多平台自启动定义
-│   ├── rules                                   # 本地覆盖层（隐私，不入库）
-│   │   ├── example_direct.txt                  # 示例
-│   │   └── example_proxy.txt                   # 示例
+│   ├── rules                                   # 本地规则覆盖（隐私，不入库）
+│   │   ├── direct-domains.txt                  # 直连覆盖（与官方 direct-domains.txt 合并）
+│   │   └── proxy-domains.txt                   # 代理覆盖（与官方 proxy-domains.txt 合并）
 │   └── gfw-pac                                 # 规则资产子模块
 ├── README.md
 ├── sketchybar              # SketchyBar 配置子模块
@@ -227,7 +227,7 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 - `~/.config/sketchybar/` -> `dotfiles/sketchybar/`
 - `~/.config/fastfetch/` -> `dotfiles/fastfetch/`
 - `~/.config/gitlogue/` -> `dotfiles/gitlogue/`
-- `~/.config/pacproxy/` -> `dotfiles/proxy/`
+- `~/.config/pacproxy/` -> `dotfiles/generated/pacproxy/`
 
 `locals/` 目录用于存放机器特定的本地覆盖配置，不进入 Git 追踪。它与 `generated/` 渲染目录配合：
 
@@ -235,6 +235,15 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 - **纯文件型 config**（aerospace、cava、starship、yazi）：基础配置中通过 `# @locals:<file>` 标记预留插入点，部署 render 阶段将 locals 内容注入标记位置，输出到 `generated/`。
 
 `generated/` 是统一的渲染产物目录（gitignored），由 deploy 的 render 阶段自动生成。纯文件型配置的符号链接指向 `generated/` 而非源目录。
+
+### pacproxy 规则更新
+
+pacproxy 的规则来自两个来源，deploy 的 render 阶段合并后输出到 `generated/pacproxy/`（`~/.config/pacproxy` 指向此目录）：
+
+- **官方规则**：`proxy/gfw-pac/` 子模块（每周自动更新），提供 `direct-domains.txt`、`proxy-domains.txt`、`local-tlds.txt`、`cidrs-cn.txt` 四份基础文件。
+- **本地覆盖**：`proxy/rules/` 下的同名文件（隐私，不入库）。用户直接添加或修改这些文件即可，deploy 时与官方规则合并去重（用户域名同时出现在两个列表时直连优先）。
+
+合并产物包括 pacproxy 服务读的规则文件，以及给浏览器等应用使用的 `gfw.pac`（PAC 直接指向本地上游 `127.0.0.1:9910`，不经过 pacproxy 二次分流）。修改 `proxy/rules/` 后，重新执行部署的 render 阶段即可生效：`./deploy/macos.sh --only pacproxy --config-mode replace-link`（Termux 对应 `./termux.sh --only pacproxy --config-mode replace-link`）。
 
 ## 4. 部署
 

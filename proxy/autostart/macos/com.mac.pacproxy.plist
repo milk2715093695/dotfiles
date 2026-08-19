@@ -7,21 +7,19 @@
     <key>ProgramArguments</key>
     <array>
         <string>__PYTHON__</string>
-        <string>__CONFIG_DIR__/pacproxy.py</string>
+        <string>~/.config/pacproxy/pacproxy.py</string>
         <string>--rules-dir</string>
-        <string>__CONFIG_DIR__/gfw-pac</string>
-        <string>--overlay-dir</string>
-        <string>__CONFIG_DIR__/rules</string>
+        <string>~/.config/pacproxy</string>
         <string>--log</string>
-        <string>__CONFIG_DIR__/pacproxy.log</string>
+        <string>~/.config/pacproxy/pacproxy.log</string>
     </array>
     <key>RunAtLoad</key>
     <true/>
     <key>KeepAlive</key>
     <true/>
     <key>StandardOutPath</key>
-    <string>__CONFIG_DIR__/pacproxy.log</string>
+    <string>~/.config/pacproxy/pacproxy.log</string>
     <key>StandardErrorPath</key>
-    <string>__CONFIG_DIR__/pacproxy.log</string>
+    <string>~/.config/pacproxy/pacproxy.log</string>
 </dict>
 </plist>

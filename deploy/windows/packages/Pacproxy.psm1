@@ -1,11 +1,52 @@
 Set-StrictMode -Version Latest
 
-# 检查 Python 运行时是否存在
-function Test-PacproxyRuntime {
-    return $null -ne (Get-Command python -ErrorAction SilentlyContinue)
+# 渲染合并规则并生成 PAC 到 generated/pacproxy/
+function Render-PacproxyAssets {
+    $outDir = Join-Path $REPO_ROOT "generated\pacproxy"
+    $officialDir = Join-Path $REPO_ROOT "proxy\gfw-pac"
+    $userDir = Join-Path $REPO_ROOT "proxy\rules"
+
+    New-Item -ItemType Directory -Force -Path $outDir | Out-Null
+    Write-STEP "渲染 pacproxy 规则产物 -> $outDir"
+
+    # 合并官方与用户规则，去重保序（UTF8 无 BOM，兼容 python 解析）
+    $utf8NoBom = New-Object System.Text.UTF8Encoding $false
+
+    $direct = @(Get-Content (Join-Path $officialDir "direct-domains.txt"))
+    if (Test-Path (Join-Path $userDir "direct-domains.txt")) {
+        $direct += Get-Content (Join-Path $userDir "direct-domains.txt")
+    }
+    [IO.File]::WriteAllLines((Join-Path $outDir "direct-domains.txt"), ($direct | Select-Object -Unique), $utf8NoBom)
+
+    $proxy = @(Get-Content (Join-Path $officialDir "proxy-domains.txt"))
+    if (Test-Path (Join-Path $userDir "proxy-domains.txt")) {
+        $proxy += Get-Content (Join-Path $userDir "proxy-domains.txt")
+    }
+    [IO.File]::WriteAllLines((Join-Path $outDir "proxy-domains.txt"), ($proxy | Select-Object -Unique), $utf8NoBom)
+
+    Copy-Item (Join-Path $officialDir "local-tlds.txt") $outDir
+    Copy-Item (Join-Path $officialDir "cidrs-cn.txt") $outDir
+
+    # 生成 PAC：直接指向上游（透明转发），不再经 pacproxy 二次分流
+    $python = (Get-Command python -ErrorAction Stop).Source
+    & $python (Join-Path $officialDir "gfw-pac.py") -f (Join-Path $outDir "gfw.pac") `
+        -p "PROXY 127.0.0.1:9910" `
+        --proxy-domains (Join-Path $outDir "proxy-domains.txt") `
+        --direct-domains (Join-Path $outDir "direct-domains.txt") `
+        --localtld-domains (Join-Path $outDir "local-tlds.txt") `
+        --ip-file (Join-Path $outDir "cidrs-cn.txt")
+    if ($LASTEXITCODE -ne 0) { throw "gfw.pac 生成失败" }
+
+    # 自包含：复制服务脚本，产物目录可独立运行
+    Copy-Item (Join-Path $REPO_ROOT "proxy\pacproxy.py") $outDir
+
+    if (-not (Test-Path (Join-Path $userDir "direct-domains.txt")) -or -not (Test-Path (Join-Path $userDir "proxy-domains.txt"))) {
+        Write-WARNING "proxy\rules\ 缺少用户自定义规则（隐私文件，不入库）"
+        Write-WARNING "参考 proxy\gfw-pac\direct-domains.txt 创建同名文件后重新部署"
+    }
 }
 
-# 初始化 gfw-pac 规则子模块，引导本地覆盖层文件
+# 初始化 gfw-pac 规则子模块，渲染合并规则并生成 PAC
 function Render-PacproxyTask {
     param(
         [Parameter(Mandatory)]
@@ -29,11 +70,7 @@ function Render-PacproxyTask {
         }
     }
 
-    $rulesDir = Join-Path $REPO_ROOT "proxy\rules"
-    if (-not (Test-Path (Join-Path $rulesDir "new_direct.txt")) -or -not (Test-Path (Join-Path $rulesDir "new_proxy.txt"))) {
-        Write-WARNING "proxy\rules\ 缺少本地覆盖层（隐私文件，不入库）"
-        Write-WARNING "参考 proxy\rules\example_*.txt 创建 new_direct.txt / new_proxy.txt"
-    }
+    Render-PacproxyAssets
 }
 
 # 创建配置链接（符号链接失败时回退目录联接，SSH 过滤令牌场景）并注册计划任务
@@ -44,7 +81,7 @@ function New-PacproxyConfigLink {
     )
 
     $target = Join-Path $HOME ".config\pacproxy"
-    $source = Join-Path $REPO_ROOT "proxy"
+    $source = Join-Path $REPO_ROOT "generated\pacproxy"
 
     if (-not (Test-TargetExists $target)) {
         $parent = Split-Path -Parent $target
@@ -63,7 +100,7 @@ function New-PacproxyConfigLink {
 
     $python = (Get-Command python -ErrorAction Stop).Source
     $configDir = Join-Path $HOME ".config\pacproxy"
-    $arguments = "$configDir\pacproxy.py --rules-dir $configDir\gfw-pac --overlay-dir $configDir\rules --log $configDir\pacproxy.log"
+    $arguments = "$configDir\pacproxy.py --rules-dir $configDir --log $configDir\pacproxy.log"
 
     Write-STEP "注册计划任务 pacproxy"
     $action = New-ScheduledTaskAction -Execute $python -Argument $arguments

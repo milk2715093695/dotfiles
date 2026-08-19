@@ -1,7 +1,6 @@
 #!/data/data/com.termux/files/usr/bin/sh
-# 由 deploy 渲染: __CONFIG_DIR__ 替换为 $HOME/.local/share/pacproxy, __PYTHON__ 替换为实际 python3 路径
-exec __PYTHON__ __CONFIG_DIR__/pacproxy.py \
-    --rules-dir __CONFIG_DIR__/gfw-pac \
-    --overlay-dir __CONFIG_DIR__/rules \
+# 由 deploy 渲染: __PYTHON__ 替换为实际 python3 路径；配置目录固定为 $HOME/.config/pacproxy（链接到 generated/pacproxy）
+exec __PYTHON__ "$HOME/.config/pacproxy/pacproxy.py" \
+    --rules-dir "$HOME/.config/pacproxy" \
     --upstream 127.0.0.1:9910 \
     2>&1

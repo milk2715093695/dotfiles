@@ -9,7 +9,7 @@ check_pacproxy_available() {
     command -v python3 >/dev/null 2>&1
 }
 
-# 渲染 runit 服务目录与 run 脚本；缺失时初始化规则子模块
+# 渲染合并规则并生成 PAC；缺失时初始化规则子模块
 render_pacproxy_config() {
     local service_dir="$PREFIX/var/service/pacproxy"
 
@@ -23,14 +23,10 @@ render_pacproxy_config() {
         }
     fi
 
-    if [ ! -f "$REPO_ROOT/proxy/rules/new_direct.txt" ] || [ ! -f "$REPO_ROOT/proxy/rules/new_proxy.txt" ]; then
-        warn "proxy/rules/ 缺少本地覆盖层（隐私文件，不入库）"
-        warn "参考 proxy/rules/example_*.txt 创建 new_direct.txt / new_proxy.txt"
-    fi
+    render_pacproxy_assets
 
     mkdir -p "$service_dir/log"
-    sed -e "s|__CONFIG_DIR__|$HOME/.local/share/pacproxy|g" \
-        -e "s|__PYTHON__|$(command -v python3)|g" \
+    sed -e "s|__PYTHON__|$(command -v python3)|g" \
         "$REPO_ROOT/proxy/autostart/termux/pacproxy/run" > "$service_dir/run"
     chmod +x "$service_dir/run"
 
@@ -38,9 +34,9 @@ render_pacproxy_config() {
     chmod +x "$service_dir/log/run"
 }
 
-# 链接 proxy/ -> ~/.local/share/pacproxy，并重启 runit 服务
+# 链接 generated/pacproxy -> ~/.config/pacproxy，并重启 runit 服务
 link_pacproxy_config() {
-    link_item "$HOME/.local/share/pacproxy" "$REPO_ROOT/proxy"
+    link_item "$HOME/.config/pacproxy" "$REPO_ROOT/generated/pacproxy"
 
     if command -v sv >/dev/null 2>&1; then
         step "重启 pacproxy runit 服务（sv restart）"
