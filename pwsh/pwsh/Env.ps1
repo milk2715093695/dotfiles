@@ -52,3 +52,6 @@ function Add-ModulePath {
         }
     }
 }
+
+# 默认编辑器为 nvim
+$env:EDITOR = "nvim"
