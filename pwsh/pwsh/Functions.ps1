@@ -8,7 +8,7 @@ function Set-Proxy {
 
     # 默认参数
     $DefaultIP = "127.0.0.1"
-    $DefaultHttpPort = "9910"
+    $DefaultHttpPort = "6045"
     $DefaultSocks5Port = "9909"
 
     # 取消代理
