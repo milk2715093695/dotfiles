@@ -102,16 +102,13 @@ function New-PacproxyConfigLink {
     $configDir = Join-Path $HOME ".config\pacproxy"
     $arguments = "$configDir\pacproxy.py --rules-dir $configDir --log $configDir\pacproxy.log"
 
-    Write-STEP "注册计划任务 pacproxy"
-    $action = New-ScheduledTaskAction -Execute $python -Argument $arguments
-    $trigger = New-ScheduledTaskTrigger -AtLogOn
-    $settings = New-ScheduledTaskSettingsSet `
-        -MultipleInstances IgnoreNew `
-        -ExecutionTimeLimit ([TimeSpan]::Zero) `
-        -RestartCount 999 -RestartInterval (New-TimeSpan -Minutes 1) `
-        -StartWhenAvailable
-    Register-ScheduledTask -TaskName "pacproxy" -Action $action -Trigger $trigger -Settings $settings -Force | Out-Null
-    Write-SUCCESS "已注册计划任务 pacproxy（登录触发，失败每分钟重启）"
+    Register-AutostartTask `
+        -DeployContext $DeployContext `
+        -Name "pacproxy" `
+        -Execute $python `
+        -Argument $arguments `
+        -Description "pacproxy 本地转发代理" `
+        -RestartOnFailure
 }
 
 Export-ModuleMember -Function Test-PacproxyRuntime, Render-PacproxyTask, New-PacproxyConfigLink

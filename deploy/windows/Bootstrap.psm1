@@ -20,6 +20,7 @@ Set-StrictMode -Version Latest
     "$PSScriptRoot\utils\PSGallery.psm1"
     "$PSScriptRoot\utils\ToolCheck.psm1"
     "$PSScriptRoot\utils\Preset.psm1"
+    "$PSScriptRoot\utils\Autostart.psm1"
     "$PSScriptRoot\packages\AltSnap.psm1"
     "$PSScriptRoot\packages\JetBrains.psm1"
     "$PSScriptRoot\packages\WezTerm.psm1"
