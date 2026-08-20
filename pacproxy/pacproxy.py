@@ -22,7 +22,7 @@ import re
 import socket
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Literal
+from typing import Literal, TypeAlias
 from urllib.parse import urlsplit
 
 DEFAULT_LISTEN_HOST = "127.0.0.1"
@@ -31,7 +31,7 @@ DEFAULT_UPSTREAM = "127.0.0.1:9910"
 DEFAULT_RULES_DIR = Path.home() / ".config" / "pacproxy"
 
 # 路由决策结果类型：直接连接目标或经上游代理转发
-Decision = Literal["direct", "proxy"]
+Decision: TypeAlias = Literal["direct", "proxy"]
 
 # 镜像 PAC isPrivateIp：IPv4 分支锚定首尾，防止 "10.0.0.1.evil.com" 这类域名误判
 _PRIVATE_IP_RE = re.compile(
@@ -123,13 +123,17 @@ def _group_by_length(domains: list[str]) -> dict[int, frozenset[str]]:
     for domain in domains:
         groups.setdefault(len(domain), set()).add(domain)
 
-    return {length: frozenset(domains_set) for length, domains_set in groups.items()}
+    return {length: frozenset(domains_at_length) for length, domains_at_length in groups.items()}
 
 
-def _match_suffix(host: str, exact: frozenset[str], groups: dict[int, frozenset[str]]) -> bool:
+def _match_suffix(
+    host: str,
+    exact_domains: frozenset[str],
+    groups: dict[int, frozenset[str]],
+) -> bool:
     """判断 host 是否命中某个域名或其子域名。"""
 
-    if host in exact:
+    if host in exact_domains:
         return True
 
     for length, domains in groups.items():
@@ -140,10 +144,17 @@ def _match_suffix(host: str, exact: frozenset[str], groups: dict[int, frozenset[
 
 
 def _in_cn(ip_int: int, bit_width: int, networks: dict[int, frozenset[int]]) -> bool:
-    """按二进制前缀判断 IP 是否落在任一中国网段，等价于 PAC 的 radixTree。"""
+    """按二进制前缀判断 IP 是否落在任一中国网段，等价于 PAC 的 radixTree。
+
+    `bit_width` 区分地址族（IPv4=32、IPv6=128）：IPv6 地址只匹配 prefixlen > 32
+    的 IPv6 网段，IPv4 地址只匹配 prefixlen <= 32 的 IPv4 网段，避免高位段数值
+    碰撞导致跨族误判（如 Fastly 的 IPv6 前缀被 IPv4 桶命中而错误直连）。
+    """
 
     for prefix_len in networks:
         if prefix_len > bit_width:
+            continue
+        if bit_width == 128 and prefix_len <= 32:
             continue
         if (ip_int >> (bit_width - prefix_len)) in networks[prefix_len]:
             return True

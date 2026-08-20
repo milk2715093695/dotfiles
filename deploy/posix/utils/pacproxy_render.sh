@@ -10,10 +10,11 @@ render_pacproxy_assets() {
     step "渲染 pacproxy 规则产物 -> $out_dir"
 
     # 合并官方与用户规则，去重保序（用户重复域名不覆盖官方位置；决策时 direct 优先）
-    cat "$official_dir/direct-domains.txt" "$user_dir/direct-domains.txt" 2>/dev/null |
-        awk '!seen[$0]++' > "$out_dir/direct-domains.txt"
-    cat "$official_dir/proxy-domains.txt" "$user_dir/proxy-domains.txt" 2>/dev/null |
-        awk '!seen[$0]++' > "$out_dir/proxy-domains.txt"
+    # 官方文件行尾可能无换行符，cat 拼接会粘行，故逐文件补换行并过滤空行
+    { cat "$official_dir/direct-domains.txt"; echo; cat "$user_dir/direct-domains.txt"; echo; } 2>/dev/null |
+        awk 'NF && !seen[$0]++' > "$out_dir/direct-domains.txt"
+    { cat "$official_dir/proxy-domains.txt"; echo; cat "$user_dir/proxy-domains.txt"; echo; } 2>/dev/null |
+        awk 'NF && !seen[$0]++' > "$out_dir/proxy-domains.txt"
 
     cp "$official_dir/local-tlds.txt" "$official_dir/cidrs-cn.txt" "$out_dir/"
 
