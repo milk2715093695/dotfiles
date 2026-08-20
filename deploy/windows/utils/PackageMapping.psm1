@@ -54,6 +54,9 @@ $script:PackageSpecsByManagerAndKey = @{
     "scoop:cli.gitlogue" = @(
         @{ Kind = "package"; Name = "rust" }
     )
+    "scoop:cli.aria2" = @(
+        @{ Kind = "package"; Name = "aria2" }
+    )
 
     "winget:shell.starship" = @(
         @{ Kind = "package"; Name = "Starship.Starship" }
@@ -66,6 +69,9 @@ $script:PackageSpecsByManagerAndKey = @{
     )
     "winget:terminal.wezterm" = @(
         @{ Kind = "package"; Name = "WezTerm.WezTerm" }
+    )
+    "winget:cli.aria2" = @(
+        @{ Kind = "package"; Name = "aria2.aria2" }
     )
 }
 

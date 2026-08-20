@@ -6,6 +6,7 @@
   - [1. 效果展示](#1-效果展示)
   - [2. 目录结构](#2-目录结构)
   - [3. 配置路径约定](#3-配置路径约定)
+    - [pacproxy 规则更新](#pacproxy-规则更新)
   - [4. 部署](#4-部署)
     - [4.1. 预设覆盖](#41-预设覆盖)
     - [4.2. Ubuntu / Linux（Ubuntu 优先）](#42-ubuntu--linuxubuntu-优先)
@@ -149,6 +150,10 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 │   └── config.jsonc        # fastfetch 系统信息展示配置
 ├── generated/              # 渲染产物目录（gitignored）：部署时由 render 阶段生成
 ├── gitlogue                # gitlogue 配置
+├── aria2                   # aria2 下载器配置
+│   ├── aria2.conf          # 基础配置
+│   ├── autostart           # 多平台自启动定义（macos plist、termux runit）
+│   └── locals/             # 本地覆盖（gitignored）：rpc-secret、下载目录等
 ├── LICENSE
 ├── nvim                    # 基于 LazyVim 的轻量定制配置
 ├── pwsh                    # pwsh 配置
@@ -164,9 +169,9 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 │       ├── Plugins.ps1                         # 插件配置
 │       └── Secrets                             # 密码管理（除了示例文件外不会被追踪）
 │           └── Example.ps1                     # 示例
-├── pacproxy                                 # pacproxy 本地转发代理
-│   ├── pacproxy.py                           # 代理服务主体
-│   ├── autostart                               # 多平台自启动定义
+├── pacproxy                                    # pacproxy 本地转发代理
+│   ├── pacproxy.py                             # 代理服务主体
+│   ├── autostart                               # 多平台自启动定义（macos plist、termux runit）
 │   ├── rules                                   # 本地规则覆盖（隐私，不入库）
 │   │   ├── direct-domains.txt                  # 直连覆盖（与官方 direct-domains.txt 合并）
 │   │   └── proxy-domains.txt                   # 代理覆盖（与官方 proxy-domains.txt 合并）
@@ -210,7 +215,7 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 
 对于**脚本型**配置（zsh、pwsh、wezterm、nvim、tmux），源目录直接链接到目标路径，本地覆盖通过各自 `locals/` 子目录在运行时加载。
 
-对于**纯文件型**配置（aerospace、cava、starship、yazi），部署时通过 render 阶段将基础配置与 `locals/` 本地差异合并，输出到统一的 `/generated/` 目录（gitignored），再链接到目标路径。基础配置中可使用 `# @platform:<file>` 或 `# @locals:<file>` 注释标记精确控制内容插入位置。
+对于**纯文件型**配置（aerospace、aria2、cava、starship、yazi），部署时通过 render 阶段将基础配置与 `locals/` 本地差异合并，输出到统一的 `/generated/` 目录（gitignored），再链接到目标路径。基础配置中可使用 `# @platform:<file>` 或 `# @locals:<file>` 注释标记精确控制内容插入位置。
 
 例如：
 
@@ -227,12 +232,13 @@ nvim 目前以 LazyVim 为主，只做了少量覆写，并接入了 tmux 导航
 - `~/.config/sketchybar/` -> `dotfiles/sketchybar/`
 - `~/.config/fastfetch/` -> `dotfiles/fastfetch/`
 - `~/.config/gitlogue/` -> `dotfiles/gitlogue/`
+- `~/.config/aria2/` -> `dotfiles/generated/aria2/`
 - `~/.config/pacproxy/` -> `dotfiles/generated/pacproxy/`
 
 `locals/` 目录用于存放机器特定的本地覆盖配置，不进入 Git 追踪。它与 `generated/` 渲染目录配合：
 
 - **脚本型 config**（zsh、pwsh）：`locals/` 在运行时被 `source`/`dofile` 加载。例如 conda 使用懒加载——首次输入 `conda` 命令时，才会 source `~/.config/zsh/locals/conda.zsh`（或 Windows 下的 `~\.config\pwsh\Locals\Conda.ps1`）。用户需运行 `conda init zsh`（或 `conda init powershell`），然后将输出的初始化块放入对应文件即可。
-- **纯文件型 config**（aerospace、cava、starship、yazi）：基础配置中通过 `# @locals:<file>` 标记预留插入点，部署 render 阶段将 locals 内容注入标记位置，输出到 `generated/`。
+- **纯文件型 config**（aerospace、aria2、cava、starship、yazi）：基础配置中通过 `# @locals:<file>` 标记预留插入点，部署 render 阶段将 locals 内容注入标记位置，输出到 `generated/`。
 
 `generated/` 是统一的渲染产物目录（gitignored），由 deploy 的 render 阶段自动生成。纯文件型配置的符号链接指向 `generated/` 而非源目录。
 
@@ -257,6 +263,7 @@ pacproxy 的规则来自两个来源，deploy 的 render 阶段合并后输出�
 - `prepare -> install（若缺失）-> recheck availability -> render -> link -> update`
 - 软件安装与配置链接分离；软件仍不可用时，会跳过后续 render/link/update，而不是强行继续
 - render 阶段负责将基础配置与平台差异（`@platform:`）和本地差异（`@locals:`）合并，输出到 `generated/`；无标记时走快路径（直接复制）
+- link 阶段对需要开机自启的单元（如 aria2、pacproxy）会询问并注册启动项：macOS 为 `launchd`（`~/Library/LaunchAgents/`），Termux 为 `runit`（`$PREFIX/var/service/`，由 Termux:Boot 拉起），Windows 为计划任务；无交互 TTY 时默认跳过，`--yes-install` 可自动确认
 - 配置部署以符号链接为主，冲突处理统一由 `--config-mode` / `-ConfigMode` 控制
 
 部署脚本会：
@@ -268,10 +275,10 @@ pacproxy 的规则来自两个来源，deploy 的 render 阶段合并后输出�
 
 当前实际覆盖范围：
 
-- macOS：字体、WezTerm、CLI 工具、zsh 插件、Starship、zsh、Yazi、Cava、LazyVim、fastfetch、gitlogue、tmux、pacproxy，以及 Aerospace + borders + SketchyBar 窗口管理栈
+- macOS：字体、WezTerm、CLI 工具、zsh 插件、Starship、zsh、Yazi、Cava、LazyVim、fastfetch、gitlogue、aria2、tmux、pacproxy，以及 Aerospace + borders + SketchyBar 窗口管理栈
 - Ubuntu / Linux：共享 POSIX 主流程，入口脚本以 Ubuntu 为主；包管理器优先级是 `apt -> dnf -> pacman -> brew`，实测除了字体安装被跳过以外其余在 Ubuntu 均可以成功
-- Windows：AltSnap、JetBrains Mono、WezTerm、PSGallery、CLI 工具、Starship、PowerShell、Yazi、Cava、LazyVim、fastfetch、gitlogue、pacproxy
-- Termux：共享 POSIX 主流程，但 WezTerm 会被显式跳过，考虑到手机上使用 Termux 作为终端；pacproxy 以 runit 服务部署（Termux:Boot 拉起）
+- Windows：AltSnap、JetBrains Mono、WezTerm、PSGallery、CLI 工具、Starship、PowerShell、Yazi、Cava、LazyVim、fastfetch、gitlogue、aria2、pacproxy
+- Termux：共享 POSIX 主流程，但 WezTerm 会被显式跳过，考虑到手机上使用 Termux 作为终端；aria2 与 pacproxy 以 runit 服务部署（Termux:Boot 拉起）
 
 补充说明：
 
@@ -284,6 +291,7 @@ pacproxy 的规则来自两个来源，deploy 的 render 阶段合并后输出�
 - Windows 的 `PSFzf` 部署单元已移除（fzf 可用性由 CLI Tools 覆盖）
 - 自动字体安装目前主要覆盖 macOS；Windows 只单独处理 JetBrains Mono
 - POSIX 在无交互 TTY 时无法确认安装类操作，这类步骤会倾向于跳过
+- Windows 上的启动项注册会先询问确认，`-YesInstall` 可自动通过；aria2 的 Windows 启动项在测试通过后会撤销，避免常驻
 
 可能的系统副作用：
 
@@ -340,6 +348,7 @@ pacproxy 的规则来自两个来源，deploy 的 render 阶段合并后输出�
 | Cava | Cava | x | |
 | fastfetch | fastfetch | x | |
 | gitlogue | gitlogue | x | |
+| aria2 | aria2 | x | |
 | Aerospace | — | x | |
 | borders | — | x | |
 | SketchyBar | — | x | |

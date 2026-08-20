@@ -150,5 +150,16 @@ main() {
     deploy_unit_tags="beauty"
     run_deploy_unit_stage_from_vars
 
+    deploy_unit_stage_name="配置 aria2"
+    deploy_unit_name="aria2"
+    deploy_unit_availability_check="check_aria2_available"
+    deploy_unit_prepare_stage=""
+    deploy_unit_install_stage="install_aria2"
+    deploy_unit_render_stage="render_aria2_config"
+    deploy_unit_link_stage="link_aria2_config"
+    deploy_unit_update_stage=""
+    deploy_unit_tags="dev"
+    run_deploy_unit_stage_from_vars
+
     success "部署完成"
 }

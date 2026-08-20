@@ -246,6 +246,11 @@ get_package_install_specs() {
                 "package|perl|gitlogue OpenSSL 源码编译依赖"
             ;;
 
+        brew:cli.aria2) printf '%s\n' "package|aria2" ;;
+        apt:cli.aria2) printf '%s\n' "package|aria2" ;;
+        pacman:cli.aria2) printf '%s\n' "package|aria2" ;;
+        pkg:cli.aria2) printf '%s\n' "package|aria2" ;;
+
         *) return 1 ;;  
     esac
 }

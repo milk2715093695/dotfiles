@@ -42,13 +42,21 @@ $RECYCLE.BIN/
 
 # 私密配置：忽略 shell 本地覆盖配置
 /zsh/zsh/locals/*
+!/zsh/zsh/locals/.gitkeep
 /pwsh/pwsh/Locals/*
+!/pwsh/pwsh/Locals/.gitkeep
 
 # 私密配置：忽略 Aerospace 本地应用规则
 /aerospace/locals/*
+!/aerospace/locals/.gitkeep
 
 # 私密配置：忽略 Yazi 本地覆盖配置
-/yazi/locals/
+/yazi/locals/*
+!/yazi/locals/.gitkeep
+
+# 私密配置：忽略 aria2 本地覆盖（rpc-secret 等凭证）
+/aria2/locals/*
+!/aria2/locals/.gitkeep
 
 # 可再生成资源：yazi 插件和主题（现由 /generated/ 规则覆盖）
 # /generated/ 规则已在 "配置渲染产物" 段落中

@@ -1,0 +1,4 @@
+#!/data/data/com.termux/files/usr/bin/sh
+# 由 deploy 渲染: __ARIA2__ 替换为实际 aria2c 路径；配置目录固定为 $HOME/.config/aria2（链接到 generated/aria2）
+exec __ARIA2__ --conf-path="$HOME/.config/aria2/aria2.conf" \
+    2>&1

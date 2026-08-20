@@ -161,6 +161,17 @@ function Main {
             Update = $null
             Tags = @("dev")
         }
+        @{
+            StageName = "配置 aria2"
+            Name = "aria2"
+            AvailabilityCheck = ({ Test-Aria2 }).GetNewClosure()
+            Prepare = $null
+            Install = ({ Install-Aria2 -DeployContext $DeployContext }).GetNewClosure()
+            Render = ({ New-Aria2RenderConfig }).GetNewClosure()
+            Link = ({ New-Aria2ConfigLink -DeployContext $DeployContext }).GetNewClosure()
+            Update = $null
+            Tags = @("dev")
+        }
     )
 
     foreach ($unit in $deployUnits) {

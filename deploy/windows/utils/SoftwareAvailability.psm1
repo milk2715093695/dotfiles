@@ -11,6 +11,7 @@ $script:SoftwareCommandByKey = @{
     "filemanager.yazi" = "yazi"
     "audio.cava" = "cava"
     "cli.gitlogue" = "gitlogue"
+    "cli.aria2" = "aria2c"
 }
 
 $script:ScoopPackageBySoftwareKey = @{
@@ -22,6 +23,7 @@ $script:ScoopPackageBySoftwareKey = @{
     "terminal.wezterm" = "wezterm"
     "filemanager.yazi" = "yazi"
     "audio.cava" = "cava"
+    "cli.aria2" = "aria2"
 }
 
 # 检查 canonical software key 对应的命令是否可用

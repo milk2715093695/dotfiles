@@ -33,6 +33,7 @@ Set-StrictMode -Version Latest
     "$PSScriptRoot\packages\LazyVim.psm1"
     "$PSScriptRoot\packages\Gitlogue.psm1"
     "$PSScriptRoot\packages\Pacproxy.psm1"
+    "$PSScriptRoot\packages\Aria2.psm1"
     "$PSScriptRoot\Main.psm1"
 ) | ForEach-Object { Import-Module $_ -Force }
 

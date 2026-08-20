@@ -15,6 +15,7 @@ get_software_command_name() {
         audio.cava) printf '%s\n' "cava" ;;
         window.aerospace) printf '%s\n' "aerospace" ;;
         cli.gitlogue) printf '%s\n' "gitlogue" ;;
+        cli.aria2) printf '%s\n' "aria2c" ;;
         *) return 1 ;;
     esac
 }
