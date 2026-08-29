@@ -56,7 +56,8 @@ class Rules:
     direct_groups: dict[int, frozenset[str]]
     proxy_groups: dict[int, frozenset[str]]
     local_tlds: frozenset[str]
-    cn_networks: dict[int, frozenset[int]]  # prefixlen -> 网络地址 int 集合
+    cn_v4: dict[int, frozenset[int]]  # IPv4 prefixlen -> 网络地址 int 集合
+    cn_v6: dict[int, frozenset[int]]  # IPv6 prefixlen -> 网络地址 int 集合
 
 
 @dataclass(frozen=True)
@@ -143,19 +144,29 @@ def _match_suffix(
     return False
 
 
-def _in_cn(ip_int: int, bit_width: int, networks: dict[int, frozenset[int]]) -> bool:
+def _in_cn(
+    ip_int: int,
+    bit_width: int,
+    v4: dict[int, frozenset[int]],
+    v6: dict[int, frozenset[int]],
+) -> bool:
     """按二进制前缀判断 IP 是否落在任一中国网段，等价于 PAC 的 radixTree。
 
-    `bit_width` 区分地址族（IPv4=32、IPv6=128）：IPv6 地址只匹配 prefixlen > 32
-    的 IPv6 网段，IPv4 地址只匹配 prefixlen <= 32 的 IPv4 网段，避免高位段数值
-    碰撞导致跨族误判（如 Fastly 的 IPv6 前缀被 IPv4 桶命中而错误直连）。
+    IPv4/IPv6 分表存储，按 bit_width 选表，避免跨族前缀长度撞键误判。
+
+    Args:
+        ip_int (int): 待判断地址的整数表示。
+        bit_width (int): 地址位宽，IPv4=32、IPv6=128，用于选表与移位。
+        v4 (dict[int, frozenset[int]]): IPv4 网段表，prefixlen -> 网络地址集合。
+        v6 (dict[int, frozenset[int]]): IPv6 网段表，prefixlen -> 网络地址集合。
+
+    Returns:
+        bool: IP 落在任一中国网段时返回 True。
     """
 
+    networks = v4 if bit_width == 32 else v6
+
     for prefix_len in networks:
-        if prefix_len > bit_width:
-            continue
-        if bit_width == 128 and prefix_len <= 32:
-            continue
         if (ip_int >> (bit_width - prefix_len)) in networks[prefix_len]:
             return True
 
@@ -195,18 +206,21 @@ class RuleStore:
         proxy = self._merged_lines("proxy")
         local_tlds = _read_lines(self._paths["tlds"])
 
-        cn_networks: dict[int, set[int]] = {}
+        cn_v4: dict[int, set[int]] = {}
+        cn_v6: dict[int, set[int]] = {}
         for cidr in _read_lines(self._paths["cidrs"]):
             network = ipaddress.ip_network(cidr, strict=False)
             prefix_bits = int(network.network_address) >> (network.max_prefixlen - network.prefixlen)
-            cn_networks.setdefault(network.prefixlen, set()).add(prefix_bits)
+            bucket = cn_v4 if network.version == 4 else cn_v6
+            bucket.setdefault(network.prefixlen, set()).add(prefix_bits)
 
         logger.info(
             "规则加载: %d 直连域名, %d 代理域名, %d 本地TLD, %d CIDR 前缀",
             len(direct),
             len(proxy),
             len(local_tlds),
-            sum(len(addresses) for addresses in cn_networks.values()),
+            sum(len(addresses) for addresses in cn_v4.values())
+            + sum(len(addresses) for addresses in cn_v6.values()),
         )
 
         return Rules(
@@ -215,7 +229,8 @@ class RuleStore:
             direct_groups=_group_by_length(direct),
             proxy_groups=_group_by_length(proxy),
             local_tlds=frozenset(local_tlds),
-            cn_networks={prefix: frozenset(addresses) for prefix, addresses in cn_networks.items()},
+            cn_v4={prefix: frozenset(addresses) for prefix, addresses in cn_v4.items()},
+            cn_v6={prefix: frozenset(addresses) for prefix, addresses in cn_v6.items()},
         )
 
     def refresh(self) -> None:
@@ -279,7 +294,7 @@ class RuleStore:
 
         if any(_PRIVATE_IP_RE.search(str(address)) for address in ip_addresses):
             return "direct"
-        if any(_in_cn(int(address), address.max_prefixlen, rules.cn_networks) for address in ip_addresses):
+        if any(_in_cn(int(address), address.max_prefixlen, rules.cn_v4, rules.cn_v6) for address in ip_addresses):
             return "direct"
 
         return "proxy"
