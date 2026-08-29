@@ -41,5 +41,6 @@ link_aria2_config() {
 
     register_autostart aria2 \
         "s|__ARIA2__|$(command -v aria2c)|g" \
-        "s|~/.config/aria2|$HOME/.config/aria2|g"
+        "s|~/.config/aria2|$HOME/.config/aria2|g" \
+        "s|~/.local/state/aria2|$HOME/.local/state/aria2|g"
 }

@@ -14,9 +14,9 @@
     <key>KeepAlive</key>
     <true/>
     <key>StandardOutPath</key>
-    <string>~/.config/aria2/aria2.log</string>
+    <string>~/.local/state/aria2/aria2.log</string>
     <key>StandardErrorPath</key>
-    <string>~/.config/aria2/aria2.log</string>
+    <string>~/.local/state/aria2/aria2.log</string>
     <key>ProcessType</key>
     <string>Background</string>
 </dict>
