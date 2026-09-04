@@ -41,7 +41,9 @@ mkdir -p "$WORK/rules" "$WORK/user-overrides"
 # 有真文件(非 .gitkeep)则快照复制; 全空/不存在则占位, 避免 glob 展开失败
 for d in rules user-overrides; do
     has_real=""
-    [ -d "$MODDIR/$d" ] && has_real="$(ls -A "$MODDIR/$d" 2>/dev/null | grep -v '^\.gitkeep$')"
+    if [ -d "$MODDIR/$d" ]; then
+        has_real="$(ls -A "$MODDIR/$d" 2>/dev/null | grep -v '^\.gitkeep$' || true)"
+    fi
     if [ -n "$has_real" ]; then
         find "$MODDIR/$d" -type f \! -name '.gitkeep' -exec cp -f {} "$WORK/$d/" \;
     else
