@@ -1,0 +1,7 @@
+id=pacproxy-tp
+name=Pacproxy Transparent Split
+version=v0.1.0
+versionCode=1
+minMagisk=27000
+author=milk
+description=透明分流规则模块: 纯IP决策(私网+中国CIDR直连, 其余走上游代理), iptables REDIRECT 全量劫持。上游代理地址由模块自身配置(UPSTREAM), 缺失则默认 127.0.0.1:9910。

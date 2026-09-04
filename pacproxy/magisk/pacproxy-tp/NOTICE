@@ -1,0 +1,35 @@
+Pacproxy-TP Transparent Split Module
+====================================
+
+This module (module.prop, pacproxy.py, service.sh, watchdog.sh, update.sh,
+uninstall.sh) is distributed under the MIT License. See the project LICENSE
+file in the dotfiles repository root for the full license text.
+
+Third-party bundled runtime (python 3.10.21, built by Termux-Packages):
+The module bundles a self-contained CPython 3.10.21 runtime and its linked
+libraries, used solely to run pacproxy.py. These components are redistributed
+under their respective upstream licenses, listed in this NOTICE and in the
+LICENSES/ directory:
+
+  Component        License            Bundled where
+  ---------------- ------------------ -------------------------------
+  CPython 3.10.21  PSF License 2.0    python/lib/python3.10/LICENSE.txt
+  musl libc        MIT                python/bin/ld-musl-aarch64.so.1
+  OpenSSL 3.5.8    Apache-2.0         (statically linked, see LICENSES/openssl.LICENSE.txt)
+  zlib             zlib License       (statically linked, see LICENSES/zlib.LICENSE.txt)
+  libexpat         MIT                (statically linked, see LICENSES/expat.COPYING)
+  libffi           MIT-style          (statically linked, see LICENSES/libffi.LICENSE)
+  libedit          BSD-3-Clause       (Python readline / editline)
+
+The python runtime was produced from the publicly documented Termux-Packages
+build of python 3.10 ("CC=musl-clang --host=aarch64-unknown-linux-musl
+--prefix=/install --with-openssl=/tools/deps --enable-static-libpython-for-interpreter"),
+then stripped to the modules required by pacproxy.py.
+
+This bundle is for use with the pacproxy-tp Magisk module only; it is not a
+general-purpose python distribution. Do not redistribute this runtime
+separately.
+
+=====================================================================
+Third-party licenses are in the LICENSES/ directory. Full text of the
+PSF license is bundled at python/lib/python3.10/LICENSE.txt.

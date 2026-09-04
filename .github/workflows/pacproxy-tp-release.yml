@@ -1,0 +1,53 @@
+name: pacproxy-tp release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Download python runtime asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # python-slim.tar.gz 是首个 release 的一次性资产(本地 mk-python-slim.sh 构建后手动上传)
+          # 之后每个版本都复用该运行时(CPython 3.10.21 musl aarch64)
+          gh release download python-runtime -R "$GITHUB_REPOSITORY" \
+            -p python-slim.tar.gz -D /tmp/pacp || {
+            echo "::error::缺少 python-runtime release asset (先手动创建: gh release create python-runtime python-slim.tar.gz)"
+            exit 1
+          }
+          ls -la /tmp/pacp/
+
+      - name: Build Magisk zip
+        run: |
+          cd pacproxy/magisk/pacproxy-tp
+          ./build.sh "${{ github.ref_name }}" < /dev/null 2>&1
+          test -f dist/pacproxy-tp-${{ github.ref_name }}.zip
+
+      - name: Create SHA256SUMS
+        run: |
+          cd pacproxy/magisk/pacproxy-tp/dist
+          sha256sum pacproxy-tp-${{ github.ref_name }}.zip > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cd pacproxy/magisk/pacproxy-tp/dist
+          gh release create "${{ github.ref_name }}" \
+            pacproxy-tp-${{ github.ref_name }}.zip SHA256SUMS.txt \
+            -R "$GITHUB_REPOSITORY"
