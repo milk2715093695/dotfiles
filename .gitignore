@@ -85,8 +85,7 @@ __pycache__/
 # pacproxy.py 单源在主仓库 (pacproxy/pacproxy.py)，模块目录不保存副本
 /pacproxy/magisk/pacproxy-tp/pacproxy.py
 
-# 模块运行时数据：规则为 update.sh 拉取产物、用户定制为手机端本地文件，均不入仓库
-/pacproxy/magisk/pacproxy-tp/rules/*
-!/pacproxy/magisk/pacproxy-tp/rules/.gitkeep
+# 模块基础规则：随模块入库（cidrs-cn 等为模块默认配置）
+# 用户定制为手机端本地文件，不入仓库
 /pacproxy/magisk/pacproxy-tp/user-overrides/*
 !/pacproxy/magisk/pacproxy-tp/user-overrides/.gitkeep

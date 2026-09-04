@@ -36,23 +36,21 @@ cp -R "$MODDIR/module.prop" "$MAIN_PY" "$MODDIR/service.sh" \
 # 2) python 运行时 (bin/lib)
 "$(command -v tar)" -xzf "$PYTHON_TAR" -C "$WORK"
 
-# 3) rules / user-overrides: 优先快照源目录, 无则为占位 (安装后 update.sh 填充)
+# 3) rules: 快照源目录真数据(基础规则随包发布); user-overrides: 恒占位(用户数据不打包)
 mkdir -p "$WORK/rules" "$WORK/user-overrides"
 # 有真文件(非 .gitkeep)则快照复制; 全空/不存在则占位, 避免 glob 展开失败
-for d in rules user-overrides; do
-    has_real=""
-    if [ -d "$MODDIR/$d" ]; then
-        has_real="$(ls -A "$MODDIR/$d" 2>/dev/null | grep -v '^\.gitkeep$' || true)"
-    fi
-    if [ -n "$has_real" ]; then
-        find "$MODDIR/$d" -type f \! -name '.gitkeep' -exec cp -f {} "$WORK/$d/" \;
-    else
-        touch "$WORK/$d/.gitkeep"
-    fi
-done
+has_real=""
+if [ -d "$MODDIR/rules" ]; then
+    has_real="$(ls -A "$MODDIR/rules" 2>/dev/null | grep -v '^\.gitkeep$' || true)"
+fi
+if [ -n "$has_real" ]; then
+    find "$MODDIR/rules" -type f \! -name '.gitkeep' -exec cp -f {} "$WORK/rules/" \;
+else
+    touch "$WORK/rules/.gitkeep"
+fi
+touch "$WORK/user-overrides/.gitkeep"
 # 快照源存在时清理占位 (有真文件就不再留 .gitkeep)
 [ -n "$(ls -A "$WORK/rules" 2>/dev/null | grep -v '^\.gitkeep$')" ] && rm -f "$WORK/rules/.gitkeep"
-[ -n "$(ls -A "$WORK/user-overrides" 2>/dev/null | grep -v '^\.gitkeep$')" ] && rm -f "$WORK/user-overrides/.gitkeep"
 
 # 4) 打包 (Magisk zip = 无 META-INF, 根为模块结构; 先删旧产物避免追加)
 rm -f "$OUT"
