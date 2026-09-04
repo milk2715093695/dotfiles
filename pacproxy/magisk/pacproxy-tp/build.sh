@@ -38,16 +38,16 @@ cp -R "$MODDIR/module.prop" "$MAIN_PY" "$MODDIR/service.sh" \
 
 # 3) rules / user-overrides: 优先快照源目录, 无则为占位 (安装后 update.sh 填充)
 mkdir -p "$WORK/rules" "$WORK/user-overrides"
-if [ -d "$MODDIR/rules" ] && [ "$(ls -A "$MODDIR/rules" 2>/dev/null)" ]; then
-    cp -f "$MODDIR"/rules/* "$WORK/rules/" 2>/dev/null
-else
-    touch "$WORK/rules/.gitkeep"
-fi
-if [ -d "$MODDIR/user-overrides" ] && [ "$(ls -A "$MODDIR/user-overrides" 2>/dev/null)" ]; then
-    cp -f "$MODDIR"/user-overrides/* "$WORK/user-overrides/" 2>/dev/null
-else
-    touch "$WORK/user-overrides/.gitkeep"
-fi
+# 有真文件(非 .gitkeep)则快照复制; 全空/不存在则占位, 避免 glob 展开失败
+for d in rules user-overrides; do
+    has_real=""
+    [ -d "$MODDIR/$d" ] && has_real="$(ls -A "$MODDIR/$d" 2>/dev/null | grep -v '^\.gitkeep$')"
+    if [ -n "$has_real" ]; then
+        find "$MODDIR/$d" -type f \! -name '.gitkeep' -exec cp -f {} "$WORK/$d/" \;
+    else
+        touch "$WORK/$d/.gitkeep"
+    fi
+done
 # 快照源存在时清理占位 (有真文件就不再留 .gitkeep)
 [ -n "$(ls -A "$WORK/rules" 2>/dev/null | grep -v '^\.gitkeep$')" ] && rm -f "$WORK/rules/.gitkeep"
 [ -n "$(ls -A "$WORK/user-overrides" 2>/dev/null | grep -v '^\.gitkeep$')" ] && rm -f "$WORK/user-overrides/.gitkeep"
