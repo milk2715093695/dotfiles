@@ -24,6 +24,7 @@ $RECYCLE.BIN/
 /taskbooks/
 /.taskbook-backups/
 /.vscode/
+__pycache__/
 
 # 代理配置与本地索引
 /.claude/
@@ -77,3 +78,15 @@ $RECYCLE.BIN/
 /pacproxy/pacproxy.log
 /pacproxy/my_proxy.pac
 /pacproxy/gfw.pac
+
+# 代理模块构建产物：Magisk zip 与裁剪运行时，由 build.sh 生成
+/pacproxy/magisk/pacproxy-tp/dist/*
+!/pacproxy/magisk/pacproxy-tp/dist/.gitkeep
+# pacproxy.py 单源在主仓库 (pacproxy/pacproxy.py)，模块目录不保存副本
+/pacproxy/magisk/pacproxy-tp/pacproxy.py
+
+# 模块运行时数据：规则为 update.sh 拉取产物、用户定制为手机端本地文件，均不入仓库
+/pacproxy/magisk/pacproxy-tp/rules/*
+!/pacproxy/magisk/pacproxy-tp/rules/.gitkeep
+/pacproxy/magisk/pacproxy-tp/user-overrides/*
+!/pacproxy/magisk/pacproxy-tp/user-overrides/.gitkeep
