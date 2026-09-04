@@ -34,7 +34,7 @@ jobs:
       - name: Build Magisk zip
         run: |
           cd pacproxy/magisk/pacproxy-tp
-          ./build.sh "${{ github.ref_name }}" < /dev/null 2>&1
+          PYTHON_TAR=/tmp/pacp/python-slim.tar.gz ./build.sh "${{ github.ref_name }}" < /dev/null 2>&1
           test -f dist/pacproxy-tp-${{ github.ref_name }}.zip
 
       - name: Create SHA256SUMS
