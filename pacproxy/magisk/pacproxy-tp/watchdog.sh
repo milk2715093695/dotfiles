@@ -12,11 +12,18 @@ PORT="${PORT:-6045}"
 LOGLEVEL_OPT=""
 [ -n "$VERBOSE" ] && LOGLEVEL_OPT=" --verbose"
 LOGDIR="$MODDIR/logs"
-WATCHDOG_PID="$LOGDIR/watchdog.pid"
+LOCKDIR="$LOGDIR/watchdog.lock"
 unset LD_PRELOAD
 
-echo $$ > "$WATCHDOG_PID"
-trap '[ "$(cat "$WATCHDOG_PID" 2>/dev/null)" = "$$" ] && rm -f "$WATCHDOG_PID"' EXIT
+# 单实例锁: mkdir 原子(内核 VFS 保证), 持锁期间有 pid 文件供 service.sh 停止用
+# 防双 watchdog 并发(update.sh 先停再启 + 服务重启竞态窗口)
+mkdir -p "$LOGDIR"
+if ! mkdir "$LOCKDIR" 2>/dev/null; then
+    echo "watchdog: 已有实例在跑, 退出" >> "$LOGDIR/pacproxy.log"
+    exit 0
+fi
+echo $$ > "$LOCKDIR/pid"
+trap 'rm -rf "$LOCKDIR"' EXIT TERM INT
 
 LAUNCH() {
     setsid "$PYTHON" "$MODDIR/pacproxy.py" --rules-dir "$MODDIR/rules" --override-dir "$MODDIR/user-overrides" --upstream "$UPSTREAM" --transparent --listen "$PORT" $LOGLEVEL_OPT --log "$LOGDIR/pacproxy.log" >> "$LOGDIR/pacproxy.log" 2>&1 &

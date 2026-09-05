@@ -45,14 +45,27 @@ def merge(official: str, override_path: pathlib.Path) -> str:
     return "\n".join(merged) + "\n"
 
 
+def write_atomic(path: pathlib.Path, text: str) -> None:
+    """原子写: 写临时文件再 rename(2) 替换, 读者永远看到完整文件(旧或新)。"""
+    tmp = path.with_name(path.name + ".tmp")
+    tmp.write_text(text)
+    tmp.chmod(0o644)
+    tmp.replace(path)
+
+
 rules = mod / "rules"
 for name in ("direct-domains.txt", "proxy-domains.txt"):
-    (rules / name).write_text(merge(fetch(name), mod / "user-overrides" / name))
+    write_atomic(rules / name, merge(fetch(name), mod / "user-overrides" / name))
 for name in ("local-tlds.txt", "cidrs-cn.txt"):
-    (rules / name).write_text(fetch(name))
+    write_atomic(rules / name, fetch(name))
 print("规则已更新")
 PYEOF
 
+# 先停 watchdog(防其 10s 循环在 pkill 窗口内复活 pacproxy), 再停 pacproxy, 再启
+if [ -r "$MODDIR/logs/watchdog.lock/pid" ]; then
+    kill "$(cat "$MODDIR/logs/watchdog.lock/pid" 2>/dev/null)" 2>/dev/null
+    sleep 1
+fi
 pkill -f "pacproxy.py.*transparent" 2>/dev/null
 sleep 1
 sh "$MODDIR/service.sh" start

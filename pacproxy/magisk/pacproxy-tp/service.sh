@@ -14,14 +14,18 @@ PORT="${PORT:-6045}"
 LOGLEVEL_OPT=""
 [ -n "$VERBOSE" ] && LOGLEVEL_OPT=" --verbose"
 LOGDIR="$MODDIR/logs"
-WATCHDOG_PID="$LOGDIR/watchdog.pid"
+LOCKDIR="$LOGDIR/watchdog.lock"
 
 unset LD_PRELOAD
 
 start_service() {
     mkdir -p "$LOGDIR"
-    [ -f "$WATCHDOG_PID" ] && kill "$(cat "$WATCHDOG_PID")" 2>/dev/null && sleep 1
-    rm -f "$WATCHDOG_PID"
+    # 停旧 watchdog: 锁目录内 pid (flock 失败后回退 mkdir 锁)
+    if [ -r "$LOCKDIR/pid" ]; then
+        kill "$(cat "$LOCKDIR/pid" 2>/dev/null)" 2>/dev/null
+        sleep 1
+    fi
+    rm -rf "$LOCKDIR"
 
     # 等上游就绪(上游可能晚于本模块启动), 探测不了也照样起 pacproxy
     UPSTREAM_PORT=${UPSTREAM##*:}
@@ -53,9 +57,11 @@ start_service() {
 }
 
 stop_service() {
-    [ -f "$WATCHDOG_PID" ] && kill "$(cat "$WATCHDOG_PID")" 2>/dev/null
-    sleep 1
-    rm -f "$WATCHDOG_PID"
+    if [ -r "$LOCKDIR/pid" ]; then
+        kill "$(cat "$LOCKDIR/pid" 2>/dev/null)" 2>/dev/null
+        sleep 1
+    fi
+    rm -rf "$LOCKDIR"
     iptables -w -t nat -D OUTPUT -j PAC_TP 2>/dev/null
     iptables -w -t nat -D OUTPUT -p tcp -j PAC_TP 2>/dev/null
     iptables -w -t nat -F PAC_TP 2>/dev/null

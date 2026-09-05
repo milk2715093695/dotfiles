@@ -28,12 +28,12 @@ if [ ! -f "$MAIN_PY" ]; then
     exit 1
 fi
 
-# 1) 模块源码
+# 1) 模块源码 (zip 内权限位会被 Magisk set_default_perm 覆盖为 0644, 可执行位由 customize.sh 恢复)
 cp -R "$MODDIR/module.prop" "$MAIN_PY" "$MODDIR/service.sh" \
       "$MODDIR/watchdog.sh" "$MODDIR/update.sh" "$MODDIR/uninstall.sh" \
-      "$MODDIR/NOTICE" "$MODDIR/LICENSES" "$WORK/"
+      "$MODDIR/customize.sh" "$MODDIR/NOTICE" "$MODDIR/LICENSES" "$WORK/"
 
-# 2) python 运行时 (bin/lib)
+# 2) python 运行时 (bin/lib) — tar 自带权限位(同样会被 set_default_perm 覆盖, 由 customize.sh 恢复)
 "$(command -v tar)" -xzf "$PYTHON_TAR" -C "$WORK"
 
 # 3) rules: 快照源目录真数据(基础规则随包发布); user-overrides: 恒占位(用户数据不打包)
@@ -52,9 +52,9 @@ touch "$WORK/user-overrides/.gitkeep"
 # 快照源存在时清理占位 (有真文件就不再留 .gitkeep)
 [ -n "$(ls -A "$WORK/rules" 2>/dev/null | grep -v '^\.gitkeep$')" ] && rm -f "$WORK/rules/.gitkeep"
 
-# 4) 打包 (Magisk zip = 无 META-INF, 根为模块结构; 先删旧产物避免追加)
+# 4) 打包 (Magisk zip = 无 META-INF, 根为模块结构; 先删旧产物避免追加; 排除 macOS AppleDouble 只针对 ._ 前缀)
 rm -f "$OUT"
-(cd "$WORK" && zip -rq "$OUT" .)
+(cd "$WORK" && zip -rq "$OUT" . -x "*._*")
 
 echo "打包完成: $OUT ($(du -h "$OUT" | cut -f1))"
 ls -la "$OUT"
